@@ -39,10 +39,10 @@
 - [x] API 요청 클라이언트 구현
 - [x] XML 성공·오류 응답 파싱
 - [x] 거래금액·면적·계약일 정규화
-- [ ] Region 저장
-- [ ] Apartment 저장
-- [ ] Trade 저장
-- [ ] 중복 거래 처리
+- [x] Region 저장
+- [x] Apartment 저장
+- [x] Trade 저장
+- [x] 중복 거래 처리
 
 ## Backend
 
