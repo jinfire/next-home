@@ -1,0 +1,21 @@
+# Backend
+
+Next Home의 조회·분석·추천·알림 API를 제공하는 Spring Boot 애플리케이션이다.
+
+## 실행
+
+루트의 PostgreSQL 컨테이너를 먼저 실행한 뒤 다음 명령을 사용한다.
+
+```powershell
+.\gradlew.bat bootRun
+```
+
+루트 `.env`를 선택적으로 읽으며 기본 포트는 `8080`이다.
+
+## 테스트
+
+```powershell
+.\gradlew.bat test
+```
+
+테스트는 로컬 PostgreSQL과 분리된 인메모리 DB 프로필로 실행된다.

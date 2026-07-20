@@ -1,0 +1,17 @@
+.app-shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding-bottom: 48px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid #cbc7bc; }
+.brand { font-size: 1.2rem; font-weight: 800; text-decoration: none; letter-spacing: -0.04em; }
+.status { padding: 8px 12px; border-radius: 999px; background: #dce7d8; color: #31523d; font-size: .82rem; }
+.hero-copy { padding: 72px 0 36px; max-width: 760px; }
+.eyebrow { color: #607b67; font-size: .75rem; font-weight: 800; letter-spacing: .16em; }
+.hero-copy h1 { margin: 10px 0 18px; font-size: clamp(2.6rem, 7vw, 5.8rem); line-height: .98; letter-spacing: -.07em; }
+.hero-copy > p:last-child { max-width: 620px; color: #5c665f; font-size: 1.05rem; line-height: 1.7; }
+.map-placeholder { min-height: 480px; display: grid; place-items: center; border: 1px solid #b9c3b9; border-radius: 28px; background: radial-gradient(circle at 30% 20%, #eff5ea, transparent 35%), linear-gradient(135deg, #d9e4d6, #bfcfc2); text-align: center; box-shadow: 0 18px 60px rgba(41, 61, 47, .12); }
+.map-placeholder h2 { margin: 14px 0 8px; font-size: clamp(1.5rem, 3vw, 2.4rem); }
+.map-placeholder p { color: #536258; }
+.map-badge { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: #183c28; color: white; font-weight: 800; font-size: .75rem; letter-spacing: .12em; }
+.recommendation-card { margin-top: 24px; padding: 30px; border-radius: 24px; background: #17211c; color: white; }
+.recommendation-card span { color: #a9cab0; font-size: .8rem; }
+.recommendation-card h2 { margin: 8px 0; font-size: clamp(1.35rem, 3vw, 2rem); }
+.recommendation-card p { margin: 0; color: #bbc4be; }
+@media (max-width: 640px) { .hero-copy { padding-top: 48px; } .map-placeholder { min-height: 380px; padding: 24px; } .status { display: none; } }

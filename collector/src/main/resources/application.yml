@@ -1,0 +1,22 @@
+spring:
+  config:
+    import: optional:file:../.env[.properties]
+  application:
+    name: next-home-collector
+  main:
+    web-application-type: none
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/next_home}
+    username: ${POSTGRES_USER:next_home}
+    password: ${POSTGRES_PASSWORD:next_home_local_password}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: false
+
+next-home:
+  molit:
+    endpoint: ${MOLIT_API_ENDPOINT:https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev}
+    service-key: ${MOLIT_API_KEY:}
