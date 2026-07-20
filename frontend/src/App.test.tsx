@@ -19,7 +19,7 @@ describe('Next Home grade map', () => {
     expect(screen.getByRole('heading', { name: '사는 곳의 가치를 한눈에' })).toBeInTheDocument()
     expect(screen.getByLabelText('지역 급지 지도')).toBeInTheDocument()
     expect(await screen.findAllByText('강남구')).toHaveLength(2)
-    expect(screen.getAllByText('1급지')).toHaveLength(2)
+    expect(screen.getAllByText('1급지').length).toBeGreaterThanOrEqual(2)
     expect(screen.getAllByText('9,000만원/평')).toHaveLength(2)
   })
 })

@@ -1,5 +1,13 @@
 # TODO
 
+## Upgrade comparison frontend update (2026-07-20)
+
+- [x] 현재 급지만 입력하는 비교 화면
+- [x] 1·2급지 위 평균 평단가 표시
+- [x] 현재 평당 격차 표시
+- [x] 과거 대비 현재 격차 백분위 표시
+- [x] 대출·추가 자금 계산 제외
+
 ## Grade map frontend update (2026-07-20)
 
 - [x] 네이버 Dynamic Map SDK 로딩

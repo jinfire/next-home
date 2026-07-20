@@ -1,5 +1,12 @@
 # Roadmap
 
+## Upgrade comparison frontend completion (2026-07-20)
+
+- [x] 현재 급지 단일 입력
+- [x] 1·2급지 위 API 연동
+- [x] 평균 평단가·현재 격차·과거 백분위 결과 카드
+- [x] 빈 결과 및 오류 상태
+
 ## Grade map frontend completion (2026-07-20)
 
 - [x] 네이버 지도 SDK 연결

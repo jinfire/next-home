@@ -1,5 +1,9 @@
 # Architecture
 
+## Frontend upgrade comparison flow
+
+React의 `UpgradePanel`은 현재 급지와 지도에서 선택한 연도만 상태로 관리한다. 급지를 선택하면 `/api/recommendations/upgrades`를 호출하고 반환된 1·2급지 위 결과를 카드로 렌더링한다. 금융 상황은 서버에 전송하지 않으며 대출·추가 자금 계산 계층도 두지 않는다.
+
 ## Frontend grade map flow
 
 Vite는 루트 `.env`의 `NAVER_MAP_CLIENT_ID`만 프런트 빌드에 주입하고 Client Secret은 노출하지 않는다. React가 네이버 Dynamic Map SDK를 한 번 로드하고 `/api/grades?year={year}`를 호출해 지역 급지 목록을 구성한다. 개발 환경의 `/api` 요청은 Vite 프록시를 통해 Spring Boot `8080` 포트로 전달한다.

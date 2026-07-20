@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import NaverMap from './components/NaverMap'
+import UpgradePanel from './components/UpgradePanel'
 
 type GradeSummary = {
   regionId: number
@@ -105,11 +106,7 @@ function App() {
         )}
       </section>
 
-      <section id="upgrade" className="next-step">
-        <p className="section-kicker">MOVE-UP SIGNAL</p>
-        <h2>지금보다 한 단계 더 좋은 선택</h2>
-        <p>현재 급지만 선택하면 1·2급지 위의 평균 평단가, 현재 격차, 과거 대비 격차 수준을 보여드립니다.</p>
-      </section>
+      <UpgradePanel year={year} />
     </main>
   )
 }
