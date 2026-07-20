@@ -1,5 +1,13 @@
 # TODO
 
+## Foreground web notification update (2026-07-20)
+
+- [x] 브라우저 알림 권한 요청
+- [x] 현재 급지·최대 평당 격차 조건 저장
+- [x] 조건 즉시 확인 및 시스템 알림
+- [x] 페이지가 열린 동안 1시간 주기 확인
+- [ ] Service Worker·Web Push 기반 백그라운드 알림
+
 ## Lifestyle recommendation frontend update (2026-07-20)
 
 - [x] 현재 아파트 이름 검색

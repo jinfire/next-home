@@ -3,6 +3,7 @@ import './App.css'
 import NaverMap from './components/NaverMap'
 import UpgradePanel from './components/UpgradePanel'
 import LifestylePanel from './components/LifestylePanel'
+import AlertPanel from './components/AlertPanel'
 
 type GradeSummary = {
   regionId: number
@@ -109,6 +110,7 @@ function App() {
 
       <UpgradePanel year={year} />
       <LifestylePanel year={year} />
+      <AlertPanel year={year} />
     </main>
   )
 }

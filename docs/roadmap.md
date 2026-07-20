@@ -1,5 +1,13 @@
 # Roadmap
 
+## Foreground web notification completion (2026-07-20)
+
+- [x] 웹 알림 설정 UI
+- [x] 브라우저 권한·로컬 조건 저장
+- [x] 가격 격차 조건 평가와 Notification API 알림
+- [ ] Push 구독 저장과 서버 발송
+- [ ] 브라우저가 닫혀 있을 때 백그라운드 알림
+
 ## Lifestyle recommendation frontend completion (2026-07-20)
 
 - [x] 아파트 검색·선택 흐름
