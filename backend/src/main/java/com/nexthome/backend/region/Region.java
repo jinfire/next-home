@@ -16,8 +16,8 @@ public class Region {
 
     protected Region() {}
 
-    Long id() { return id; }
-    String code() { return code; }
-    String name() { return name; }
-    int level() { return level; }
+    public Long id() { return id; }
+    public String code() { return code; }
+    public String name() { return name; }
+    public int level() { return level; }
 }

@@ -29,3 +29,19 @@ GET /api/regions?query=강남
 ```
 
 지역명 부분 일치 결과를 이름순 최대 20건 반환한다. 빈 검색어는 `400 Bad Request`다.
+
+### 아파트 검색
+
+```http
+GET /api/apartments?query=래미안&regionId=1
+```
+
+아파트명 부분 검색 결과를 최대 20건 반환하며 `regionId`는 선택 항목이다.
+
+### 아파트 실거래 조회
+
+```http
+GET /api/apartments/10/trades
+```
+
+해당 아파트의 최근 거래를 계약일 역순 최대 100건 반환한다. 해제 거래는 `cancelled`로 구분한다.

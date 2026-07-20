@@ -52,6 +52,8 @@
 - 호출 예산이 소진되면 외부 API 요청을 차단하고 저장된 좌표 또는 대체 데이터를 사용한다.
 - Backend와 Collector를 독립된 Spring Boot 4.0.5 애플리케이션으로 실행한다.
 - `/api/regions`에서 지역명 부분 검색 결과를 최대 20건 제공한다.
+- `/api/apartments`에서 지역 필터를 선택적으로 적용한 아파트명 검색을 제공한다.
+- `/api/apartments/{id}/trades`에서 최근 실거래 최대 100건을 제공한다.
 
 ### React
 
