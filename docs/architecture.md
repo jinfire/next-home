@@ -1,5 +1,9 @@
 # Architecture
 
+## Alert condition registration flow
+
+`POST /api/alerts`가 브라우저 식별자, 현재 지역, 목표 지역 또는 목표 급지와 선택적인 격차 조건을 검증한다. Spring Data JPA가 검증된 조건을 기존 `alert_condition` 테이블에 저장한다. 조건 평가는 별도 주기 작업으로, 실제 알림 전달은 `push_subscription`과 Web Push 발송 계층으로 분리한다.
+
 ## Lifestyle apartment recommendation flow
 
 `GET /api/recommendations/apartments?apartmentId={id}&year={year}`는 선택 연도의 유효 실거래를 집계한다. Spring Boot가 아파트별 평균 평단가를 계산한 뒤 현재 아파트와 동일한 `region_id`에 속하면서 평균 평단가가 더 높은 후보만 골라 최대 10개를 반환한다. 취소 거래는 집계에서 제외하며 별도 요약 테이블 없이 PostgreSQL 조회 결과를 사용한다.

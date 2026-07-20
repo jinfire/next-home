@@ -1,5 +1,13 @@
 # Roadmap
 
+## Alert condition registration completion (2026-07-20)
+
+- [x] 알림 조건 요청 및 응답 모델
+- [x] 알림 조건 유효성 검증
+- [x] PostgreSQL 저장 API
+- [ ] 조건 평가 작업
+- [ ] Web Push 구독 및 발송
+
 ## Lifestyle recommendation completion (2026-07-20)
 
 - [x] 생활권 MVP를 동일 행정구역으로 정의

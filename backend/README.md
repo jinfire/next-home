@@ -1,5 +1,22 @@
 # Backend
 
+## 갈아타기 알림 조건 등록 API
+
+```http
+POST /api/alerts
+Content-Type: application/json
+
+{
+  "browserId": "550e8400-e29b-41d4-a716-446655440000",
+  "currentRegionId": 10,
+  "targetGrade": 3,
+  "targetGapPercent": 15,
+  "historicalGapPercentile": 30
+}
+```
+
+`targetRegionId` 또는 `targetGrade` 중 하나는 필수다. 등록 성공 시 `201 Created`와 저장된 조건을 반환한다. 조건 평가와 브라우저 알림 발송은 별도 후속 단계다.
+
 ## 같은 생활권 내 상급 아파트 추천 API
 
 ```http

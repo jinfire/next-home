@@ -1,5 +1,13 @@
 # TODO
 
+## Alert condition registration update (2026-07-20)
+
+- [x] 갈아타기 알림 조건 등록 API
+- [x] 목표 지역 또는 목표 급지 필수 검증
+- [x] 급지 1~10 및 과거 격차 백분위 0~100 검증
+- [ ] 저장된 알림 조건 주기적 평가
+- [ ] 브라우저 Push 구독 및 알림 발송
+
 ## Lifestyle recommendation update (2026-07-20)
 
 - [x] 같은 행정구역 내 상급 아파트 추천 API
