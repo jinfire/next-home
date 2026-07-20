@@ -45,3 +45,12 @@ GET /api/apartments/10/trades
 ```
 
 해당 아파트의 최근 거래를 계약일 역순 최대 100건 반환한다. 해제 거래는 `cancelled`로 구분한다.
+
+### 연도별 급지
+
+```http
+POST /api/grades/recalculate?year=2026
+GET /api/grades?year=2026
+```
+
+해제되지 않은 실거래의 평균 평단가로 지역을 정렬해 1~10급지를 계산하고 조회한다.
