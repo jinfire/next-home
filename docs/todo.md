@@ -51,7 +51,7 @@
 - [x] Spring Boot 프로젝트 생성
 - [x] DB 연결 설정
 - [x] Flyway 핵심 스키마 마이그레이션
-- [ ] 지역 검색 API
+- [x] 지역 검색 API
 - [ ] 아파트 검색 API
 - [ ] 실거래 조회 API
 - [ ] 급지 조회 API
