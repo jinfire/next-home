@@ -37,4 +37,40 @@ describe('NAVER Dynamic Map usage protection', () => {
 
     await waitFor(() => expect(document.head.querySelectorAll('script[data-next-home-map]')).toHaveLength(1))
   })
+
+  it('loads the selected year boundaries and applies grade colors', async () => {
+    const addGeoJson = vi.fn()
+    const setStyle = vi.fn()
+    const removeAll = vi.fn()
+    const map = { data: { addGeoJson, setStyle, removeAll } }
+    class MockMap { data = map.data }
+    class MockLatLng {}
+    window.naver = { maps: {
+      Map: MockMap,
+      LatLng: MockLatLng,
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ type: 'FeatureCollection', features: [] }),
+    }))
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(callback: IntersectionObserverCallback) {
+        queueMicrotask(() => callback([{ isIntersecting: true } as IntersectionObserverEntry], this as unknown as IntersectionObserver))
+      }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+      takeRecords() { return [] }
+      root = null
+      rootMargin = '0px'
+      thresholds = [0]
+    })
+
+    render(<NaverMap clientId="client-id" year={2026} />)
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/region-boundaries?year=2026', expect.anything()))
+    expect(removeAll).toHaveBeenCalled()
+    expect(addGeoJson).toHaveBeenCalledWith({ type: 'FeatureCollection', features: [] })
+    expect(setStyle).toHaveBeenCalled()
+  })
 })

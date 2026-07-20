@@ -51,7 +51,8 @@
 - [x] 연도 선택 및 급지 조회
 - [x] 지역 급지·평균 평단가 표시
 - [x] 모바일 반응형 지도/목록 레이아웃
-- [ ] 행정구역 경계 데이터와 지도 색상 오버레이
+- [x] 행정구역 경계 GeoJSON API와 지도 색상 오버레이
+- [ ] VWorld API 키 발급과 실제 시군구 경계 적재
 
 ## Alert condition registration completion (2026-07-20)
 

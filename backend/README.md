@@ -1,5 +1,13 @@
 # Backend
 
+## 행정구역 경계 API
+
+```http
+GET /api/region-boundaries?year=2026
+```
+
+PostGIS 경계가 존재하고 요청 연도의 급지가 계산된 지역만 `application/geo+json` FeatureCollection으로 반환한다.
+
 ## Geocoding 좌표 보강
 
 좌표가 없는 아파트는 기본 1시간 주기로 최대 50건씩 처리한다. 같은 정규화 주소는 DB 캐시를 재사용하며, 코드 내부 한도인 일 900건 또는 월 18,000건에 도달하면 NAVER API를 호출하지 않는다. 한도와 배치 크기는 `NAVER_GEOCODING_*` 환경 변수로 더 낮출 수 있다. 운영 중 상향할 때도 NAVER Cloud 콘솔의 최종 한도를 먼저 확인해야 한다.

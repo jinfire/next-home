@@ -1,5 +1,11 @@
 # Folder Structure
 
+## Region boundary overlay additions
+
+- `backend/.../region/RegionBoundaryService.java`: PostGIS 경계와 급지를 GeoJSON으로 결합
+- `backend/.../region/RegionBoundaryController.java`: 연도별 경계 API
+- `frontend/src/components/NaverMap.tsx`: NAVER Maps Data 레이어 급지 색상 표시
+
 ## Dynamic Map usage protection additions
 
 - `frontend/src/components/NaverMap.tsx`: 뷰포트 기반 지연 로딩과 단일 SDK·지도 인스턴스 관리

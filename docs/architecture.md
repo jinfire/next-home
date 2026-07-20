@@ -1,5 +1,9 @@
 # Architecture
 
+## Region boundary overlay flow
+
+Spring Boot가 PostGIS `region.boundary`와 `region_grade`를 연도 기준으로 결합해 `application/geo+json`을 생성한다. React 지도는 SDK 초기화 후 이 API를 요청하고 NAVER Maps Data 레이어에 추가한다. 연도 변경 시 기존 Feature를 제거한 뒤 급지별 색상과 반투명 채우기를 다시 적용한다.
+
 ## Dynamic Map lazy-load flow
 
 `NaverMap`은 `IntersectionObserver`로 지도 영역의 접근을 감지한 뒤 공유 SDK 로더를 호출한다. 로더는 모듈 범위 Promise와 `data-next-home-map` script 하나를 재사용하므로 React 재렌더링이나 여러 소비자가 Dynamic Map 로드를 중복 발생시키지 않는다.

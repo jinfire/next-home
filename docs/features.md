@@ -1,5 +1,12 @@
 # Features
 
+## 행정구역 급지 색상 오버레이 구현
+
+- `GET /api/region-boundaries?year=2026`은 경계가 저장된 지역과 해당 연도 급지를 GeoJSON FeatureCollection으로 반환한다.
+- 지도는 기준 연도가 바뀔 때 기존 경계를 제거하고 새 경계를 1~10급지 색상으로 표시한다.
+- 경계가 없는 지역은 응답에서 제외되어 잘못된 도형이나 빈 Feature를 만들지 않는다.
+- 실제 경계 원천은 국토교통부 VWorld의 무료 시군구 WFS `lt_c_adsigg_info`를 사용한다. 별도 VWorld API 키 발급 전까지 DB 경계 데이터 수집은 보류한다.
+
 ## Dynamic Map 호출 절약 구현
 
 - 지도 영역이 화면 200px 이내에 들어올 때만 NAVER Maps SDK를 지연 로딩한다.

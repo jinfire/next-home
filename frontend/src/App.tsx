@@ -81,7 +81,7 @@ function App() {
         </div>
 
         <div className="map-grid">
-          <NaverMap />
+          <NaverMap year={year} />
           <aside className="grade-list" aria-label="지역 급지 목록">
             {error && <p role="alert" className="empty-state">{error}</p>}
             {!error && grades.length === 0 && <p className="empty-state">{year}년 급지 데이터가 아직 없습니다.</p>}

@@ -1,5 +1,11 @@
 # Database
 
+## Region boundary 조회 규칙
+
+- `region.boundary`는 SRID 4326의 MultiPolygon이다.
+- 경계 API는 `region_grade.year`가 일치하고 `boundary IS NOT NULL`인 지역만 노출한다.
+- PostGIS `ST_AsGeoJSON`으로 변환하므로 프런트엔드에서 별도 좌표계 변환을 수행하지 않는다.
+
 ## GeocodingCache와 ExternalApiUsage
 
 - `geocoding_cache`: 정규화 주소를 기본 키로 사용하고 도로명 주소, 경도, 위도, `geography(Point, 4326)`를 보관한다.

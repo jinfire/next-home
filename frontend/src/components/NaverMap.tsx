@@ -4,10 +4,20 @@ declare global {
   interface Window {
     naver?: {
       maps: {
-        Map: new (element: HTMLElement, options: Record<string, unknown>) => unknown
+        Map: new (element: HTMLElement, options: Record<string, unknown>) => NaverMapInstance
         LatLng: new (latitude: number, longitude: number) => unknown
       }
     }
+  }
+}
+
+type GeoJson = { type: 'FeatureCollection'; features: unknown[] }
+type NaverFeature = { getProperty(name: string): unknown }
+type NaverMapInstance = {
+  data: {
+    addGeoJson(value: GeoJson): void
+    removeAll(): void
+    setStyle(style: (feature: NaverFeature) => Record<string, unknown>): void
   }
 }
 
@@ -40,12 +50,16 @@ export function resetNaverMapSdkForTest() {
   sdkPromise = undefined
 }
 
-type NaverMapProps = { clientId?: string }
+type NaverMapProps = { clientId?: string; year?: number }
 
-export default function NaverMap({ clientId = configuredClientId }: NaverMapProps) {
+const gradeColors = ['#7c3aed', '#2563eb', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#ea580c', '#dc2626', '#be185d', '#64748b']
+
+export default function NaverMap({ clientId = configuredClientId, year = new Date().getFullYear() }: NaverMapProps) {
   const wrapper = useRef<HTMLDivElement>(null)
   const container = useRef<HTMLDivElement>(null)
   const initialized = useRef(false)
+  const map = useRef<NaverMapInstance | null>(null)
+  const [mapReady, setMapReady] = useState(false)
   const [visible, setVisible] = useState(false)
   const [message, setMessage] = useState('지도를 불러오는 중입니다.')
 
@@ -75,16 +89,45 @@ export default function NaverMap({ clientId = configuredClientId }: NaverMapProp
     let active = true
     loadNaverMapSdk(clientId).then(() => {
       if (!active || initialized.current || !container.current || !window.naver) return
-      new window.naver.maps.Map(container.current, {
+      map.current = new window.naver.maps.Map(container.current, {
         center: new window.naver.maps.LatLng(37.5665, 126.978),
         zoom: 11,
         minZoom: 8,
       })
       initialized.current = true
+      setMapReady(true)
       setMessage('')
     }).catch(() => active && setMessage('지도를 불러오지 못했습니다.'))
     return () => { active = false }
   }, [clientId, visible])
+
+  useEffect(() => {
+    if (!mapReady || !map.current) return
+    const controller = new AbortController()
+    fetch(`/api/region-boundaries?year=${year}`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error('행정구역 경계를 불러오지 못했습니다.')
+        return response.json() as Promise<GeoJson>
+      })
+      .then((geoJson) => {
+        if (!map.current) return
+        map.current.data.removeAll()
+        map.current.data.addGeoJson(geoJson)
+        map.current.data.setStyle((feature) => {
+          const grade = Number(feature.getProperty('grade'))
+          return {
+            fillColor: gradeColors[grade - 1] ?? '#94a3b8',
+            fillOpacity: 0.42,
+            strokeColor: '#ffffff',
+            strokeWeight: 1.5,
+          }
+        })
+      })
+      .catch((reason: Error) => {
+        if (reason.name !== 'AbortError') setMessage(reason.message)
+      })
+    return () => controller.abort()
+  }, [mapReady, year])
 
   return (
     <div ref={wrapper} className="map-canvas">
