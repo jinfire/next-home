@@ -28,4 +28,17 @@ class RecommendationControllerTest {
         mvc.perform(get("/api/recommendations/upgrades").param("currentGrade","11").param("year","2026"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test void returnsBetterApartmentsInSameLifestyleZone() throws Exception {
+        var recommendation = new LifestyleApartmentRecommendation(
+                2, "Upgrade A", "Seoul", new BigDecimal("8000.00"),
+                new BigDecimal("2000.00"), 4);
+        when(service.recommendApartments(1, 2026)).thenReturn(List.of(recommendation));
+
+        mvc.perform(get("/api/recommendations/apartments")
+                        .param("apartmentId", "1").param("year", "2026"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].apartmentId").value(2))
+                .andExpect(jsonPath("$[0].gapPerPyeong").value(2000.00));
+    }
 }

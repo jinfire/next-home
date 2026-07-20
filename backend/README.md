@@ -1,5 +1,13 @@
 # Backend
 
+## 같은 생활권 내 상급 아파트 추천 API
+
+```http
+GET /api/recommendations/apartments?apartmentId=10&year=2026
+```
+
+선택 연도의 취소되지 않은 실거래를 기준으로, 현재 아파트와 같은 행정구역에서 평균 평단가가 더 높은 단지를 최대 10개 반환한다. 각 결과에는 평균 평단가, 유효 거래 수, 현재 아파트 대비 평당 격차가 포함된다. 해당 연도에 현재 아파트의 유효 거래가 없으면 `404 Not Found`를 반환한다.
+
 Next Home의 조회·분석·추천·알림 API를 제공하는 Spring Boot 애플리케이션이다.
 
 ## 실행

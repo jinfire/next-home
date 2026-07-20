@@ -1,5 +1,9 @@
 # Architecture
 
+## Lifestyle apartment recommendation flow
+
+`GET /api/recommendations/apartments?apartmentId={id}&year={year}`는 선택 연도의 유효 실거래를 집계한다. Spring Boot가 아파트별 평균 평단가를 계산한 뒤 현재 아파트와 동일한 `region_id`에 속하면서 평균 평단가가 더 높은 후보만 골라 최대 10개를 반환한다. 취소 거래는 집계에서 제외하며 별도 요약 테이블 없이 PostgreSQL 조회 결과를 사용한다.
+
 > 이 문서는 전체 시스템 구성과 데이터 흐름을 정리한다.
 
 ## 전체 구조
