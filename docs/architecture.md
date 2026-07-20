@@ -1,5 +1,9 @@
 # Architecture
 
+## Dynamic Map lazy-load flow
+
+`NaverMap`은 `IntersectionObserver`로 지도 영역의 접근을 감지한 뒤 공유 SDK 로더를 호출한다. 로더는 모듈 범위 Promise와 `data-next-home-map` script 하나를 재사용하므로 React 재렌더링이나 여러 소비자가 Dynamic Map 로드를 중복 발생시키지 않는다.
+
 ## Geocoding cache and budget flow
 
 `ApartmentGeocodingJob`이 좌표가 없는 아파트를 작은 배치로 조회한다. `GeocodingService`는 정규화 주소 캐시를 먼저 확인하고, 캐시 미스일 때만 `PersistentGeocodingBudget`에서 일·월 예산을 원자적으로 예약한 뒤 NAVER API를 호출한다. 성공한 좌표는 캐시와 `apartment.location`에 저장한다. 예산 소진 시 호출을 중단하므로 브라우저 트래픽이 외부 API 사용량을 직접 늘릴 수 없다.

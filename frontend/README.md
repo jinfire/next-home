@@ -24,6 +24,8 @@
 
 메인 화면은 네이버 Dynamic Map과 연도별 지역 급지 목록을 보여준다. 루트 `.env`의 `NAVER_MAP_CLIENT_ID`를 사용하며 지도 Client Secret은 프런트엔드에 포함하지 않는다. 개발 서버의 `/api` 요청은 `http://localhost:8080`으로 전달된다.
 
+Dynamic Map SDK는 지도 영역이 화면 가까이에 들어올 때 지연 로딩하며, 페이지 안에서 script와 SDK 로드 요청을 한 번만 공유한다.
+
 ```powershell
 npm run dev
 npm test

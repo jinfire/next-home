@@ -1,5 +1,10 @@
 # Folder Structure
 
+## Dynamic Map usage protection additions
+
+- `frontend/src/components/NaverMap.tsx`: 뷰포트 기반 지연 로딩과 단일 SDK·지도 인스턴스 관리
+- `frontend/src/components/NaverMap.test.tsx`: SDK 중복 요청 방지와 지연 로딩 회귀 테스트
+
 ## Geocoding additions
 
 - `backend/.../geocoding`: 주소 정규화, 좌표 캐시, 영속 호출 예산, NAVER 게이트웨이, 아파트 좌표 보강 작업

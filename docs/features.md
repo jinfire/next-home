@@ -1,5 +1,11 @@
 # Features
 
+## Dynamic Map 호출 절약 구현
+
+- 지도 영역이 화면 200px 이내에 들어올 때만 NAVER Maps SDK를 지연 로딩한다.
+- 동시에 여러 지도 소비자가 생겨도 공유 Promise와 단일 script 태그를 사용한다.
+- 한 지도 컴포넌트에서는 지도 객체를 한 번만 생성한다.
+
 ## Geocoding 캐시와 무료 한도 보호 구현
 
 - 좌표가 없는 아파트 주소를 백엔드 배치가 한 번에 최대 50건씩 NAVER Geocoding으로 변환한다.

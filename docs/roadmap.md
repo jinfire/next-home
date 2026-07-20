@@ -1,5 +1,12 @@
 # Roadmap
 
+## Dynamic Map usage protection completion (2026-07-20)
+
+- [x] 뷰포트 접근 시 SDK 지연 로딩
+- [x] SDK script와 로드 Promise 단일화
+- [x] 컴포넌트별 지도 객체 중복 생성 방지
+- [x] 호출 절약 동작의 프런트엔드 테스트
+
 ## Geocoding cache and budget completion (2026-07-20)
 
 - [x] 주소 정규화와 중복 좌표 캐시

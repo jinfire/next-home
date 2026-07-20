@@ -92,7 +92,7 @@
 - [ ] 네이버 Maps 사용량 70% 이메일 알림 설정
 - [x] Geocoding 일·월 호출 예산 저장 및 차단 로직 TDD 구현
 - [x] 주소 중복 제거와 좌표 재사용 로직 TDD 구현
-- [ ] Dynamic Map 단일 인스턴스 및 지연 로딩 테스트 작성
+- [x] Dynamic Map 단일 인스턴스 및 지연 로딩 테스트 작성
 
 ## Collector
 
