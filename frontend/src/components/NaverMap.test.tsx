@@ -41,8 +41,9 @@ describe('NAVER Dynamic Map usage protection', () => {
   it('loads the selected year boundaries and applies grade colors', async () => {
     const addGeoJson = vi.fn()
     const setStyle = vi.fn()
-    const removeAll = vi.fn()
-    const map = { data: { addGeoJson, setStyle, removeAll } }
+    const removeFeature = vi.fn()
+    addGeoJson.mockReturnValue([])
+    const map = { data: { addGeoJson, setStyle, removeFeature } }
     class MockMap { data = map.data }
     class MockLatLng {}
     window.naver = { maps: {
@@ -69,7 +70,6 @@ describe('NAVER Dynamic Map usage protection', () => {
     render(<NaverMap clientId="client-id" year={2026} />)
 
     await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/region-boundaries?year=2026', expect.anything()))
-    expect(removeAll).toHaveBeenCalled()
     expect(addGeoJson).toHaveBeenCalledWith({ type: 'FeatureCollection', features: [] })
     expect(setStyle).toHaveBeenCalled()
   })

@@ -1,5 +1,11 @@
 # Folder Structure
 
+## Frontend E2E additions
+
+- `frontend/playwright.config.ts`: Chromium 프로젝트와 Vite 테스트 서버 설정
+- `frontend/e2e/main-flow.spec.ts`: 급지 지도·검색·갈아타기 핵심 흐름
+- `frontend/test-results`, `frontend/playwright-report`: Git에서 제외되는 실행 결과
+
 ## Region search frontend additions
 
 - `frontend/src/components/RegionSearch.tsx`: 지역 검색 폼·결과·오류 상태

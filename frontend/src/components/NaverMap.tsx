@@ -15,8 +15,8 @@ type GeoJson = { type: 'FeatureCollection'; features: unknown[] }
 type NaverFeature = { getProperty(name: string): unknown }
 type NaverMapInstance = {
   data: {
-    addGeoJson(value: GeoJson): void
-    removeAll(): void
+    addGeoJson(value: GeoJson): NaverFeature[]
+    removeFeature(feature: NaverFeature): void
     setStyle(style: (feature: NaverFeature) => Record<string, unknown>): void
   }
 }
@@ -59,6 +59,7 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
   const container = useRef<HTMLDivElement>(null)
   const initialized = useRef(false)
   const map = useRef<NaverMapInstance | null>(null)
+  const boundaryFeatures = useRef<NaverFeature[]>([])
   const [mapReady, setMapReady] = useState(false)
   const [visible, setVisible] = useState(false)
   const [message, setMessage] = useState('지도를 불러오는 중입니다.')
@@ -111,8 +112,8 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
       })
       .then((geoJson) => {
         if (!map.current) return
-        map.current.data.removeAll()
-        map.current.data.addGeoJson(geoJson)
+        boundaryFeatures.current.forEach((feature) => map.current?.data.removeFeature(feature))
+        boundaryFeatures.current = map.current.data.addGeoJson(geoJson)
         map.current.data.setStyle((feature) => {
           const grade = Number(feature.getProperty('grade'))
           return {

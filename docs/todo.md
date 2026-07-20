@@ -85,7 +85,7 @@
 - [x] Backend 단위 테스트 환경 구성
 - [x] Backend PostGIS 통합 테스트 환경 구성
 - [x] Frontend 컴포넌트 테스트 환경 구성
-- [ ] Frontend E2E 테스트 환경 구성
+- [x] Frontend E2E 테스트 환경 구성
 - [x] 네이버 Maps Application 등록 및 로컬 인증정보 설정
 - [x] 네이버 Maps 대표 계정 여부 확인
 - [x] Dynamic Map 한도 설정: 일 10,000건, 월 100,000건

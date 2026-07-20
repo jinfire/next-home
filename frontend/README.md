@@ -30,6 +30,16 @@ Dynamic Map SDK는 지도 영역이 화면 가까이에 들어올 때 지연 로
 
 지도 상단의 지역 검색은 `/api/regions` 결과를 현재 연도 급지 목록과 연결해 선택 요약과 알림 대상을 갱신한다.
 
+## 브라우저 E2E 테스트
+
+최초 한 번 `npx playwright install chromium`으로 브라우저를 설치한 뒤 실행한다.
+
+```powershell
+npm run test:e2e
+```
+
+테스트는 API 응답을 가로채므로 외부 API 호출량을 사용하지 않는다.
+
 ```powershell
 npm run dev
 npm test

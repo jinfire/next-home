@@ -1,5 +1,9 @@
 # Architecture
 
+## Frontend E2E test flow
+
+Playwright가 Vite 개발 서버를 별도 포트에서 실행하고 Chromium으로 실제 DOM 상호작용을 수행한다. `/api/**`는 테스트 라우트가 고정 응답을 제공해 백엔드나 유료 가능성이 있는 외부 서비스에 의존하지 않는다. Vitest는 `e2e/**`를 제외해 단위 테스트 러너와 Playwright 러너를 분리한다.
+
 ## Region search frontend flow
 
 `RegionSearch`가 제출된 검색어를 URL 인코딩해 `/api/regions`에 요청한다. 선택 결과는 `App`의 연도별 급지 목록과 `regionId`로 결합되며, 일치할 때 지도 하단 선택 요약과 알림 대상 지역을 함께 갱신한다.
