@@ -1,5 +1,9 @@
 # Backend
 
+## Geocoding 좌표 보강
+
+좌표가 없는 아파트는 기본 1시간 주기로 최대 50건씩 처리한다. 같은 정규화 주소는 DB 캐시를 재사용하며, 코드 내부 한도인 일 900건 또는 월 18,000건에 도달하면 NAVER API를 호출하지 않는다. 한도와 배치 크기는 `NAVER_GEOCODING_*` 환경 변수로 더 낮출 수 있다. 운영 중 상향할 때도 NAVER Cloud 콘솔의 최종 한도를 먼저 확인해야 한다.
+
 ## 알림 평가 및 Web Push 발송
 
 활성 조건은 기본 한 시간마다 평가한다. `targetGapPercent`와 `historicalGapPercentile` 중 설정된 임계값을 모두 만족하면 같은 `browserId`의 구독으로 알림을 전송한다. 동일 조건은 24시간에 한 번만 발송한다. 평가 간격은 `app.alerts.check-interval-ms`로 조정할 수 있다.

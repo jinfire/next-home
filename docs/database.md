@@ -1,5 +1,11 @@
 # Database
 
+## GeocodingCache와 ExternalApiUsage
+
+- `geocoding_cache`: 정규화 주소를 기본 키로 사용하고 도로명 주소, 경도, 위도, `geography(Point, 4326)`를 보관한다.
+- `external_api_usage`: 공급자·API·기간 종류·기간 시작일별 호출 수를 보관한다. 조건부 upsert로 한도 이내에서만 카운터를 증가시킨다.
+- `V2__add_geocoding_cache_and_api_budget.sql`이 두 테이블과 공간 인덱스를 생성한다.
+
 ## alert_condition 평가 규칙
 
 - `target_gap_percent`: 목표 평균 평단가와 현재 지역 평균 평단가의 격차율 상한

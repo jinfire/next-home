@@ -1,5 +1,11 @@
 # Folder Structure
 
+## Geocoding additions
+
+- `backend/.../geocoding`: 주소 정규화, 좌표 캐시, 영속 호출 예산, NAVER 게이트웨이, 아파트 좌표 보강 작업
+- `backend/.../db/migration/V2__add_geocoding_cache_and_api_budget.sql`: 캐시와 외부 API 사용량 스키마
+- `backend/.../geocoding` 테스트: 캐시·예산·PostGIS 저장·배치 흐름 검증
+
 ## Web Push additions
 
 - `backend/.../push`: Push 구독 API, 서비스, JPA 엔티티와 저장소

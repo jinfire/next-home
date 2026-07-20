@@ -1,5 +1,9 @@
 # Architecture
 
+## Geocoding cache and budget flow
+
+`ApartmentGeocodingJob`이 좌표가 없는 아파트를 작은 배치로 조회한다. `GeocodingService`는 정규화 주소 캐시를 먼저 확인하고, 캐시 미스일 때만 `PersistentGeocodingBudget`에서 일·월 예산을 원자적으로 예약한 뒤 NAVER API를 호출한다. 성공한 좌표는 캐시와 `apartment.location`에 저장한다. 예산 소진 시 호출을 중단하므로 브라우저 트래픽이 외부 API 사용량을 직접 늘릴 수 없다.
+
 ## Background alert evaluation and delivery
 
 `AlertDispatchJob`은 활성 `alert_condition`을 조회하고 `JdbcAlertMarketDataProvider`가 `region_grade` 이력에서 현재 격차율과 과거 백분위를 만든다. `AlertConditionMatcher`가 임계값을 판정하면 `PushNotificationService`가 같은 `browser_id`의 모든 구독으로 JSON payload를 보낸다. `JavaWebPushGateway`는 webpush-java와 VAPID 키로 암호화·서명하며 성공한 조건은 `last_triggered_at`을 기록해 24시간 쿨다운을 적용한다.

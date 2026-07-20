@@ -43,6 +43,8 @@ class DatabaseMigrationTest {
             assertThat(tableExists(statement, "region_grade")).isTrue();
             assertThat(tableExists(statement, "alert_condition")).isTrue();
             assertThat(tableExists(statement, "push_subscription")).isTrue();
+            assertThat(tableExists(statement, "external_api_usage")).isTrue();
+            assertThat(tableExists(statement, "geocoding_cache")).isTrue();
         }
     }
 

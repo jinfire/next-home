@@ -1,5 +1,13 @@
 # Roadmap
 
+## Geocoding cache and budget completion (2026-07-20)
+
+- [x] 주소 정규화와 중복 좌표 캐시
+- [x] 일 900건·월 18,000건 코드 예산 차단
+- [x] PostGIS 좌표 저장과 공간 인덱스
+- [x] 좌표 누락 아파트 소규모 배치 보강
+- [x] 단위·PostGIS 통합 테스트와 실제 로컬 DB 기동 검증
+
 ## Web Push subscription completion (2026-07-20)
 
 - [x] VAPID 공개키 API

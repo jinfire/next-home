@@ -15,6 +15,17 @@ spring:
     enabled: true
 
 app:
+  naver:
+    client-id: ${NAVER_MAP_CLIENT_ID:}
+    client-secret: ${NAVER_MAP_CLIENT_SECRET:}
+    geocoding:
+      endpoint: ${NAVER_GEOCODING_ENDPOINT:https://maps.apigw.ntruss.com/map-geocode/v2/geocode}
+      daily-limit: ${NAVER_GEOCODING_DAILY_LIMIT:900}
+      monthly-limit: ${NAVER_GEOCODING_MONTHLY_LIMIT:18000}
+      batch-size: ${NAVER_GEOCODING_BATCH_SIZE:50}
+      backfill-enabled: ${NAVER_GEOCODING_BACKFILL_ENABLED:true}
+      backfill-interval-ms: ${NAVER_GEOCODING_BACKFILL_INTERVAL_MS:3600000}
+      backfill-initial-delay-ms: ${NAVER_GEOCODING_BACKFILL_INITIAL_DELAY_MS:120000}
   push:
     vapid-public-key: ${VAPID_PUBLIC_KEY:}
     vapid-private-key: ${VAPID_PRIVATE_KEY:}
