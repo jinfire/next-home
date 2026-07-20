@@ -1,5 +1,9 @@
 # Architecture
 
+## Background alert evaluation and delivery
+
+`AlertDispatchJob`은 활성 `alert_condition`을 조회하고 `JdbcAlertMarketDataProvider`가 `region_grade` 이력에서 현재 격차율과 과거 백분위를 만든다. `AlertConditionMatcher`가 임계값을 판정하면 `PushNotificationService`가 같은 `browser_id`의 모든 구독으로 JSON payload를 보낸다. `JavaWebPushGateway`는 webpush-java와 VAPID 키로 암호화·서명하며 성공한 조건은 `last_triggered_at`을 기록해 24시간 쿨다운을 적용한다.
+
 ## Web Push subscription flow
 
 백엔드는 `VAPID_PUBLIC_KEY`만 `/api/push-subscriptions/vapid-public-key`로 제공한다. 브라우저는 `/sw.js`를 등록하고 PushManager 구독을 만든 뒤 endpoint, p256dh, auth와 장치별 UUID를 백엔드에 전송한다. 서버는 공개 구독정보를 PostgreSQL에 upsert한다. `VAPID_PRIVATE_KEY`는 서버 환경에만 존재하며 후속 발송기가 Push 서비스 요청을 서명할 때 사용한다.

@@ -40,4 +40,8 @@ class PushSubscription {
     PushSubscriptionResponse response() {
         return new PushSubscriptionResponse(id, browserId, endpoint);
     }
+
+    PushTarget target() {
+        return new PushTarget(endpoint, p256dh, auth);
+    }
 }

@@ -13,8 +13,8 @@
 - [x] 웹 알림 설정 UI
 - [x] 브라우저 권한·로컬 조건 저장
 - [x] 가격 격차 조건 평가와 Notification API 알림
-- [ ] Push 구독 저장과 서버 발송
-- [ ] 브라우저가 닫혀 있을 때 백그라운드 알림
+- [x] Push 구독 저장과 서버 발송
+- [x] 브라우저가 닫혀 있을 때 백그라운드 알림
 
 ## Lifestyle recommendation frontend completion (2026-07-20)
 
@@ -43,8 +43,8 @@
 - [x] 알림 조건 요청 및 응답 모델
 - [x] 알림 조건 유효성 검증
 - [x] PostgreSQL 저장 API
-- [ ] 조건 평가 작업
-- [ ] Web Push 구독 및 발송
+- [x] 조건 평가 작업
+- [x] Web Push 구독 및 발송
 
 ## Lifestyle recommendation completion (2026-07-20)
 

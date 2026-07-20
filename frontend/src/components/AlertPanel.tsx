@@ -60,8 +60,15 @@ async function checkAlert(condition: StoredAlert, permission: NotificationPermis
   return true
 }
 
-export default function AlertPanel({ year }: { year: number }) {
-  const [currentGrade, setCurrentGrade] = useState(0)
+type AlertPanelProps = {
+  year: number
+  currentRegionId?: number
+  currentGrade?: number
+  currentAveragePricePerPyeong?: number
+  regionName?: string
+}
+
+export default function AlertPanel({ year, currentRegionId, currentGrade, currentAveragePricePerPyeong, regionName }: AlertPanelProps) {
   const [maxGap, setMaxGap] = useState('')
   const [message, setMessage] = useState('')
 
@@ -80,8 +87,8 @@ export default function AlertPanel({ year }: { year: number }) {
       return
     }
     const gap = Number(maxGap)
-    if (!currentGrade || !Number.isFinite(gap) || gap <= 0) {
-      setMessage('현재 급지와 최대 격차를 입력해 주세요.')
+    if (!currentRegionId || !currentGrade || !currentAveragePricePerPyeong || !Number.isFinite(gap) || gap <= 0) {
+      setMessage('지도에서 현재 지역을 선택하고 최대 격차를 입력해 주세요.')
       return
     }
     const permission = Notification.permission === 'granted'
@@ -94,6 +101,20 @@ export default function AlertPanel({ year }: { year: number }) {
     const condition = { currentGrade, maxGapManwon: gap, year }
     localStorage.setItem(storageKey, JSON.stringify(condition))
     const backgroundReady = await registerBackgroundPush().catch(() => false)
+    if (backgroundReady) {
+      const targetGrades = [currentGrade - 1, currentGrade - 2].filter((grade) => grade >= 1)
+      const targetGapPercent = gap * 10_000 / currentAveragePricePerPyeong * 100
+      await Promise.all(targetGrades.map((targetGrade) => fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          browserId: browserId(),
+          currentRegionId,
+          targetGrade,
+          targetGapPercent,
+        }),
+      })))
+    }
     setMessage(backgroundReady
       ? '알림이 설정되었습니다.'
       : '알림이 설정되었습니다. 현재 브라우저에서는 페이지가 열려 있을 때 작동합니다.')
@@ -113,14 +134,7 @@ export default function AlertPanel({ year }: { year: number }) {
         <p>페이지가 열려 있는 동안 한 시간마다 가격 격차를 확인해 브라우저 알림으로 알려드립니다.</p>
       </div>
       <form onSubmit={enable}>
-        <label>알림 기준 현재 급지
-          <select value={currentGrade} onChange={(event) => setCurrentGrade(Number(event.target.value))}>
-            <option value="0">선택</option>
-            {Array.from({ length: 10 }, (_, index) => index + 1).map((grade) => (
-              <option value={grade} key={grade}>{grade}급지</option>
-            ))}
-          </select>
-        </label>
+        <div className="alert-current"><span>알림 기준 현재 지역</span><strong>{regionName && currentGrade ? `${regionName} · ${currentGrade}급지` : '지도에서 지역을 선택하세요'}</strong></div>
         <label>최대 평당 격차
           <span className="unit-input"><input inputMode="numeric" value={maxGap} onChange={(event) => setMaxGap(event.target.value)} /><span>만원/평</span></span>
         </label>

@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -29,22 +31,65 @@ class AlertCondition {
     private BigDecimal historicalGapPercentile;
     @Column(nullable = false)
     private boolean enabled = true;
+    @Column(name = "last_triggered_at")
+    private Instant lastTriggeredAt;
 
     protected AlertCondition() {
     }
 
     AlertCondition(AlertConditionRequest request) {
+        update(request);
+    }
+
+    void update(AlertConditionRequest request) {
         browserId = request.browserId();
         currentRegionId = request.currentRegionId();
         targetRegionId = request.targetRegionId();
         targetGrade = request.targetGrade() == null ? null : request.targetGrade().shortValue();
         targetGapPercent = request.targetGapPercent();
         historicalGapPercentile = request.historicalGapPercentile();
+        enabled = true;
+        lastTriggeredAt = null;
+    }
+
+    boolean sameTarget(AlertConditionRequest request) {
+        Integer grade = targetGrade == null ? null : targetGrade.intValue();
+        return currentRegionId == request.currentRegionId()
+                && java.util.Objects.equals(targetRegionId, request.targetRegionId())
+                && java.util.Objects.equals(grade, request.targetGrade());
     }
 
     AlertConditionResponse response() {
         return new AlertConditionResponse(id, browserId, currentRegionId, targetRegionId,
                 targetGrade == null ? null : targetGrade.intValue(),
                 targetGapPercent, historicalGapPercentile, enabled);
+    }
+
+    UUID browserId() {
+        return browserId;
+    }
+
+    long currentRegionId() {
+        return currentRegionId;
+    }
+
+    Long targetRegionId() {
+        return targetRegionId;
+    }
+
+    Integer targetGrade() {
+        return targetGrade == null ? null : targetGrade.intValue();
+    }
+
+    AlertThresholds thresholds() {
+        return new AlertThresholds(targetGapPercent, historicalGapPercentile);
+    }
+
+    boolean canTrigger(Instant now, Duration cooldown) {
+        return lastTriggeredAt == null || lastTriggeredAt.plus(cooldown).compareTo(now) <= 0;
+    }
+
+    void markTriggered(Instant now) {
+        lastTriggeredAt = now;
     }
 }

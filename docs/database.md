@@ -1,5 +1,12 @@
 # Database
 
+## alert_condition 평가 규칙
+
+- `target_gap_percent`: 목표 평균 평단가와 현재 지역 평균 평단가의 격차율 상한
+- `historical_gap_percentile`: 현재 격차가 과거 분포에서 차지하는 백분위 상한
+- `last_triggered_at`: 동일 조건의 24시간 중복 발송을 막는 기준 시각
+- 동일 브라우저·현재 지역·목표 지역/급지 조건은 새 행을 만들지 않고 갱신한다.
+
 ## push_subscription 사용 규칙
 
 - `endpoint`는 브라우저 Push 구독의 고유키이며 중복 등록 시 기존 레코드를 갱신한다.

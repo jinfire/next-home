@@ -110,7 +110,13 @@ function App() {
 
       <UpgradePanel year={year} />
       <LifestylePanel year={year} />
-      <AlertPanel year={year} />
+      <AlertPanel
+        year={year}
+        currentRegionId={selected?.regionId}
+        currentGrade={selected?.grade}
+        currentAveragePricePerPyeong={selected?.averagePricePerPyeong}
+        regionName={selected?.regionName}
+      />
     </main>
   )
 }

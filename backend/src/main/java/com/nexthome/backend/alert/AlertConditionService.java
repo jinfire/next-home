@@ -13,6 +13,11 @@ public class AlertConditionService {
 
     @Transactional
     public AlertConditionResponse create(AlertConditionRequest request) {
-        return repository.save(new AlertCondition(request)).response();
+        AlertCondition condition = repository.findAllByBrowserId(request.browserId()).stream()
+                .filter(existing -> existing.sameTarget(request))
+                .findFirst()
+                .orElseGet(() -> new AlertCondition(request));
+        condition.update(request);
+        return repository.save(condition).response();
     }
 }

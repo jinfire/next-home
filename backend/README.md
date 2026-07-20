@@ -1,5 +1,9 @@
 # Backend
 
+## 알림 평가 및 Web Push 발송
+
+활성 조건은 기본 한 시간마다 평가한다. `targetGapPercent`와 `historicalGapPercentile` 중 설정된 임계값을 모두 만족하면 같은 `browserId`의 구독으로 알림을 전송한다. 동일 조건은 24시간에 한 번만 발송한다. 평가 간격은 `app.alerts.check-interval-ms`로 조정할 수 있다.
+
 ## Web Push 구독 API
 
 ```http

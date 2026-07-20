@@ -17,6 +17,8 @@ spring:
 app:
   push:
     vapid-public-key: ${VAPID_PUBLIC_KEY:}
+    vapid-private-key: ${VAPID_PRIVATE_KEY:}
+    vapid-subject: ${VAPID_SUBJECT:mailto:admin@next-home.local}
 
 management:
   endpoints:

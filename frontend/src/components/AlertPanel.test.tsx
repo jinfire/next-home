@@ -33,8 +33,8 @@ beforeEach(() => {
 })
 
 it('saves an alert and shows a browser notification when the condition is met', async () => {
-  render(<AlertPanel year={2026} />)
-  await userEvent.selectOptions(screen.getByLabelText('알림 기준 현재 급지'), '5')
+  render(<AlertPanel year={2026} currentRegionId={10} currentGrade={5} currentAveragePricePerPyeong={50_000_000} regionName="마포구" />)
+  expect(screen.getByText('마포구 · 5급지')).toBeInTheDocument()
   await userEvent.type(screen.getByLabelText(/최대 평당 격차/), '2000')
   await userEvent.click(screen.getByRole('button', { name: '웹 알림 켜기' }))
 
@@ -42,4 +42,5 @@ it('saves an alert and shows a browser notification when the condition is met', 
   expect(notification).toHaveBeenCalledWith('갈아타기 조건이 좋아졌어요', expect.any(Object))
   expect(localStorage.getItem('next-home-alert')).toContain('2000')
   expect(fetch).toHaveBeenCalledWith('/api/push-subscriptions', expect.objectContaining({ method: 'POST' }))
+  expect(fetch).toHaveBeenCalledWith('/api/alerts', expect.objectContaining({ method: 'POST' }))
 })
