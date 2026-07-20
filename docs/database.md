@@ -1,5 +1,9 @@
 # Database
 
+## 실제 수집 검증 데이터
+
+2026-07-20 로컬 PostGIS에 종로구 코드 `11110`, 2026년 1월 아파트 26개와 중복 제거된 거래 45건을 실제 API에서 적재해 저장 흐름을 검증했다. 이 데이터는 개발용 로컬 볼륨에만 존재하며 Git에는 포함되지 않는다.
+
 ## Region boundary 조회 규칙
 
 - `region.boundary`는 SRID 4326의 MultiPolygon이다.

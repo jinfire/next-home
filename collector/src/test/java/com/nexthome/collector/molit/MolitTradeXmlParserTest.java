@@ -40,4 +40,19 @@ class MolitTradeXmlParserTest {
                 .isInstanceOf(MolitApiException.class)
                 .hasMessageContaining("등록되지 않은 키");
     }
+
+    @Test
+    void parsesTheCompactCancellationDateReturnedByTheLiveApi() {
+        String xml = """
+                <response><header><resultCode>000</resultCode><resultMsg>OK</resultMsg></header>
+                <body><totalCount>1</totalCount><items><item>
+                  <aptSeq>11110-100</aptSeq><aptNm>테스트 아파트</aptNm><umdNm>청운동</umdNm>
+                  <jibun>10</jibun><dealAmount>125,000</dealAmount><excluUseAr>84.91</excluUseAr>
+                  <dealYear>2026</dealYear><dealMonth>1</dealMonth><dealDay>5</dealDay>
+                  <floor>12</floor><buildYear>2015</buildYear><cdealDay>26.01.29</cdealDay>
+                </item></items></body></response>
+                """;
+
+        assertThat(parser.parse(xml).items().get(0).cancellationDate().toString()).isEqualTo("2026-01-29");
+    }
 }

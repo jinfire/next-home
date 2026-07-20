@@ -1,5 +1,9 @@
 # Architecture
 
+## Live MOLIT collection flow
+
+Collector는 서비스 기본 URL에 공식 상세 기능 경로를 붙이고 법정동 앞 5자리, 계약연월 6자리, 페이지 정보를 전달한다. XML 헤더 성공 코드를 확인한 뒤 거래를 정규화하고 한 트랜잭션으로 Region·Apartment·Trade에 저장한다. 실제 응답에서 확인한 해제일은 ISO 또는 `yy.MM.dd` 두 형식을 지원한다.
+
 ## Frontend E2E test flow
 
 Playwright가 Vite 개발 서버를 별도 포트에서 실행하고 Chromium으로 실제 DOM 상호작용을 수행한다. `/api/**`는 테스트 라우트가 고정 응답을 제공해 백엔드나 유료 가능성이 있는 외부 서비스에 의존하지 않는다. Vitest는 `e2e/**`를 제외해 단위 테스트 러너와 Playwright 러너를 분리한다.

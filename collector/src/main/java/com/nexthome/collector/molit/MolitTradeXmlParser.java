@@ -3,6 +3,7 @@ package com.nexthome.collector.molit;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import org.xml.sax.InputSource;
 
 @Component
 public class MolitTradeXmlParser {
+
+    private static final DateTimeFormatter COMPACT_DATE = DateTimeFormatter.ofPattern("yy.MM.dd");
 
     public MolitTradePage parse(String xml) {
         try {
@@ -57,7 +60,11 @@ public class MolitTradeXmlParser {
                 LocalDate.of(year, month, day),
                 nullableInteger(text(item, "floor")),
                 nullableInteger(text(item, "buildYear")),
-                cancellation.isBlank() ? null : LocalDate.parse(cancellation));
+                cancellation.isBlank() ? null : cancellationDate(cancellation));
+    }
+
+    private LocalDate cancellationDate(String value) {
+        return value.indexOf('.') >= 0 ? LocalDate.parse(value, COMPACT_DATE) : LocalDate.parse(value);
     }
 
     private DocumentBuilderFactory secureFactory() throws Exception {
