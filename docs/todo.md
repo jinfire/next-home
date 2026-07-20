@@ -20,7 +20,7 @@
 - [x] frontend 폴더 생성
 - [x] PostgreSQL 로컬 환경 구성
 - [x] Backend 단위 테스트 환경 구성
-- [ ] Backend PostGIS 통합 테스트 환경 구성
+- [x] Backend PostGIS 통합 테스트 환경 구성
 - [x] Frontend 컴포넌트 테스트 환경 구성
 - [ ] Frontend E2E 테스트 환경 구성
 - [x] 네이버 Maps Application 등록 및 로컬 인증정보 설정
@@ -45,6 +45,7 @@
 
 - [x] Spring Boot 프로젝트 생성
 - [x] DB 연결 설정
+- [x] Flyway 핵심 스키마 마이그레이션
 - [ ] 지역 검색 API
 - [ ] 아파트 검색 API
 - [ ] 실거래 조회 API

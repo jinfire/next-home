@@ -9,6 +9,7 @@
 - [x] Collector, Backend, Frontend 폴더 생성
 - [x] PostgreSQL 실행 환경 구성
 - [x] Backend, Collector, Frontend 테스트 기반 구성
+- [x] Flyway 핵심 스키마와 PostGIS 통합 테스트 구성
 
 ## 2. 데이터 수집
 

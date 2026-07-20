@@ -35,6 +35,7 @@
 - 지역, 아파트, 거래, 급지 정보를 관리한다.
 - 관심 지역과 갈아타기 알림 조건을 관리한다.
 - 네이버 Geocoding 결과를 저장해 같은 주소의 중복 API 호출을 방지한다.
+- Flyway로 스키마 버전을 관리하고 PostGIS Testcontainers로 마이그레이션을 검증한다.
 
 ### Spring Boot
 

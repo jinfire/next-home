@@ -30,6 +30,18 @@ Region
   │ N
 RegionGrade
 
+AlertCondition
+  │ N
+  │
+  │ 1
+Region
+
+PushSubscription
+  │ N
+  │
+  │ 1
+Browser
+
 Apartment
   │ 1
   │
@@ -48,6 +60,7 @@ AlertCondition
 - name
 - parent_id
 - level
+- boundary (`geometry(MultiPolygon, 4326)`)
 
 ## Apartment
 
@@ -63,6 +76,7 @@ AlertCondition
 - longitude
 - build_year
 - household_count
+- location (`geography(Point, 4326)`)
 
 ## Trade
 
@@ -79,6 +93,8 @@ AlertCondition
 - contract_type
 - buyer_type
 - seller_type
+- source_key
+- cancellation_date
 
 ## RegionGrade
 
@@ -91,7 +107,8 @@ AlertCondition
 - year
 - average_price_per_pyeong
 - grade
-- score
+- trade_count
+- calculated_at
 
 ## 아직 저장하지 않는 데이터
 
@@ -113,9 +130,31 @@ AlertCondition
 - current_region_id
 - target_region_id
 - target_grade
-- target_gap
-- historical_gap_level
+- target_gap_percent
+- historical_gap_percentile
 - enabled
+- last_triggered_at
 - created_at
 
-알림 발송 채널과 사용자 식별 방식은 구현 단계에서 확정한다.
+브라우저 UUID로 사용자를 식별하며 웹 푸시 구독은 `PushSubscription`에 별도로 저장한다.
+
+## PushSubscription
+
+브라우저 웹 푸시 발송에 필요한 구독 정보를 저장한다.
+
+주요 필드:
+
+- id
+- browser_id
+- endpoint
+- p256dh_key
+- auth_key
+- created_at
+- updated_at
+
+## 마이그레이션
+
+- 스키마는 Backend의 Flyway 마이그레이션으로 관리한다.
+- `V1__create_core_schema.sql`이 PostGIS 확장과 핵심 테이블·인덱스를 생성한다.
+- 공간 컬럼에는 GiST 인덱스를 적용한다.
+- 실제 PostGIS 컨테이너를 사용하는 Testcontainers 통합 테스트로 마이그레이션을 검증한다.
