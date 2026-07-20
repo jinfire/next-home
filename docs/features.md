@@ -12,6 +12,8 @@
 - GeoJSON의 `sig_cd`를 기존 `region.code`와 매칭하고 Polygon을 PostGIS MultiPolygon으로 정규화해 저장한다.
 - 매칭되지 않는 코드는 건너뛰며, 기본값은 비활성화라 키 없이 외부 요청이 발생하지 않는다.
 - 원천: [공공데이터포털 국토교통부 행정구역도](https://www.data.go.kr/data/15059008/openapi.do)
+- 실제 WFS 1회 호출로 현재 DB의 종로구 경계를 적재했으며, `ST_MultiPolygon`·SRID 4326·유효 도형·약 23.99㎢를 확인했다.
+- 공식 WFS 1.1.0 명세에 따라 GeoJSON은 `output=application/json`, EPSG:4326 bbox는 `33,124,39,132` 순서로 요청한다.
 
 ## 국토교통부 실거래 실제 수집 검증
 
@@ -36,7 +38,7 @@
 - `GET /api/region-boundaries?year=2026`은 경계가 저장된 지역과 해당 연도 급지를 GeoJSON FeatureCollection으로 반환한다.
 - 지도는 기준 연도가 바뀔 때 기존 경계를 제거하고 새 경계를 1~10급지 색상으로 표시한다.
 - 경계가 없는 지역은 응답에서 제외되어 잘못된 도형이나 빈 Feature를 만들지 않는다.
-- 실제 경계 원천은 국토교통부 VWorld의 무료 시군구 WFS `lt_c_adsigg_info`를 사용한다. 별도 VWorld API 키 발급 전까지 DB 경계 데이터 수집은 보류한다.
+- 실제 경계 원천은 국토교통부 VWorld의 무료 시군구 WFS `lt_c_adsigg_info`를 사용하며, 서버에서 1회 적재해 브라우저에 키를 노출하지 않는다.
 
 ## Dynamic Map 호출 절약 구현
 
@@ -78,7 +80,7 @@
 - 기준 연도를 바꾸면 `/api/grades`에서 해당 연도의 급지 데이터를 다시 읽는다.
 - 지역별 급지, 평균 평단가와 유효 실거래 수를 함께 표시한다.
 - 지역을 선택하면 현재 선택한 지역의 핵심 값을 지도 아래에 요약한다.
-- 행정구역 경계 색상은 PostGIS `boundary` 데이터가 확보된 뒤 지도 오버레이로 추가한다.
+- 행정구역 경계는 PostGIS `boundary`와 연도별 급지를 결합해 지도 오버레이로 표시한다.
 
 ## 갈아타기 웹 알림 조건 등록
 

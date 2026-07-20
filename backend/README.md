@@ -21,6 +21,8 @@ $env:VWORLD_BOUNDARY_IMPORT_ENABLED='true'
 
 로그에서 적재 건수를 확인한 뒤 `VWORLD_BOUNDARY_IMPORT_ENABLED`를 다시 `false`로 둔다. 키가 없거나 비활성화 상태에서는 VWorld를 호출하지 않는다.
 
+실제 검증에서는 현재 DB의 종로구 경계 1건이 적재됐고 유효한 SRID 4326 MultiPolygon임을 확인했다. `.env`의 키는 Git에서 제외한다.
+
 ## Geocoding 좌표 보강
 
 좌표가 없는 아파트는 기본 1시간 주기로 최대 50건씩 처리한다. 같은 정규화 주소는 DB 캐시를 재사용하며, 코드 내부 한도인 일 900건 또는 월 18,000건에 도달하면 NAVER API를 호출하지 않는다. 한도와 배치 크기는 `NAVER_GEOCODING_*` 환경 변수로 더 낮출 수 있다. 운영 중 상향할 때도 NAVER Cloud 콘솔의 최종 한도를 먼저 확인해야 한다.

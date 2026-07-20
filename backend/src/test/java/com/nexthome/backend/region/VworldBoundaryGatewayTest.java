@@ -31,6 +31,14 @@ class VworldBoundaryGatewayTest {
         String response = new VworldBoundaryGateway(endpoint, "test-key", "http://localhost").fetchSigungu();
 
         assertThat(response).contains("FeatureCollection");
-        assertThat(query.get()).contains("typeName=lt_c_adsigg_info", "srsName=EPSG:4326", "key=test-key");
+        assertThat(query.get()).contains(
+                "typeName=lt_c_adsigg_info",
+                "output=application/json",
+                "srsName=EPSG:4326",
+                "bbox=33,124,39,132",
+                "maxFeatures=500",
+                "domain=http://localhost",
+                "key=test-key");
+        assertThat(query.get()).doesNotContain("outputFormat=");
     }
 }

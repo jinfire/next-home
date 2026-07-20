@@ -53,7 +53,7 @@
 - [x] 모바일 반응형 지도/목록 레이아웃
 - [x] 행정구역 경계 GeoJSON API와 지도 색상 오버레이
 - [x] VWorld WFS 수집기와 PostGIS 경계 importer
-- [ ] VWorld API 키 발급과 실제 시군구 경계 적재
+- [x] VWorld API 키 발급과 실제 시군구 경계 적재
 
 ## Alert condition registration completion (2026-07-20)
 

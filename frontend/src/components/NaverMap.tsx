@@ -106,7 +106,7 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
 
   return (
     <div ref={wrapper} className="map-canvas">
-      <div ref={container} className="naver-map" />
+      <div ref={container} className="naver-map" data-map-ready={mapReady} />
       {message && <p className="map-message">{message}</p>}
     </div>
   )

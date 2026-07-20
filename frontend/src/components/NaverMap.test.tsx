@@ -68,9 +68,10 @@ describe('NAVER Dynamic Map usage protection', () => {
       thresholds = [0]
     })
 
-    render(<NaverMap clientId="client-id" year={2026} />)
+    const { container } = render(<NaverMap clientId="client-id" year={2026} />)
 
     await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/region-boundaries?year=2026', expect.anything()))
+    expect(container.querySelector('.naver-map')).toHaveAttribute('data-map-ready', 'true')
     expect(addGeoJson).toHaveBeenCalledWith({ type: 'FeatureCollection', features: [] })
     expect(setStyle).toHaveBeenCalled()
   })
