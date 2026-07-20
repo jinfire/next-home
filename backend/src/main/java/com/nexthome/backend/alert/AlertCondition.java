@@ -22,7 +22,7 @@ class AlertCondition {
     @Column(name = "target_region_id")
     private Long targetRegionId;
     @Column(name = "target_grade")
-    private Integer targetGrade;
+    private Short targetGrade;
     @Column(name = "target_gap_percent")
     private BigDecimal targetGapPercent;
     @Column(name = "historical_gap_percentile")
@@ -37,13 +37,14 @@ class AlertCondition {
         browserId = request.browserId();
         currentRegionId = request.currentRegionId();
         targetRegionId = request.targetRegionId();
-        targetGrade = request.targetGrade();
+        targetGrade = request.targetGrade() == null ? null : request.targetGrade().shortValue();
         targetGapPercent = request.targetGapPercent();
         historicalGapPercentile = request.historicalGapPercentile();
     }
 
     AlertConditionResponse response() {
-        return new AlertConditionResponse(id, browserId, currentRegionId, targetRegionId, targetGrade,
+        return new AlertConditionResponse(id, browserId, currentRegionId, targetRegionId,
+                targetGrade == null ? null : targetGrade.intValue(),
                 targetGapPercent, historicalGapPercentile, enabled);
     }
 }

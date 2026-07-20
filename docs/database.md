@@ -1,5 +1,12 @@
 # Database
 
+## push_subscription 사용 규칙
+
+- `endpoint`는 브라우저 Push 구독의 고유키이며 중복 등록 시 기존 레코드를 갱신한다.
+- `browser_id`는 같은 장치의 알림 조건과 구독을 연결한다.
+- `p256dh_key`와 `auth_key`는 Web Push payload 암호화에 사용한다.
+- VAPID 개인키는 데이터베이스에 저장하지 않고 서버 환경변수로만 관리한다.
+
 > 이 문서는 데이터베이스 구조와 테이블 관계를 정리한다.
 
 ## 기본 원칙

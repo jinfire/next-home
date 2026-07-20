@@ -1,5 +1,14 @@
 # Backend
 
+## Web Push 구독 API
+
+```http
+GET /api/push-subscriptions/vapid-public-key
+POST /api/push-subscriptions
+```
+
+POST 요청에는 `browserId`, `endpoint`, `p256dh`, `auth`를 전달한다. VAPID 공개키·개인키·subject는 각각 `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` 환경변수로 관리한다.
+
 ## 갈아타기 알림 조건 등록 API
 
 ```http

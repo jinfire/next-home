@@ -1,5 +1,9 @@
 # Architecture
 
+## Web Push subscription flow
+
+백엔드는 `VAPID_PUBLIC_KEY`만 `/api/push-subscriptions/vapid-public-key`로 제공한다. 브라우저는 `/sw.js`를 등록하고 PushManager 구독을 만든 뒤 endpoint, p256dh, auth와 장치별 UUID를 백엔드에 전송한다. 서버는 공개 구독정보를 PostgreSQL에 upsert한다. `VAPID_PRIVATE_KEY`는 서버 환경에만 존재하며 후속 발송기가 Push 서비스 요청을 서명할 때 사용한다.
+
 ## Foreground web notification flow
 
 `AlertPanel`은 현재 급지와 최대 평당 격차를 장치 로컬 저장소에 보관한다. 페이지가 열려 있을 때 `/api/recommendations/upgrades`를 한 시간마다 조회해 조건을 평가하고 브라우저 Notification API를 호출한다. 이는 외부 메시지 서비스 비용 없이 동작하는 1단계이며, 백그라운드 알림은 기존 `push_subscription` 테이블과 Service Worker를 후속 연결한다.

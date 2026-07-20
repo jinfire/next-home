@@ -1,5 +1,9 @@
 # Features
 
+## Web Push 구독 구현
+
+브라우저 알림 권한을 허용하면 Service Worker를 등록하고 서버에서 공개 VAPID 키를 조회한다. PushManager 구독을 생성한 뒤 endpoint와 브라우저 공개키를 `push_subscription` 테이블에 저장한다. 동일 endpoint를 다시 등록하면 브라우저 식별자와 키를 갱신한다. VAPID 개인키는 로컬 `.env`와 서버에서만 사용하며 API 응답이나 프런트 번들에 포함하지 않는다.
+
 ## 웹 알림 1단계 구현
 
 사용자는 현재 급지와 허용할 최대 평당 격차(만원/평)를 설정한다. 조건은 브라우저 `localStorage`에 저장하며 권한 허용 후 즉시 조건을 확인한다. 페이지가 열린 동안 한 시간마다 선택 연도의 갈아타기 추천을 다시 조회하고 목표 급지와의 평당 격차가 설정값 이하이면 Notification API로 알린다. 브라우저를 완전히 닫은 상태의 알림은 Service Worker와 서버 Web Push를 연결하는 후속 단계다.

@@ -14,6 +14,10 @@ spring:
   flyway:
     enabled: true
 
+app:
+  push:
+    vapid-public-key: ${VAPID_PUBLIC_KEY:}
+
 management:
   endpoints:
     web:

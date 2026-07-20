@@ -1,5 +1,9 @@
 # Frontend
 
+## Service Worker Push 구독
+
+웹 알림을 켜면 `/sw.js`를 등록하고 VAPID 공개키로 PushManager 구독을 만든다. 구독은 백엔드에 저장되며 Push 수신 시 시스템 알림을 표시하고 클릭하면 Next Home 창을 연다.
+
 ## 웹 알림
 
 현재 급지와 최대 평당 격차를 설정하면 페이지가 열린 동안 한 시간마다 조건을 확인한다. 조건 충족 시 브라우저 Notification API로 알리며 설정은 현재 장치의 `localStorage`에 저장된다. 브라우저가 닫힌 상태의 Web Push는 아직 후속 작업이다.

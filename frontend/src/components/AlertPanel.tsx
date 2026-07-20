@@ -5,6 +5,47 @@ type StoredAlert = { currentGrade: number; maxGapManwon: number; year: number }
 type Upgrade = { targetGrade: number; currentGapPerPyeong: number }
 const storageKey = 'next-home-alert'
 const checkIntervalMs = 60 * 60 * 1000
+const browserIdKey = 'next-home-browser-id'
+
+function applicationServerKey(value: string) {
+  const padding = '='.repeat((4 - value.length % 4) % 4)
+  const base64 = (value + padding).replace(/-/g, '+').replace(/_/g, '/')
+  return Uint8Array.from(atob(base64), (character) => character.charCodeAt(0))
+}
+
+function browserId() {
+  const existing = localStorage.getItem(browserIdKey)
+  if (existing) return existing
+  const created = crypto.randomUUID()
+  localStorage.setItem(browserIdKey, created)
+  return created
+}
+
+async function registerBackgroundPush() {
+  if (!('serviceWorker' in navigator)) return false
+  const registration = await navigator.serviceWorker.register('/sw.js')
+  const keyResponse = await fetch('/api/push-subscriptions/vapid-public-key')
+  if (!keyResponse.ok) return false
+  const { publicKey } = await keyResponse.json() as { publicKey: string }
+  if (!publicKey) return false
+  const existing = await registration.pushManager.getSubscription()
+  const subscription = existing ?? await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: applicationServerKey(publicKey),
+  })
+  const serialized = subscription.toJSON()
+  const response = await fetch('/api/push-subscriptions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      browserId: browserId(),
+      endpoint: subscription.endpoint,
+      p256dh: serialized.keys?.p256dh,
+      auth: serialized.keys?.auth,
+    }),
+  })
+  return response.ok
+}
 
 async function checkAlert(condition: StoredAlert, permission: NotificationPermission = Notification.permission) {
   const response = await fetch(`/api/recommendations/upgrades?currentGrade=${condition.currentGrade}&year=${condition.year}`)
@@ -52,7 +93,10 @@ export default function AlertPanel({ year }: { year: number }) {
     }
     const condition = { currentGrade, maxGapManwon: gap, year }
     localStorage.setItem(storageKey, JSON.stringify(condition))
-    setMessage('알림이 설정되었습니다.')
+    const backgroundReady = await registerBackgroundPush().catch(() => false)
+    setMessage(backgroundReady
+      ? '알림이 설정되었습니다.'
+      : '알림이 설정되었습니다. 현재 브라우저에서는 페이지가 열려 있을 때 작동합니다.')
     await checkAlert(condition, permission)
   }
 

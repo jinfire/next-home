@@ -1,5 +1,13 @@
 # TODO
 
+## Web Push subscription update (2026-07-20)
+
+- [x] VAPID 키 로컬 환경 구성 및 예시 변수 문서화
+- [x] Push 구독 등록·갱신 API
+- [x] Service Worker Push 수신 및 알림 클릭 처리
+- [x] 브라우저 PushManager 구독과 서버 저장 연결
+- [ ] 저장된 조건 평가 후 서버 Web Push 발송
+
 ## Foreground web notification update (2026-07-20)
 
 - [x] 브라우저 알림 권한 요청

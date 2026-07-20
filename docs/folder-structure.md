@@ -1,5 +1,11 @@
 # Folder Structure
 
+## Web Push additions
+
+- `backend/.../push`: Push 구독 API, 서비스, JPA 엔티티와 저장소
+- `frontend/public/sw.js`: 백그라운드 Push 수신과 시스템 알림 처리
+- `.env.example`: 실제 비밀값이 없는 로컬 환경변수 템플릿
+
 > 이 문서는 프로젝트 전체 폴더 구조와 각 폴더의 역할을 정리한다.
 
 ## 전체 구조
