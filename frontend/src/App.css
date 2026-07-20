@@ -15,6 +15,16 @@
 .map-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(290px, .75fr); min-height: 530px; border-top: 1px solid #dfe2dc; }
 .map-canvas { position: relative; min-height: 530px; background: #dfe8df; }
 .naver-map { position: absolute; inset: 0; }
+
+.region-search { position: relative; z-index: 4; margin: 0 0 18px; max-width: 440px; }
+.region-search form > label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; color: #475569; }
+.region-search-row { display: flex; gap: 8px; }
+.region-search-row input { flex: 1; min-width: 0; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px; background: #fff; }
+.region-search-row button { border: 0; border-radius: 12px; padding: 0 18px; color: #fff; background: #172554; font-weight: 700; cursor: pointer; }
+.region-search-results { position: absolute; left: 0; right: 0; top: 70px; list-style: none; margin: 0; padding: 7px; border: 1px solid #dbe3ee; border-radius: 14px; background: #fff; box-shadow: 0 12px 30px rgb(15 23 42 / 14%); }
+.region-search-results button { width: 100%; display: flex; justify-content: space-between; border: 0; border-radius: 9px; padding: 10px; background: transparent; cursor: pointer; text-align: left; }
+.region-search-results button:hover { background: #f1f5f9; }
+.region-search-results span, .search-status { color: #64748b; font-size: 13px; }
 .map-message { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); margin: 0; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,.9); color: #526158; font-size: .85rem; }
 .grade-list { overflow-y: auto; max-height: 530px; padding: 10px; border-left: 1px solid #dfe2dc; background: #f8f7f2; }
 .grade-item { width: 100%; display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 14px 12px; border: 1px solid transparent; border-radius: 15px; background: transparent; color: #1d2a22; text-align: left; cursor: pointer; }

@@ -1,5 +1,10 @@
 # Folder Structure
 
+## Region search frontend additions
+
+- `frontend/src/components/RegionSearch.tsx`: 지역 검색 폼·결과·오류 상태
+- `frontend/src/components/RegionSearch.test.tsx`: 검색·선택·빈 결과 테스트
+
 ## Region boundary overlay additions
 
 - `backend/.../region/RegionBoundaryService.java`: PostGIS 경계와 급지를 GeoJSON으로 결합

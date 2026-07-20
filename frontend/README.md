@@ -28,6 +28,8 @@ Dynamic Map SDK는 지도 영역이 화면 가까이에 들어올 때 지연 로
 
 기준 연도의 행정구역 GeoJSON이 있으면 NAVER Maps Data 레이어에서 1~10급지 색상으로 표시한다. 연도 변경 시 경계도 함께 갱신된다.
 
+지도 상단의 지역 검색은 `/api/regions` 결과를 현재 연도 급지 목록과 연결해 선택 요약과 알림 대상을 갱신한다.
+
 ```powershell
 npm run dev
 npm test

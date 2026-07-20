@@ -4,6 +4,7 @@ import NaverMap from './components/NaverMap'
 import UpgradePanel from './components/UpgradePanel'
 import LifestylePanel from './components/LifestylePanel'
 import AlertPanel from './components/AlertPanel'
+import RegionSearch, { type RegionSearchResult } from './components/RegionSearch'
 
 type GradeSummary = {
   regionId: number
@@ -50,6 +51,16 @@ function App() {
     [],
   )
 
+  const selectSearchedRegion = (region: RegionSearchResult) => {
+    const matchingGrade = grades.find((item) => item.regionId === region.id)
+    if (matchingGrade) {
+      setSelected(matchingGrade)
+      setError('')
+    } else {
+      setError(`${region.name}의 ${year}년 급지 데이터가 아직 없습니다.`)
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -79,6 +90,8 @@ function App() {
             </select>
           </label>
         </div>
+
+        <RegionSearch onSelect={selectSearchedRegion} />
 
         <div className="map-grid">
           <NaverMap year={year} />

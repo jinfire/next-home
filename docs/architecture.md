@@ -1,5 +1,9 @@
 # Architecture
 
+## Region search frontend flow
+
+`RegionSearch`가 제출된 검색어를 URL 인코딩해 `/api/regions`에 요청한다. 선택 결과는 `App`의 연도별 급지 목록과 `regionId`로 결합되며, 일치할 때 지도 하단 선택 요약과 알림 대상 지역을 함께 갱신한다.
+
 ## Region boundary overlay flow
 
 Spring Boot가 PostGIS `region.boundary`와 `region_grade`를 연도 기준으로 결합해 `application/geo+json`을 생성한다. React 지도는 SDK 초기화 후 이 API를 요청하고 NAVER Maps Data 레이어에 추가한다. 연도 변경 시 기존 Feature를 제거한 뒤 급지별 색상과 반투명 채우기를 다시 적용한다.
