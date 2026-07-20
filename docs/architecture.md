@@ -54,6 +54,7 @@
 - `/api/regions`에서 지역명 부분 검색 결과를 최대 20건 제공한다.
 - `/api/apartments`에서 지역 필터를 선택적으로 적용한 아파트명 검색을 제공한다.
 - `/api/apartments/{id}/trades`에서 최근 실거래 최대 100건을 제공한다.
+- `/api/recommendations/upgrades`에서 현재 급지만으로 1·2급지 위 평균 평단가와 현재·과거 격차를 제공한다.
 
 ### React
 
