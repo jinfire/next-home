@@ -1,5 +1,9 @@
 # Architecture
 
+## Frontend lifestyle recommendation flow
+
+`LifestylePanel`이 `/api/apartments`로 현재 아파트 후보를 검색한다. 사용자가 단지를 선택하면 아파트 ID와 지도 기준 연도를 `/api/recommendations/apartments`로 전달하고, 동일 `region_id` 안에서 평균 평단가가 더 높은 결과를 렌더링한다.
+
 ## Frontend upgrade comparison flow
 
 React의 `UpgradePanel`은 현재 급지와 지도에서 선택한 연도만 상태로 관리한다. 급지를 선택하면 `/api/recommendations/upgrades`를 호출하고 반환된 1·2급지 위 결과를 카드로 렌더링한다. 금융 상황은 서버에 전송하지 않으며 대출·추가 자금 계산 계층도 두지 않는다.

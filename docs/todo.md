@@ -1,5 +1,12 @@
 # TODO
 
+## Lifestyle recommendation frontend update (2026-07-20)
+
+- [x] 현재 아파트 이름 검색
+- [x] 검색 결과에서 현재 단지 선택
+- [x] 동일 행정구역 상급 단지 추천 연동
+- [x] 후보별 평균 평단가·격차·실거래 수 표시
+
 ## Upgrade comparison frontend update (2026-07-20)
 
 - [x] 현재 급지만 입력하는 비교 화면

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import NaverMap from './components/NaverMap'
 import UpgradePanel from './components/UpgradePanel'
+import LifestylePanel from './components/LifestylePanel'
 
 type GradeSummary = {
   regionId: number
@@ -107,6 +108,7 @@ function App() {
       </section>
 
       <UpgradePanel year={year} />
+      <LifestylePanel year={year} />
     </main>
   )
 }

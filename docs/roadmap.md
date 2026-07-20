@@ -1,5 +1,12 @@
 # Roadmap
 
+## Lifestyle recommendation frontend completion (2026-07-20)
+
+- [x] 아파트 검색·선택 흐름
+- [x] 동일 생활권 추천 API 연결
+- [x] 상급 단지 비교 목록
+- [x] 빈 결과 및 유효 거래 없음 안내
+
 ## Upgrade comparison frontend completion (2026-07-20)
 
 - [x] 현재 급지 단일 입력
