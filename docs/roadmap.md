@@ -1,5 +1,13 @@
 # Roadmap
 
+## Grade map frontend completion (2026-07-20)
+
+- [x] 네이버 지도 SDK 연결
+- [x] 연도 선택 및 급지 조회
+- [x] 지역 급지·평균 평단가 표시
+- [x] 모바일 반응형 지도/목록 레이아웃
+- [ ] 행정구역 경계 데이터와 지도 색상 오버레이
+
 ## Alert condition registration completion (2026-07-20)
 
 - [x] 알림 조건 요청 및 응답 모델

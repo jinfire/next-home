@@ -1,5 +1,13 @@
 # TODO
 
+## Grade map frontend update (2026-07-20)
+
+- [x] 네이버 Dynamic Map SDK 로딩
+- [x] 연도별 급지 API 연동
+- [x] 지역별 급지·평균 평단가·실거래 수 목록
+- [x] 지역 선택 요약 및 반응형 화면
+- [ ] 지도 위 행정구역 경계 색상 표시(경계 데이터 수집 후)
+
 ## Alert condition registration update (2026-07-20)
 
 - [x] 갈아타기 알림 조건 등록 API

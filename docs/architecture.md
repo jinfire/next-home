@@ -1,5 +1,9 @@
 # Architecture
 
+## Frontend grade map flow
+
+Vite는 루트 `.env`의 `NAVER_MAP_CLIENT_ID`만 프런트 빌드에 주입하고 Client Secret은 노출하지 않는다. React가 네이버 Dynamic Map SDK를 한 번 로드하고 `/api/grades?year={year}`를 호출해 지역 급지 목록을 구성한다. 개발 환경의 `/api` 요청은 Vite 프록시를 통해 Spring Boot `8080` 포트로 전달한다.
+
 ## Alert condition registration flow
 
 `POST /api/alerts`가 브라우저 식별자, 현재 지역, 목표 지역 또는 목표 급지와 선택적인 격차 조건을 검증한다. Spring Data JPA가 검증된 조건을 기존 `alert_condition` 테이블에 저장한다. 조건 평가는 별도 주기 작업으로, 실제 알림 전달은 `push_subscription`과 Web Push 발송 계층으로 분리한다.
