@@ -20,3 +20,9 @@ next-home:
   molit:
     endpoint: ${MOLIT_API_ENDPOINT:https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev}
     service-key: ${MOLIT_API_KEY:}
+  collector:
+    enabled: ${COLLECTOR_ENABLED:false}
+    region-code: ${COLLECTOR_REGION_CODE:}
+    region-name: ${COLLECTOR_REGION_NAME:}
+    month: ${COLLECTOR_MONTH:}
+    rows: ${COLLECTOR_ROWS:100}

@@ -8,6 +8,17 @@
 .\gradlew.bat bootRun
 ```
 
+기본 상태에서는 외부 API를 호출하지 않는다. 특정 지역과 월을 수집할 때만 다음 환경변수를 설정한다.
+
+```powershell
+$env:COLLECTOR_ENABLED='true'
+$env:COLLECTOR_REGION_CODE='11110'
+$env:COLLECTOR_REGION_NAME='종로구'
+$env:COLLECTOR_MONTH='2026-01'
+$env:COLLECTOR_ROWS='100'
+.\gradlew.bat bootRun
+```
+
 루트 `.env`의 국토교통부 API 설정과 DB 설정을 사용한다. API 수집 로직은 TDD로 단계적으로 구현한다.
 
 ## 구현 상태
@@ -21,6 +32,9 @@
 - 거래 source key를 이용한 DB 중복 방지
 - 동일 응답 페이지 안의 중복 거래 방지
 - Region·Apartment·Trade를 한 트랜잭션으로 저장
+- API totalCount에 따라 마지막 페이지까지 자동 수집
+- 페이지별 저장 결과와 중복 건수 합산
+- 명시적으로 활성화한 경우에만 외부 API 호출
 
 실제 공공데이터 게이트웨이 호출 검증은 인증 응답이 정상화된 뒤 진행한다.
 

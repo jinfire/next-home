@@ -31,6 +31,8 @@
 - WebClient로 법정동 코드·계약월 단위 API를 호출하고 XML 응답을 도메인 값으로 정규화한다.
 - 외부 엔티티와 DTD를 차단한 보안 XML 파서를 사용한다.
 - Region·Apartment·Trade를 한 트랜잭션으로 저장하고 source key로 재수집을 멱등 처리한다.
+- totalCount와 페이지 크기로 전체 페이지를 계산해 순차 수집한다.
+- Collector는 기본 비활성화하며 지역코드와 계약월을 명시한 일회성 작업으로 실행한다.
 
 ### PostgreSQL
 
