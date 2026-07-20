@@ -21,7 +21,7 @@
 - [x] Push 구독 저장 API
 - [x] Service Worker 알림 표시·클릭 처리
 - [x] 프런트 PushManager 연결
-- [ ] 조건 평가 스케줄러와 실제 Push 발송
+- [x] 조건 평가 스케줄러와 실제 Push 발송
 
 ## Foreground web notification completion (2026-07-20)
 
