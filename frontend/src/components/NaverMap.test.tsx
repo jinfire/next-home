@@ -1,6 +1,7 @@
 import { render, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import NaverMap, { loadNaverMapSdk, resetNaverMapSdkForTest } from './NaverMap'
+import NaverMap from './NaverMap'
+import { loadNaverMapSdk, resetNaverMapSdkForTest } from './naverMapSdk'
 
 describe('NAVER Dynamic Map usage protection', () => {
   beforeEach(() => {

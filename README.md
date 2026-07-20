@@ -29,6 +29,9 @@ cd ..\collector
 
 cd ..\frontend
 npm test
+npm run lint
+npm run build
+npm run test:e2e
 ```
 
 세부 개발 규칙은 `docs/groundrule.md`를 따른다.

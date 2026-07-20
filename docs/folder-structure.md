@@ -20,6 +20,7 @@
 ## Dynamic Map usage protection additions
 
 - `frontend/src/components/NaverMap.tsx`: 뷰포트 기반 지연 로딩과 단일 SDK·지도 인스턴스 관리
+- `frontend/src/components/naverMapSdk.ts`: 컴포넌트와 분리된 공유 SDK 로더
 - `frontend/src/components/NaverMap.test.tsx`: SDK 중복 요청 방지와 지연 로딩 회귀 테스트
 
 ## Geocoding additions
