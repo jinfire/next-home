@@ -1,5 +1,11 @@
 # Features
 
+## 실제 로컬 스택 브라우저 검증
+
+- 선택 실행되는 `live-stack.spec.ts`가 mock 없이 로컬 PostgreSQL·Spring Boot·React·NAVER Map을 함께 검증한다.
+- 실제 수집 결과인 종로구 1급지, 실거래 45건, 평균 4,990만원/평이 브라우저에 표시됨을 확인했다.
+- 기본 E2E에는 포함하지 않아 외부 지도 호출이 자동으로 반복되지 않는다.
+
 ## VWorld 시군구 경계 수집기 구현
 
 - 공식 무료 WFS 레이어 `lt_c_adsigg_info`를 대한민국 범위, EPSG:4326, GeoJSON 형식으로 요청한다.

@@ -4,6 +4,7 @@
 
 - `frontend/playwright.config.ts`: Chromium 프로젝트와 Vite 테스트 서버 설정
 - `frontend/e2e/main-flow.spec.ts`: 급지 지도·검색·갈아타기 핵심 흐름
+- `frontend/e2e/live-stack.spec.ts`: 실제 로컬 DB·백엔드·NAVER Map 선택 실행 스모크 테스트
 - `frontend/test-results`, `frontend/playwright-report`: Git에서 제외되는 실행 결과
 
 ## Region search frontend additions

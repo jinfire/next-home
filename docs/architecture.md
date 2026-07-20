@@ -1,5 +1,9 @@
 # Architecture
 
+## Live-stack smoke flow
+
+선택적 `LIVE_E2E=1` 테스트는 Vite의 `/api` 프록시를 `BACKEND_PROXY_TARGET`으로 실행 중인 Spring Boot에 연결한다. 실제 로컬 PostGIS의 급지 응답과 NAVER Map SDK 초기화를 Chromium에서 확인하며, 기본 CI와 단위 테스트에서는 실행하지 않는다.
+
 ## VWorld boundary import flow
 
 `VWORLD_BOUNDARY_IMPORT_ENABLED=true`일 때만 시작 작업이 공식 WFS 시군구 레이어를 한 번 요청한다. `VworldBoundaryImportService`가 `sig_cd`와 지역 코드를 결합하고 `ST_GeomFromGeoJSON`·`ST_MakeValid`·`ST_CollectionExtract`·`ST_Multi`를 거쳐 SRID 4326 MultiPolygon으로 저장한다. 키가 없거나 기능이 비활성화된 기본 실행에서는 요청하지 않는다.
