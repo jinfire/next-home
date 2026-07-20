@@ -46,7 +46,8 @@
 - [x] 지역별 급지·평균 평단가·실거래 수 목록
 - [x] 지역 선택 요약 및 반응형 화면
 - [x] 연도별 행정구역 경계 GeoJSON API와 급지 색상 오버레이
-- [ ] VWorld 시군구 WFS 키 발급 후 실제 행정구역 경계 수집
+- [x] VWorld 시군구 WFS 수집기와 PostGIS 적재 로직 TDD 구현
+- [ ] VWorld API 키 발급 후 실제 시군구 경계 1회 적재
 
 ## Alert condition registration update (2026-07-20)
 

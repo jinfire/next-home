@@ -1,5 +1,12 @@
 # Features
 
+## VWorld 시군구 경계 수집기 구현
+
+- 공식 무료 WFS 레이어 `lt_c_adsigg_info`를 대한민국 범위, EPSG:4326, GeoJSON 형식으로 요청한다.
+- GeoJSON의 `sig_cd`를 기존 `region.code`와 매칭하고 Polygon을 PostGIS MultiPolygon으로 정규화해 저장한다.
+- 매칭되지 않는 코드는 건너뛰며, 기본값은 비활성화라 키 없이 외부 요청이 발생하지 않는다.
+- 원천: [공공데이터포털 국토교통부 행정구역도](https://www.data.go.kr/data/15059008/openapi.do)
+
 ## 국토교통부 실거래 실제 수집 검증
 
 - 공식 상세 기능 경로 `/getRTMSDataSvcAptTradeDev`에서 인증 성공 코드 `000`을 확인했다.

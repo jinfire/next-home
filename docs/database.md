@@ -11,6 +11,7 @@
 - `region.boundary`는 SRID 4326의 MultiPolygon이다.
 - 경계 API는 `region_grade.year`가 일치하고 `boundary IS NOT NULL`인 지역만 노출한다.
 - PostGIS `ST_AsGeoJSON`으로 변환하므로 프런트엔드에서 별도 좌표계 변환을 수행하지 않는다.
+- VWorld 수집 시 유효하지 않은 도형을 보정하고 Polygon 계열만 추출해 MultiPolygon 제약을 지킨다.
 
 ## GeocodingCache와 ExternalApiUsage
 

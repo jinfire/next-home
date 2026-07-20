@@ -1,5 +1,9 @@
 # Architecture
 
+## VWorld boundary import flow
+
+`VWORLD_BOUNDARY_IMPORT_ENABLED=true`일 때만 시작 작업이 공식 WFS 시군구 레이어를 한 번 요청한다. `VworldBoundaryImportService`가 `sig_cd`와 지역 코드를 결합하고 `ST_GeomFromGeoJSON`·`ST_MakeValid`·`ST_CollectionExtract`·`ST_Multi`를 거쳐 SRID 4326 MultiPolygon으로 저장한다. 키가 없거나 기능이 비활성화된 기본 실행에서는 요청하지 않는다.
+
 ## Live MOLIT collection flow
 
 Collector는 서비스 기본 URL에 공식 상세 기능 경로를 붙이고 법정동 앞 5자리, 계약연월 6자리, 페이지 정보를 전달한다. XML 헤더 성공 코드를 확인한 뒤 거래를 정규화하고 한 트랜잭션으로 Region·Apartment·Trade에 저장한다. 실제 응답에서 확인한 해제일은 ISO 또는 `yy.MM.dd` 두 형식을 지원한다.

@@ -16,6 +16,9 @@
 - `backend/.../region/RegionBoundaryService.java`: PostGIS 경계와 급지를 GeoJSON으로 결합
 - `backend/.../region/RegionBoundaryController.java`: 연도별 경계 API
 - `frontend/src/components/NaverMap.tsx`: NAVER Maps Data 레이어 급지 색상 표시
+- `backend/.../region/VworldBoundaryGateway.java`: 공식 시군구 WFS 요청
+- `backend/.../region/VworldBoundaryImportService.java`: GeoJSON 코드 매칭과 PostGIS 저장
+- `backend/.../region/VworldBoundaryImportJob.java`: 명시적으로 활성화할 때 한 번 실행하는 적재 작업
 
 ## Dynamic Map usage protection additions
 
