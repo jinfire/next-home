@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import RegionSelector, { type RegionSelection } from './RegionSelector'
 
 type Apartment = {
   id: number
@@ -25,6 +26,7 @@ function price(value: number) {
 
 export default function LifestylePanel({ year, tradeMonths = [] }: { year: number; tradeMonths?: string[] }) {
   const [query, setQuery] = useState('')
+  const [region, setRegion] = useState<RegionSelection | null>(null)
   const [apartments, setApartments] = useState<Apartment[]>([])
   const [current, setCurrent] = useState<Apartment | null>(null)
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
@@ -32,8 +34,12 @@ export default function LifestylePanel({ year, tradeMonths = [] }: { year: numbe
 
   async function search(event: FormEvent) {
     event.preventDefault()
+    if (!region) {
+      setMessage('시·도와 시·군·구를 먼저 선택해 주세요.')
+      return
+    }
     if (!query.trim()) return
-    const response = await fetch(`/api/apartments?query=${encodeURIComponent(query.trim())}`)
+    const response = await fetch(`/api/apartments?query=${encodeURIComponent(query.trim())}&regionId=${region.id}`)
     if (!response.ok) {
       setMessage('아파트 검색에 실패했습니다.')
       return
@@ -68,11 +74,18 @@ export default function LifestylePanel({ year, tradeMonths = [] }: { year: numbe
       </div>
 
       <form className="apartment-search" onSubmit={search}>
+        <RegionSelector id="apartment-region" label="아파트 지역" onSelect={(selectedRegion) => {
+          setRegion(selectedRegion)
+          setApartments([])
+          setCurrent(null)
+          setRecommendations([])
+          setMessage(`${selectedRegion.provinceName} ${selectedRegion.name}에서 아파트 이름을 검색해 주세요.`)
+        }} />
         <label>
           현재 아파트명
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="예: 포레나" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="예: 래미안" disabled={!region} />
         </label>
-        <button type="submit">검색</button>
+        <button type="submit" disabled={!region}>검색</button>
       </form>
 
       {apartments.length > 0 && (

@@ -94,8 +94,10 @@
 
 .lifestyle-head { display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,.65fr); gap: 40px; align-items: end; }
 .apartment-search { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 28px; }
+.apartment-search > .region-selector { grid-column:1/-1; max-width:760px; }
 .apartment-search input { margin-top: 7px; }
 .apartment-search button { align-self: end; min-height: 46px; padding: 0 24px; border: 0; border-radius: 11px; background: var(--green); color: #fff; font-weight: 750; cursor: pointer; }
+.apartment-search button:disabled { background:#aab3ad; cursor:not-allowed; }
 .search-results { display: grid; gap: 5px; margin-top: 10px; padding: 7px; border: 1px solid var(--line); border-radius: 13px; }
 .search-results button { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; cursor: pointer; }.search-results button:hover { background: var(--soft); }.search-results span { color: #778079; font-size: .78rem; }
 .current-apartment { display:grid; gap:5px; margin:20px 0 0; color:#58645c; }.current-apartment p { margin:0; }.current-apartment small { color:var(--muted); }.lifestyle-message { padding: 24px; color: #7a837d; text-align: center; }
