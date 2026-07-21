@@ -46,3 +46,10 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('importVworldBoundaries', JavaExec) {
+	group = 'next home'
+	description = 'VWorld 시군구 경계를 PostGIS에 한 번 적재하고 종료합니다.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.nexthome.backend.region.VworldBoundaryImportApplication'
+}

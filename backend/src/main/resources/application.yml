@@ -19,7 +19,6 @@ app:
     endpoint: ${VWORLD_WFS_ENDPOINT:https://api.vworld.kr/req/wfs}
     key: ${VWORLD_API_KEY:}
     domain: ${VWORLD_API_DOMAIN:http://localhost}
-    boundary-import-enabled: ${VWORLD_BOUNDARY_IMPORT_ENABLED:false}
   naver:
     client-id: ${NAVER_MAP_CLIENT_ID:}
     client-secret: ${NAVER_MAP_CLIENT_SECRET:}

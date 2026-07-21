@@ -10,7 +10,7 @@
 
 - 공식 무료 WFS 레이어 `lt_c_adsigg_info`를 대한민국 범위, EPSG:4326, GeoJSON 형식으로 요청한다.
 - GeoJSON의 `sig_cd`를 기존 `region.code`와 매칭하고 Polygon을 PostGIS MultiPolygon으로 정규화해 저장한다.
-- 매칭되지 않는 코드는 건너뛰며, 기본값은 비활성화라 키 없이 외부 요청이 발생하지 않는다.
+- 매칭되지 않는 코드는 건너뛰며, 전용 `importVworldBoundaries` 명령에서만 외부 요청이 발생한다. 일반 서버 시작은 VWorld를 호출하지 않는다.
 - 원천: [공공데이터포털 국토교통부 행정구역도](https://www.data.go.kr/data/15059008/openapi.do)
 - 실제 WFS 1회 호출로 현재 DB의 종로구 경계를 적재했으며, `ST_MultiPolygon`·SRID 4326·유효 도형·약 23.99㎢를 확인했다.
 - 공식 WFS 1.1.0 명세에 따라 GeoJSON은 `output=application/json`, EPSG:4326 bbox는 `33,124,39,132` 순서로 요청한다.

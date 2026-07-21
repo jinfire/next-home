@@ -1,5 +1,13 @@
 # TODO
 
+## VWorld 전용 적재 명령 전환 (2026-07-21)
+
+- [x] 일반 백엔드 실행과 VWorld 외부 호출 분리
+- [x] `importVworldBoundaries` Gradle 명령 추가
+- [x] 적재 완료 후 자동 종료
+- [x] `VWORLD_BOUNDARY_IMPORT_ENABLED` 환경변수 제거
+- [x] 전용 인자 유무에 따른 호출 테스트
+
 ## Server Web Push delivery update (2026-07-20)
 
 - [x] 저장된 알림 조건을 1시간마다 평가

@@ -1,5 +1,12 @@
 # Roadmap
 
+## VWorld boundary import command completion (2026-07-21)
+
+- [x] 서버 시작 플래그 방식 제거
+- [x] 독립 Gradle 적재 명령 추가
+- [x] 일반 실행 무호출 및 전용 실행 회귀 테스트
+- [x] 명령 실행 후 자동 종료
+
 ## Dynamic Map usage protection completion (2026-07-20)
 
 - [x] 뷰포트 접근 시 SDK 지연 로딩

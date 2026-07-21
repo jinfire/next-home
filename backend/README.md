@@ -10,16 +10,13 @@ PostGIS 경계가 존재하고 요청 연도의 급지가 계산된 지역만 `a
 
 ### VWorld 경계 1회 적재
 
-VWorld에서 발급한 키와 등록 도메인을 설정한 뒤 한 번만 활성화해 백엔드를 실행한다.
+루트 `.env`에 VWorld 키와 등록 도메인을 설정하고, PostgreSQL/PostGIS 컨테이너가 실행 중일 때 전용 명령을 사용한다.
 
 ```powershell
-$env:VWORLD_API_KEY='발급받은-키'
-$env:VWORLD_API_DOMAIN='http://localhost'
-$env:VWORLD_BOUNDARY_IMPORT_ENABLED='true'
-.\gradlew.bat bootRun
+.\gradlew.bat importVworldBoundaries
 ```
 
-로그에서 적재 건수를 확인한 뒤 `VWORLD_BOUNDARY_IMPORT_ENABLED`를 다시 `false`로 둔다. 키가 없거나 비활성화 상태에서는 VWorld를 호출하지 않는다.
+명령은 VWorld WFS를 한 번 호출하고, 기존 `region.code`와 일치하는 시군구 경계를 PostGIS에 신규 저장하거나 갱신한 뒤 자동 종료한다. 평상시 `bootRun`은 VWorld를 호출하지 않으며 별도의 활성화 환경변수도 필요 없다.
 
 실제 검증에서는 현재 DB의 종로구 경계 1건이 적재됐고 유효한 SRID 4326 MultiPolygon임을 확인했다. `.env`의 키는 Git에서 제외한다.
 

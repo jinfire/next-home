@@ -6,9 +6,9 @@
 
 ## VWorld boundary import flow
 
-`VWORLD_BOUNDARY_IMPORT_ENABLED=true`일 때만 시작 작업이 공식 WFS 시군구 레이어를 한 번 요청한다. `VworldBoundaryImportService`가 `sig_cd`와 지역 코드를 결합하고 `ST_GeomFromGeoJSON`·`ST_MakeValid`·`ST_CollectionExtract`·`ST_Multi`를 거쳐 SRID 4326 MultiPolygon으로 저장한다. 키가 없거나 기능이 비활성화된 기본 실행에서는 요청하지 않는다.
+`backend`의 `importVworldBoundaries` Gradle 작업이 비웹 Spring 컨텍스트를 열고 공식 WFS 시군구 레이어를 한 번 요청한 뒤 자동 종료한다. `VworldBoundaryImportService`가 `sig_cd`와 지역 코드를 결합하고 `ST_GeomFromGeoJSON`·`ST_MakeValid`·`ST_CollectionExtract`·`ST_Multi`를 거쳐 SRID 4326 MultiPolygon으로 저장한다. 일반 `bootRun`에서는 전용 인자가 전달되지 않으므로 VWorld를 요청하지 않는다.
 
-WFS 1.1.0 요청은 `output=application/json`, `srsName=EPSG:4326`, 위도·경도 축 순서의 대한민국 bbox `33,124,39,132`를 사용한다. 실제 적재 후 기능 플래그는 다시 `false`로 유지한다.
+WFS 1.1.0 요청은 `output=application/json`, `srsName=EPSG:4326`, 위도·경도 축 순서의 대한민국 bbox `33,124,39,132`를 사용한다. 실행 명령은 `backend`에서 `.\gradlew.bat importVworldBoundaries`이며 별도 활성화 플래그는 사용하지 않는다.
 
 ## Live MOLIT collection flow
 
