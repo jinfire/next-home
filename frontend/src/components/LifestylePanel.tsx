@@ -4,7 +4,6 @@ import type { FormEvent } from 'react'
 type Apartment = {
   id: number
   name: string
-  address: string
   roadAddress: string | null
   regionId: number
   regionName: string
@@ -24,7 +23,7 @@ function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
-export default function LifestylePanel({ year }: { year: number }) {
+export default function LifestylePanel({ year, tradeMonths = [] }: { year: number; tradeMonths?: string[] }) {
   const [query, setQuery] = useState('')
   const [apartments, setApartments] = useState<Apartment[]>([])
   const [current, setCurrent] = useState<Apartment | null>(null)
@@ -71,7 +70,7 @@ export default function LifestylePanel({ year }: { year: number }) {
       <form className="apartment-search" onSubmit={search}>
         <label>
           현재 아파트명
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="예: 동탄 포레나" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="예: 포레나" />
         </label>
         <button type="submit">검색</button>
       </form>
@@ -101,7 +100,7 @@ export default function LifestylePanel({ year }: { year: number }) {
             <dl>
               <div><dt>평균 평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
               <div><dt>현재보다</dt><dd>+{price(item.gapPerPyeong)}</dd></div>
-              <div><dt>실거래</dt><dd>{item.tradeCount}건</dd></div>
+              <div><dt>{tradeMonths.length ? `${tradeMonths.map((month) => Number(month.slice(5))).join('·')}월 실거래` : `${year}년 실거래`}</dt><dd>{item.tradeCount}건</dd></div>
             </dl>
           </article>
         ))}

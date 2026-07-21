@@ -152,7 +152,7 @@ function App() {
       </section>
 
       <UpgradePanel year={year} />
-      <LifestylePanel year={year} />
+      <LifestylePanel year={year} tradeMonths={tradeMonths} />
     </main>
   )
 }

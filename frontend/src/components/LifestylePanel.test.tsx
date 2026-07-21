@@ -12,7 +12,7 @@ it('searches current apartment and recommends better apartments in the same regi
     return Promise.resolve({ ok: true, json: async () => body })
   }))
 
-  render(<LifestylePanel year={2026} />)
+  render(<LifestylePanel year={2026} tradeMonths={['2026-06']} />)
   await userEvent.type(screen.getByLabelText('현재 아파트명'), '현재')
   await userEvent.click(screen.getByRole('button', { name: '검색' }))
   await userEvent.click(await screen.findByRole('button', { name: /현재아파트/ }))
@@ -22,4 +22,5 @@ it('searches current apartment and recommends better apartments in the same regi
   expect(screen.getByText(/서울특별시 마포구 마포대로 1/)).toBeInTheDocument()
   expect(screen.getByText('8,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
+  expect(screen.getByText('6월 실거래')).toBeInTheDocument()
 })
