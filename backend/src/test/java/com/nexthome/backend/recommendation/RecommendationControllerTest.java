@@ -31,7 +31,8 @@ class RecommendationControllerTest {
 
     @Test void resolvesCurrentGradeFromSelectedRegion() throws Exception {
         var target = new UpgradeRecommendation(5,4,2026,new BigDecimal("50000000"),new BigDecimal("70000000"),new BigDecimal("20000000"),new BigDecimal("25"),5);
-        var nearby = new NearbyUpgradeRegion(11, "용산구", 4, new BigDecimal("70000000"));
+        var nearby = new NearbyUpgradeRegion(11, "용산구", 4, new BigDecimal("70000000"),
+                new BigDecimal("300000000"), new BigDecimal("800000000"), 5);
         var comparison = new RegionUpgradeComparison(10, "마포구", 5, 2026, new BigDecimal("50000000"), List.of(target), List.of(nearby));
         when(service.recommendRegion(10, 2026)).thenReturn(comparison);
 
@@ -41,6 +42,16 @@ class RecommendationControllerTest {
                 .andExpect(jsonPath("$.currentGrade").value(5))
                 .andExpect(jsonPath("$.targets[0].targetGrade").value(4))
                 .andExpect(jsonPath("$.nearbyRegions[0].regionName").value("용산구"));
+    }
+
+    @Test void returnsCurrentApartmentPriceForLatestCompleteMonth() throws Exception {
+        var current = new CurrentApartmentPrice(1, "Current", new BigDecimal("60000000"), 3, "2026-06");
+        when(service.currentApartmentPrice(1, 2026)).thenReturn(current);
+        mvc.perform(get("/api/recommendations/apartments/current")
+                        .param("apartmentId", "1").param("year", "2026"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.averagePricePerPyeong").value(60000000))
+                .andExpect(jsonPath("$.tradeMonth").value("2026-06"));
     }
 
     @Test void returnsBetterApartmentsInSameLifestyleZone() throws Exception {

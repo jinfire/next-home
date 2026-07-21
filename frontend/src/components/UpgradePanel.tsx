@@ -19,7 +19,15 @@ type Comparison = {
   year: number
   currentAveragePricePerPyeong: number
   targets: Upgrade[]
-  nearbyRegions: { regionId: number; regionName: string; grade: number; averagePricePerPyeong: number }[]
+  nearbyRegions: {
+    regionId: number
+    regionName: string
+    grade: number
+    averagePricePerPyeong: number
+    historicalMinAdditionalFor34Pyeong: number | null
+    historicalMaxAdditionalFor34Pyeong: number | null
+    historicalYears: number
+  }[]
 }
 
 function price(value: number) {
@@ -29,6 +37,10 @@ function price(value: number) {
 function additionalPrice(targetPerPyeong: number, currentPerPyeong: number, pyeong: number) {
   const eok = Math.max(0, targetPerPyeong - currentPerPyeong) * pyeong / 100_000_000
   return `${eok.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원`
+}
+
+function homeAmount(value: number) {
+  return `+${(value / 100_000_000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원`
 }
 
 export default function UpgradePanel({ year }: { year: number }) {
@@ -94,7 +106,12 @@ export default function UpgradePanel({ year }: { year: number }) {
                     <div><dt>평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
                     <div><dt>25평 기준 추가 금액</dt><dd>+{additionalPrice(item.averagePricePerPyeong, comparison.currentAveragePricePerPyeong, 25)}</dd></div>
                     <div><dt>34평 기준 추가 금액</dt><dd>+{additionalPrice(item.averagePricePerPyeong, comparison.currentAveragePricePerPyeong, 34)}</dd></div>
+                    {item.historicalYears > 1 && item.historicalMinAdditionalFor34Pyeong != null && item.historicalMaxAdditionalFor34Pyeong != null ? <>
+                      <div><dt>34평 역대 최소 추가 금액</dt><dd>{homeAmount(item.historicalMinAdditionalFor34Pyeong)}</dd></div>
+                      <div><dt>34평 역대 최대 추가 금액</dt><dd>{homeAmount(item.historicalMaxAdditionalFor34Pyeong)}</dd></div>
+                    </> : <div><dt>역대 범위</dt><dd>과거 연도 수집 중</dd></div>}
                   </dl>
+                  <small>{item.historicalYears}개 연도 비교</small>
                 </article>
               ))}
             </div>

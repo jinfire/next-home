@@ -6,5 +6,8 @@ public record NearbyUpgradeRegion(
         long regionId,
         String regionName,
         int grade,
-        BigDecimal averagePricePerPyeong) {
+        BigDecimal averagePricePerPyeong,
+        BigDecimal historicalMinAdditionalFor34Pyeong,
+        BigDecimal historicalMaxAdditionalFor34Pyeong,
+        int historicalYears) {
 }

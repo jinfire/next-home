@@ -39,10 +39,22 @@ public class RecommendationService {
                     regionId, year);
             List<NearbyUpgradeRegion> nearby = jdbc.query("""
                     SELECT candidate.id, candidate.name, candidate_grade.grade,
-                           candidate_grade.average_price_per_pyeong
+                           candidate_grade.average_price_per_pyeong,
+                           history.min_additional_34,
+                           history.max_additional_34,
+                           history.observed_years
                     FROM region selected
                     JOIN region candidate ON candidate.id <> selected.id AND candidate.boundary IS NOT NULL
                     JOIN region_grade candidate_grade ON candidate_grade.region_id=candidate.id AND candidate_grade.year=?
+                    LEFT JOIN LATERAL (
+                        SELECT MIN(GREATEST(candidate_history.average_price_per_pyeong - selected_history.average_price_per_pyeong, 0) * 34) AS min_additional_34,
+                               MAX(GREATEST(candidate_history.average_price_per_pyeong - selected_history.average_price_per_pyeong, 0) * 34) AS max_additional_34,
+                               COUNT(*) AS observed_years
+                        FROM region_grade candidate_history
+                        JOIN region_grade selected_history ON selected_history.year = candidate_history.year
+                        WHERE candidate_history.region_id = candidate.id
+                          AND selected_history.region_id = selected.id
+                    ) history ON TRUE
                     WHERE selected.id=? AND candidate_grade.grade BETWEEN GREATEST(1, ? - 2) AND ? - 1
                     ORDER BY ST_Distance(ST_Centroid(selected.boundary)::geography,
                                          ST_Centroid(candidate.boundary)::geography),
@@ -50,7 +62,10 @@ public class RecommendationService {
                     LIMIT 4
                     """, (rs, row) -> new NearbyUpgradeRegion(
                     rs.getLong("id"), rs.getString("name"), rs.getInt("grade"),
-                    rs.getBigDecimal("average_price_per_pyeong")),
+                    rs.getBigDecimal("average_price_per_pyeong"),
+                    rs.getBigDecimal("min_additional_34"),
+                    rs.getBigDecimal("max_additional_34"),
+                    rs.getInt("observed_years")),
                     year, regionId, current.grade(), current.grade());
             return new RegionUpgradeComparison(regionId, current.name(), current.grade(), year, current.average(),
                     calculator.calculate(current.grade(), year, gradeHistory()), nearby);
@@ -109,6 +124,39 @@ public class RecommendationService {
                         HttpStatus.NOT_FOUND,
                         "No valid trades found for this apartment and year"));
         return apartmentCalculator.recommend(current, averages);
+    }
+
+    @Transactional(readOnly = true)
+    public CurrentApartmentPrice currentApartmentPrice(long apartmentId, int year) {
+        try {
+            return jdbc.queryForObject("""
+                    WITH latest_month AS (
+                        SELECT coverage.contract_month AS month_start
+                        FROM trade_collection_coverage coverage
+                        JOIN region covered_region ON covered_region.id = coverage.region_id
+                        WHERE EXTRACT(YEAR FROM coverage.contract_month) = ? AND covered_region.level = 2
+                        GROUP BY coverage.contract_month
+                        HAVING COUNT(DISTINCT coverage.region_id) = (SELECT COUNT(*) FROM region WHERE level = 2)
+                        ORDER BY coverage.contract_month DESC LIMIT 1
+                    )
+                    SELECT a.id, a.name,
+                           AVG(t.price_krw * 3.305785 / t.exclusive_area_sqm) AS average_price_per_pyeong,
+                           COUNT(*) AS trade_count,
+                           TO_CHAR(latest_month.month_start, 'YYYY-MM') AS trade_month
+                    FROM apartment a
+                    JOIN trade t ON t.apartment_id = a.id
+                    CROSS JOIN latest_month
+                    WHERE a.id = ?
+                      AND t.contract_date >= latest_month.month_start
+                      AND t.contract_date < latest_month.month_start + INTERVAL '1 month'
+                      AND t.cancellation_date IS NULL
+                    GROUP BY a.id, a.name, latest_month.month_start
+                    """, (rs, row) -> new CurrentApartmentPrice(
+                    rs.getLong("id"), rs.getString("name"), rs.getBigDecimal("average_price_per_pyeong"),
+                    rs.getInt("trade_count"), rs.getString("trade_month")), year, apartmentId);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "최신 완결 월에 현재 아파트 실거래가 없습니다.");
+        }
     }
 
     private record CurrentRegionGrade(String name, int grade, java.math.BigDecimal average) {

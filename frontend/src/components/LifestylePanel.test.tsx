@@ -8,6 +8,8 @@ it('searches current apartment and recommends better apartments in the same regi
     const url = String(input)
     const body = url.includes('/api/regions/options')
       ? [{ id: 1, code: '11', name: '서울특별시', regions: [{ id: 10, code: '11440', name: '마포구' }] }]
+      : url.includes('/api/recommendations/apartments/current')
+        ? { apartmentId: 1, apartmentName: '현재아파트', averagePricePerPyeong: 60_000_000, tradeCount: 3, tradeMonth: '2026-06' }
       : url.includes('/api/apartments?')
       ? [{ id: 1, name: '현재아파트', address: '아현동 1', roadAddress: '서울특별시 마포구 마포대로 1', regionId: 10, regionName: '마포구', buildYear: 2010 }]
       : [{ apartmentId: 2, apartmentName: '추천아파트', address: '서울특별시 마포구 마포대로 2', averagePricePerPyeong: 80_000_000, gapPerPyeong: 20_000_000, tradeCount: 5, tradeMonth: '2026-06' }]
@@ -26,6 +28,8 @@ it('searches current apartment and recommends better apartments in the same regi
   expect(screen.getByText(/서울특별시 마포구 마포대로 1/)).toBeInTheDocument()
   expect(screen.getByText('8,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
-  expect(screen.getByText('2026년 6월 실거래')).toBeInTheDocument()
+  expect(screen.getAllByText('2026년 6월 실거래')).toHaveLength(2)
+  expect(screen.getByText('우리집 평균 평단가')).toBeInTheDocument()
+  expect(screen.getByText('6,000만원/평')).toBeInTheDocument()
   expect(fetch).toHaveBeenCalledWith('/api/apartments?query=%ED%98%84%EC%9E%AC&regionId=10')
 })

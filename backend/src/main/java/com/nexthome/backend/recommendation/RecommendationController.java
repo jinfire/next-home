@@ -38,4 +38,11 @@ public class RecommendationController {
             @RequestParam int year) {
         return service.recommendApartments(apartmentId, year);
     }
+
+    @GetMapping("/apartments/current")
+    public CurrentApartmentPrice currentApartment(
+            @RequestParam long apartmentId,
+            @RequestParam int year) {
+        return service.currentApartmentPrice(apartmentId, year);
+    }
 }

@@ -22,7 +22,12 @@ it('resolves the grade from a selected district and loads upper-grade comparison
         historicalGapPercentile: 25,
         historicalYears: 5,
       }],
-      nearbyRegions: [{ regionId: 11, regionName: '과천시', grade: 4, averagePricePerPyeong: 75_000_000 }],
+      nearbyRegions: [{
+        regionId: 11, regionName: '과천시', grade: 4, averagePricePerPyeong: 75_000_000,
+        historicalMinAdditionalFor34Pyeong: 400_000_000,
+        historicalMaxAdditionalFor34Pyeong: 1_000_000_000,
+        historicalYears: 5,
+      }],
     }
     return Promise.resolve({ ok: true, json: async () => body })
   }))
@@ -37,4 +42,8 @@ it('resolves the grade from a selected district and loads upper-grade comparison
   expect(screen.getByText('+6.3억원')).toBeInTheDocument()
   expect(screen.getByText('34평 기준 추가 금액')).toBeInTheDocument()
   expect(screen.getByText('+8.5억원')).toBeInTheDocument()
+  expect(screen.getByText('34평 역대 최소 추가 금액')).toBeInTheDocument()
+  expect(screen.getByText('+4억원')).toBeInTheDocument()
+  expect(screen.getByText('34평 역대 최대 추가 금액')).toBeInTheDocument()
+  expect(screen.getByText('+10억원')).toBeInTheDocument()
 })

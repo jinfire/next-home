@@ -25,6 +25,14 @@ function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
+type CurrentApartmentPrice = {
+  apartmentId: number
+  apartmentName: string
+  averagePricePerPyeong: number
+  tradeCount: number
+  tradeMonth: string
+}
+
 function tradeMonthLabel(tradeMonth: string) {
   const [year, month] = tradeMonth.split('-').map(Number)
   return `${year}년 ${month}월 실거래`
@@ -36,6 +44,7 @@ export default function LifestylePanel({ year }: { year: number }) {
   const [apartments, setApartments] = useState<Apartment[]>([])
   const [current, setCurrent] = useState<Apartment | null>(null)
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+  const [currentPrice, setCurrentPrice] = useState<CurrentApartmentPrice | null>(null)
   const [message, setMessage] = useState('아파트 이름 일부를 입력해 주세요.')
 
   async function search(event: FormEvent) {
@@ -59,12 +68,17 @@ export default function LifestylePanel({ year }: { year: number }) {
     setCurrent(apartment)
     setApartments([])
     setMessage('같은 생활권의 후보를 찾고 있습니다.')
-    const response = await fetch(`/api/recommendations/apartments?apartmentId=${apartment.id}&year=${year}`)
-    if (!response.ok) {
+    const [currentResponse, response] = await Promise.all([
+      fetch(`/api/recommendations/apartments/current?apartmentId=${apartment.id}&year=${year}`),
+      fetch(`/api/recommendations/apartments?apartmentId=${apartment.id}&year=${year}`),
+    ])
+    if (!currentResponse.ok || !response.ok) {
+      setCurrentPrice(null)
       setRecommendations([])
-      setMessage(response.status === 404 ? `${year}년 유효 실거래가 없습니다.` : '추천 결과를 불러오지 못했습니다.')
+      setMessage(currentResponse.status === 404 || response.status === 404 ? `${year}년 최신 완결 월 실거래가 없습니다.` : '추천 결과를 불러오지 못했습니다.')
       return
     }
+    setCurrentPrice(await currentResponse.json() as CurrentApartmentPrice)
     const data = await response.json() as Recommendation[]
     setRecommendations(data)
     setMessage(data.length ? '' : '같은 생활권에 더 높은 평단가의 단지가 없습니다.')
@@ -85,6 +99,7 @@ export default function LifestylePanel({ year }: { year: number }) {
           setApartments([])
           setCurrent(null)
           setRecommendations([])
+          setCurrentPrice(null)
           setMessage(`${selectedRegion.provinceName} ${selectedRegion.name}에서 아파트 이름을 검색해 주세요.`)
         }} />
         <label>
@@ -108,6 +123,10 @@ export default function LifestylePanel({ year }: { year: number }) {
       {current && <div className="current-apartment">
         <p>현재 단지 <strong>{current.name}</strong> · {current.regionName}</p>
         {current.roadAddress && <small>{current.roadAddress}</small>}
+        {currentPrice && <dl>
+          <div><dt>우리집 평균 평단가</dt><dd>{price(currentPrice.averagePricePerPyeong)}</dd></div>
+          <div><dt>{tradeMonthLabel(currentPrice.tradeMonth)}</dt><dd>{currentPrice.tradeCount}건</dd></div>
+        </dl>}
       </div>}
       {message && <p className="lifestyle-message" aria-live="polite">{message}</p>}
 
