@@ -1,5 +1,9 @@
 # Decision Log
 
+## 2026-07-21 — 저장소 루트는 단일 next-home 폴더로 유지한다
+
+로컬 기준 경로는 `C:\Users\두두\Documents\sidehustle\coding\next-home`이다. 압축 해제 과정에서 생긴 중첩 `next-home/next-home` 구조와 커밋이 없는 바깥쪽 Git 메타데이터를 제거하고, 실제 `main` 이력과 GitHub 원격 연결을 가진 저장소를 상위 폴더로 이동했다.
+
 ## 2026-07-20 — 실제 스택 E2E는 선택 실행한다
 
 외부 호출 없는 기본 E2E와 별도로 `LIVE_E2E=1`일 때만 실제 로컬 DB·백엔드·NAVER Map을 검증한다. 이번 완료 감사에서 SDK 로드 3회를 사용했으며, 자동 테스트나 CI에서는 실행하지 않아 무료 호출량을 보호한다.
