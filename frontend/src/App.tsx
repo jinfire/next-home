@@ -144,7 +144,6 @@ function App() {
             <div><span>선택 지역</span><strong>{selected.regionName}</strong></div>
             <div><span>급지</span><strong>{selected.grade}급지</strong></div>
             <div><span>평균 평단가</span><strong>{formatPrice(selected.averagePricePerPyeong)}</strong></div>
-            <div><span>실거래</span><strong>{selected.tradeCount.toLocaleString('ko-KR')}건</strong></div>
               </div>
             </> : <p>{year}년 급지 정보가 있는 지역을 선택해 주세요.</p>}
           </aside>
