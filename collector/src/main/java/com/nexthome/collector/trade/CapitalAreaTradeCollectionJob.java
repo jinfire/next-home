@@ -13,10 +13,12 @@ public class CapitalAreaTradeCollectionJob {
     private static final Logger log = LoggerFactory.getLogger(CapitalAreaTradeCollectionJob.class);
     private final RegionRepository regions;
     private final TradeCollectionJob collector;
+    private final CollectionCoverageStore coverage;
 
-    public CapitalAreaTradeCollectionJob(RegionRepository regions, TradeCollectionJob collector) {
+    public CapitalAreaTradeCollectionJob(RegionRepository regions, TradeCollectionJob collector, CollectionCoverageStore coverage) {
         this.regions = regions;
         this.collector = collector;
+        this.coverage = coverage;
     }
 
     public CapitalAreaCollectionSummary collect(YearMonth start, YearMonth end, int rows) {
@@ -26,6 +28,7 @@ public class CapitalAreaTradeCollectionJob {
         for (Region region : districts) {
             for (YearMonth month = start; !month.isAfter(end); month = month.plusMonths(1)) {
                 CollectionSummary summary = collector.collect(region.code(), region.name(), month, rows);
+                coverage.markComplete(region.code(), month);
                 attempts++;
                 pages += summary.pages();
                 saved += summary.savedTrades();

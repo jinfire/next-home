@@ -70,9 +70,17 @@ public class RecommendationService {
     public List<LifestyleApartmentRecommendation> recommendApartments(long apartmentId, int year) {
         List<ApartmentPriceAverage> averages = jdbc.query("""
                 WITH latest_month AS (
-                    SELECT DATE_TRUNC('month', MAX(contract_date)) AS month_start
-                    FROM trade
-                    WHERE EXTRACT(YEAR FROM contract_date) = ? AND cancellation_date IS NULL
+                    SELECT coverage.contract_month AS month_start
+                    FROM trade_collection_coverage coverage
+                    JOIN region covered_region ON covered_region.id = coverage.region_id
+                    WHERE EXTRACT(YEAR FROM coverage.contract_month) = ?
+                      AND covered_region.level = 2
+                    GROUP BY coverage.contract_month
+                    HAVING COUNT(DISTINCT coverage.region_id) = (
+                        SELECT COUNT(*) FROM region WHERE level = 2
+                    )
+                    ORDER BY coverage.contract_month DESC
+                    LIMIT 1
                 )
                 SELECT a.id AS apartment_id, a.region_id, a.name, a.road_address AS address,
                        AVG(t.price_krw * 3.305785 / t.exclusive_area_sqm) AS average_price_per_pyeong,

@@ -17,6 +17,7 @@ class CapitalAreaTradeCollectionJobTest {
     void collectsEveryDistrictAndMonthInTheRequestedRange() {
         RegionRepository regions = mock(RegionRepository.class);
         TradeCollectionJob collector = mock(TradeCollectionJob.class);
+        CollectionCoverageStore coverage = mock(CollectionCoverageStore.class);
         Region seoul = Region.create("11110", "종로구", 2);
         Region gyeonggi = Region.create("41135", "성남시 분당구", 2);
         when(regions.findByLevelOrderByCodeAsc((short) 2)).thenReturn(List.of(seoul, gyeonggi));
@@ -24,13 +25,15 @@ class CapitalAreaTradeCollectionJobTest {
         when(collector.collect(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.anyString(),
                 org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.eq(500))).thenReturn(one);
 
-        CapitalAreaCollectionSummary summary = new CapitalAreaTradeCollectionJob(regions, collector)
+        CapitalAreaCollectionSummary summary = new CapitalAreaTradeCollectionJob(regions, collector, coverage)
                 .collect(YearMonth.of(2026, 1), YearMonth.of(2026, 2), 500);
 
         verify(collector).collect("11110", "종로구", YearMonth.of(2026, 1), 500);
         verify(collector).collect("11110", "종로구", YearMonth.of(2026, 2), 500);
         verify(collector).collect("41135", "성남시 분당구", YearMonth.of(2026, 1), 500);
         verify(collector).collect("41135", "성남시 분당구", YearMonth.of(2026, 2), 500);
+        verify(coverage).markComplete("11110", YearMonth.of(2026, 1));
+        verify(coverage).markComplete("41135", YearMonth.of(2026, 2));
         assertThat(summary.regions()).isEqualTo(2);
         assertThat(summary.months()).isEqualTo(4);
         assertThat(summary.savedTrades()).isEqualTo(8);
