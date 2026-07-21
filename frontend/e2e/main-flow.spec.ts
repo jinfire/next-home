@@ -37,8 +37,6 @@ test('selects a district and compares one-grade-up prices', async ({ page }) => 
   await expect(page.getByRole('heading', { name: '수도권 급지지도', exact: true })).toBeVisible()
   await expect(page.getByLabel('기준 연도')).toBeVisible()
 
-  await page.getByLabel('지도 지역 시·도').selectOption('11')
-  await page.getByLabel('지도 지역 시·군·구').selectOption('1')
   await expect(page.locator('.selection-summary')).toContainText('강남구')
 
   await page.getByLabel('현재 거주 지역 시·도').selectOption('11')

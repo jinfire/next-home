@@ -3,7 +3,6 @@ import './App.css'
 import NaverMap from './components/NaverMap'
 import UpgradePanel from './components/UpgradePanel'
 import LifestylePanel from './components/LifestylePanel'
-import RegionSelector, { type RegionSelection } from './components/RegionSelector'
 
 type GradeSummary = {
   regionId: number
@@ -65,12 +64,6 @@ function App() {
     count: grades.filter((item) => item.grade === index + 1).length,
   })), [grades])
 
-  const selectRegion = (region: RegionSelection) => {
-    const matching = grades.find((item) => item.regionId === region.id)
-    setSelected(matching ?? null)
-    setError(matching ? '' : `${region.provinceName} ${region.name}의 ${year}년 실거래 급지 데이터가 없습니다.`)
-  }
-
   const selectRegionFromMap = (regionId: number) => {
     const matching = grades.find((item) => item.regionId === regionId)
     setSelected(matching ?? null)
@@ -99,12 +92,6 @@ function App() {
             <h2>수도권 지역별 주거 가치</h2>
             <p>같은 연도의 아파트 실거래 평균 평단가를 비교해 수도권 시·군·구를 1~10급지로 나눈 결과입니다.</p>
           </div>
-          <RegionSelector
-            id="map-region"
-            label="지도 지역"
-            selectedRegionId={selected?.regionId}
-            onSelect={selectRegion}
-          />
         </div>
 
         <div className="year-control">
