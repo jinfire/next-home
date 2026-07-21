@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import RegionSelector, { type RegionSelection } from './RegionSelector'
 
 type Upgrade = {
   currentGrade: number
@@ -11,71 +12,83 @@ type Upgrade = {
   historicalYears: number
 }
 
+type Comparison = {
+  regionId: number
+  regionName: string
+  currentGrade: number
+  year: number
+  currentAveragePricePerPyeong: number
+  targets: Upgrade[]
+}
+
 function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
 export default function UpgradePanel({ year }: { year: number }) {
-  const [currentGrade, setCurrentGrade] = useState(0)
-  const [results, setResults] = useState<Upgrade[]>([])
+  const [region, setRegion] = useState<RegionSelection | null>(null)
+  const [comparison, setComparison] = useState<Comparison | null>(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!currentGrade) {
-      setResults([])
+    if (!region) {
+      setComparison(null)
       return
     }
     const controller = new AbortController()
     setError('')
-    fetch(`/api/recommendations/upgrades?currentGrade=${currentGrade}&year=${year}`, {
-      signal: controller.signal,
-    })
+    fetch(`/api/recommendations/upgrades?regionId=${region.id}&year=${year}`, { signal: controller.signal })
       .then((response) => {
-        if (!response.ok) throw new Error('추천 결과를 불러오지 못했습니다.')
-        return response.json() as Promise<Upgrade[]>
+        if (response.status === 404) throw new Error(`${year}년 급지 데이터가 없는 지역입니다.`)
+        if (!response.ok) throw new Error('갈아타기 비교를 불러오지 못했습니다.')
+        return response.json() as Promise<Comparison>
       })
-      .then(setResults)
+      .then(setComparison)
       .catch((reason: Error) => {
-        if (reason.name !== 'AbortError') setError(reason.message)
+        if (reason.name !== 'AbortError') {
+          setComparison(null)
+          setError(reason.message)
+        }
       })
     return () => controller.abort()
-  }, [currentGrade, year])
+  }, [region, year])
 
   return (
-    <section id="upgrade" className="upgrade-panel">
-      <div className="upgrade-intro">
-        <p className="section-kicker">MOVE-UP SIGNAL</p>
-        <h2>한 단계 위는 지금 얼마나 멀까요?</h2>
-        <p>대출이나 추가 자금은 계산하지 않습니다. 시장의 가격 격차만 선명하게 비교합니다.</p>
-        <label>
-          현재 급지
-          <select value={currentGrade} onChange={(event) => setCurrentGrade(Number(event.target.value))}>
-            <option value="0">급지를 선택하세요</option>
-            {Array.from({ length: 10 }, (_, index) => index + 1).map((grade) => (
-              <option key={grade} value={grade}>{grade}급지</option>
-            ))}
-          </select>
-        </label>
+    <section id="upgrade" className="upgrade-panel section-panel">
+      <div className="section-heading">
+        <div>
+          <h2>상급지로 갈아타면 평당 가격 차이가 얼마나 날까요?</h2>
+          <p>현재 거주 지역을 선택하면 급지를 자동으로 확인하고, 한·두 급지 위의 평균 평단가와 시장 격차를 비교합니다.</p>
+        </div>
       </div>
 
+      <RegionSelector id="upgrade-region" label="현재 거주 지역" onSelect={setRegion} />
+
       <div className="upgrade-results" aria-live="polite">
-        {!currentGrade && <p className="upgrade-prompt">현재 급지를 고르면 1·2급지 위를 바로 비교해 드려요.</p>}
-        {error && <p role="alert" className="upgrade-prompt">{error}</p>}
-        {currentGrade > 0 && !error && results.length === 0 && (
-          <p className="upgrade-prompt">{year}년 비교 가능한 상위 급지 데이터가 없습니다.</p>
+        {!region && <p className="panel-placeholder">시·도와 시·군·구를 차례로 선택해 주세요.</p>}
+        {error && <p role="alert" className="panel-placeholder">{error}</p>}
+        {comparison && (
+          <div className="current-region-card">
+            <span>현재 지역</span>
+            <strong>{comparison.regionName} · {comparison.currentGrade}급지</strong>
+            <small>{price(comparison.currentAveragePricePerPyeong)}</small>
+          </div>
         )}
-        {results.map((item) => (
+        {comparison && comparison.targets.length === 0 && (
+          <p className="panel-placeholder">현재 지역보다 높은 급지 데이터가 없습니다.</p>
+        )}
+        {comparison?.targets.map((item) => (
           <article className="upgrade-card" key={item.targetGrade}>
             <div className="upgrade-card-head">
-              <span>{item.currentGrade - item.targetGrade}단계 위</span>
+              <span>{item.currentGrade - item.targetGrade}급지 위</span>
               <strong>{item.targetGrade}급지</strong>
             </div>
             <dl>
-              <div><dt>평균 평단가</dt><dd>{price(item.targetAveragePricePerPyeong)}</dd></div>
-              <div><dt>현재 격차</dt><dd>+{price(item.currentGapPerPyeong)}</dd></div>
-              <div><dt>과거 대비</dt><dd>과거 격차의 하위 {Math.round(item.historicalGapPercentile)}% 수준</dd></div>
+              <div><dt>상급지 평균 평단가</dt><dd>{price(item.targetAveragePricePerPyeong)}</dd></div>
+              <div><dt>현재 지역과의 평당 격차</dt><dd>+{price(item.currentGapPerPyeong)}</dd></div>
+              <div><dt>과거 대비 현재 격차</dt><dd>과거 격차의 하위 {Math.round(item.historicalGapPercentile)}% 수준</dd></div>
             </dl>
-            <small>{item.historicalYears}개 연도 기준</small>
+            <small>{item.historicalYears}개 연도 기준 · 대출 및 총 필요 자금은 계산하지 않습니다.</small>
           </article>
         ))}
       </div>

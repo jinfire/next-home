@@ -65,9 +65,9 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
     loadNaverMapSdk(clientId).then(() => {
       if (!active || initialized.current || !container.current || !window.naver) return
       map.current = new window.naver.maps.Map(container.current, {
-        center: new window.naver.maps.LatLng(37.5665, 126.978),
-        zoom: 11,
-        minZoom: 8,
+        center: new window.naver.maps.LatLng(37.45, 127.15),
+        zoom: 9,
+        minZoom: 7,
       })
       initialized.current = true
       setMapReady(true)

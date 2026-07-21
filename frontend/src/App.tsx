@@ -3,8 +3,7 @@ import './App.css'
 import NaverMap from './components/NaverMap'
 import UpgradePanel from './components/UpgradePanel'
 import LifestylePanel from './components/LifestylePanel'
-import AlertPanel from './components/AlertPanel'
-import RegionSearch, { type RegionSearchResult } from './components/RegionSearch'
+import RegionSelector, { type RegionSelection } from './components/RegionSelector'
 
 type GradeSummary = {
   regionId: number
@@ -23,10 +22,23 @@ function formatPrice(value: number) {
 }
 
 function App() {
+  const [availableYears, setAvailableYears] = useState<number[]>([currentYear])
   const [year, setYear] = useState(currentYear)
   const [grades, setGrades] = useState<GradeSummary[]>([])
   const [selected, setSelected] = useState<GradeSummary | null>(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/api/grades/years')
+      .then((response) => response.ok ? response.json() as Promise<number[]> : Promise.reject())
+      .then((years) => {
+        if (years.length === 0) return
+        const sorted = [...years].sort((a, b) => a - b)
+        setAvailableYears(sorted)
+        setYear(sorted.at(-1) ?? currentYear)
+      })
+      .catch(() => undefined)
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -38,7 +50,7 @@ function App() {
       })
       .then((data) => {
         setGrades(data)
-        setSelected(data[0] ?? null)
+        setSelected((previous) => data.find((item) => item.regionId === previous?.regionId) ?? data[0] ?? null)
       })
       .catch((reason: Error) => {
         if (reason.name !== 'AbortError') setError(reason.message)
@@ -46,90 +58,91 @@ function App() {
     return () => controller.abort()
   }, [year])
 
-  const yearOptions = useMemo(
-    () => Array.from({ length: 7 }, (_, index) => currentYear - index),
-    [],
-  )
+  const yearIndex = Math.max(0, availableYears.indexOf(year))
+  const groupedCounts = useMemo(() => Array.from({ length: 10 }, (_, index) => ({
+    grade: index + 1,
+    count: grades.filter((item) => item.grade === index + 1).length,
+  })), [grades])
 
-  const selectSearchedRegion = (region: RegionSearchResult) => {
-    const matchingGrade = grades.find((item) => item.regionId === region.id)
-    if (matchingGrade) {
-      setSelected(matchingGrade)
-      setError('')
-    } else {
-      setError(`${region.name}의 ${year}년 급지 데이터가 아직 없습니다.`)
-    }
+  const selectRegion = (region: RegionSelection) => {
+    const matching = grades.find((item) => item.regionId === region.id)
+    setSelected(matching ?? null)
+    setError(matching ? '' : `${region.provinceName} ${region.name}의 ${year}년 실거래 급지 데이터가 없습니다.`)
   }
 
   return (
     <main className="app-shell">
       <header className="topbar">
-        <a className="brand" href="/">NEXT HOME</a>
+        <a className="brand" href="/">수도권 급지지도</a>
         <nav aria-label="주요 메뉴">
-          <a href="#grade-map">급지 지도</a>
-          <a href="#upgrade">갈아타기</a>
+          <a href="#grade-map">지도</a>
+          <a href="#upgrade">갈아타기 비교</a>
+          <a href="#lifestyle">아파트 추천</a>
         </nav>
       </header>
 
-      <section className="hero-copy">
-        <p className="eyebrow">DATA-GUIDED HOME UPGRADE</p>
-        <h1>사는 곳의 가치를 한눈에</h1>
-        <p>실거래 평균 평단가로 지역의 현재 위치를 읽고, 다음 집으로 가는 선택지를 차분하게 비교하세요.</p>
+      <section className="page-title">
+        <h1>수도권 급지지도</h1>
+        <p>실거래 평균 평단가를 기준으로 서울·경기·인천 지역의 상대적인 주거 가격 수준을 보여줍니다.</p>
       </section>
 
       <section id="grade-map" className="map-panel" aria-label="지역 급지 지도">
-        <div className="map-toolbar">
+        <div className="map-heading">
           <div>
-            <p className="section-kicker">REGION GRADE MAP</p>
-            <h2>지역별 주거 가치</h2>
+            <h2>수도권 지역별 주거 가치</h2>
+            <p>같은 연도의 아파트 실거래 평균 평단가를 비교해 수도권 시·군·구를 1~10급지로 나눈 결과입니다.</p>
           </div>
-          <label>
-            기준 연도
-            <select value={year} onChange={(event) => setYear(Number(event.target.value))}>
-              {yearOptions.map((option) => <option key={option}>{option}</option>)}
-            </select>
-          </label>
+          <RegionSelector
+            id="map-region"
+            label="지도 지역"
+            selectedRegionId={selected?.regionId}
+            onSelect={selectRegion}
+          />
         </div>
 
-        <RegionSearch onSelect={selectSearchedRegion} />
-
-        <div className="map-grid">
-          <NaverMap year={year} />
-          <aside className="grade-list" aria-label="지역 급지 목록">
-            {error && <p role="alert" className="empty-state">{error}</p>}
-            {!error && grades.length === 0 && <p className="empty-state">{year}년 급지 데이터가 아직 없습니다.</p>}
-            {grades.map((item) => (
-              <button
-                className={selected?.regionId === item.regionId ? 'grade-item selected' : 'grade-item'}
-                key={item.regionId}
-                onClick={() => setSelected(item)}
-              >
-                <span className={`grade-dot grade-${item.grade}`}>{item.grade}</span>
-                <span><strong>{item.regionName}</strong><small>{item.tradeCount}건 실거래</small></span>
-                <span className="grade-price"><strong>{item.grade}급지</strong><small>{formatPrice(item.averagePricePerPyeong)}</small></span>
-              </button>
-            ))}
-          </aside>
+        <div className="year-control">
+          <div className="year-control-title">
+            <label htmlFor="grade-year">기준 연도</label>
+            <output htmlFor="grade-year">{year}년</output>
+          </div>
+          <input
+            id="grade-year"
+            aria-label="기준 연도"
+            type="range"
+            min="0"
+            max={Math.max(0, availableYears.length - 1)}
+            step="1"
+            value={yearIndex}
+            onChange={(event) => setYear(availableYears[Number(event.target.value)] ?? year)}
+            disabled={availableYears.length < 2}
+          />
+          <div className="year-ticks" aria-hidden="true">
+            {availableYears.map((item) => <span key={item}>{item}</span>)}
+          </div>
         </div>
 
+        <div className="grade-legend" aria-label="급지 색상 범례">
+          {groupedCounts.map(({ grade, count }) => (
+            <span key={grade}><i className={`legend-color grade-color-${grade}`} />{grade}급지 <small>{count}</small></span>
+          ))}
+          <span><i className="legend-color no-data" />데이터 없음</span>
+        </div>
+
+        <NaverMap year={year} />
+
+        {error && <p role="alert" className="map-error">{error}</p>}
         {selected && (
           <div className="selection-summary" aria-live="polite">
-            <span>{selected.regionName}</span>
-            <strong>{selected.grade}급지</strong>
-            <span>{formatPrice(selected.averagePricePerPyeong)}</span>
+            <div><span>선택 지역</span><strong>{selected.regionName}</strong></div>
+            <div><span>급지</span><strong>{selected.grade}급지</strong></div>
+            <div><span>평균 평단가</span><strong>{formatPrice(selected.averagePricePerPyeong)}</strong></div>
+            <div><span>실거래</span><strong>{selected.tradeCount.toLocaleString('ko-KR')}건</strong></div>
           </div>
         )}
       </section>
 
       <UpgradePanel year={year} />
       <LifestylePanel year={year} />
-      <AlertPanel
-        year={year}
-        currentRegionId={selected?.regionId}
-        currentGrade={selected?.grade}
-        currentAveragePricePerPyeong={selected?.averagePricePerPyeong}
-        regionName={selected?.regionName}
-      />
     </main>
   )
 }

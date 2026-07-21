@@ -1,5 +1,14 @@
 # Roadmap
 
+## 수도권 급지지도 화면 개편 완료 (2026-07-21)
+
+- [x] 수도권 전체 지도와 명확한 화면 제목
+- [x] 시·도→시·군·구 연동 선택
+- [x] 보유 데이터 기반 연도 슬라이더
+- [x] 지역 자동 급지 판정 기반 갈아타기 비교
+- [x] 알림 설정 UI 비노출
+- [x] Vitest·Playwright·lint·production build 검증
+
 ## VWorld boundary import command completion (2026-07-21)
 
 - [x] 서버 시작 플래그 방식 제거

@@ -28,7 +28,7 @@ export default function LifestylePanel({ year }: { year: number }) {
   const [apartments, setApartments] = useState<Apartment[]>([])
   const [current, setCurrent] = useState<Apartment | null>(null)
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
-  const [message, setMessage] = useState('현재 아파트를 검색해 보세요.')
+  const [message, setMessage] = useState('현재 거주지의 도로명주소나 아파트명을 입력해 주세요.')
 
   async function search(event: FormEvent) {
     event.preventDefault()
@@ -62,16 +62,15 @@ export default function LifestylePanel({ year }: { year: number }) {
     <section className="lifestyle-panel" id="lifestyle">
       <div className="lifestyle-head">
         <div>
-          <p className="section-kicker">SAME NEIGHBORHOOD, NEXT HOME</p>
-          <h2>생활은 그대로, 집은 한 단계 위로</h2>
+          <h2>같은 지역에서 더 높은 평단가의 아파트 찾기</h2>
         </div>
-        <p>현재 단지와 같은 행정구역에서 실거래 평균 평단가가 더 높은 아파트를 찾습니다.</p>
+        <p>현재 주소의 시·군·구 안에서 실거래 평균 평단가가 더 높은 아파트를 보여드립니다.</p>
       </div>
 
       <form className="apartment-search" onSubmit={search}>
         <label>
-          현재 아파트
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="아파트 이름 입력" />
+          현재 도로명주소 또는 아파트명
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="예: 마포대로 201 또는 래미안" />
         </label>
         <button type="submit">검색</button>
       </form>

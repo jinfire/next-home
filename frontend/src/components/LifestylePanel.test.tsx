@@ -13,7 +13,7 @@ it('searches current apartment and recommends better apartments in the same regi
   }))
 
   render(<LifestylePanel year={2026} />)
-  await userEvent.type(screen.getByLabelText('현재 아파트'), '현재')
+  await userEvent.type(screen.getByLabelText('현재 도로명주소 또는 아파트명'), '현재')
   await userEvent.click(screen.getByRole('button', { name: '검색' }))
   await userEvent.click(await screen.findByRole('button', { name: /현재아파트/ }))
 

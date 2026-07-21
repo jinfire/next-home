@@ -3,23 +3,34 @@ import userEvent from '@testing-library/user-event'
 import { expect, it, vi } from 'vitest'
 import UpgradePanel from './UpgradePanel'
 
-it('loads one and two grade upgrade comparisons from only the current grade', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => [{
-      currentGrade: 5, targetGrade: 4, year: 2026,
+it('resolves the grade from a selected district and loads upper-grade comparisons', async () => {
+  vi.stubGlobal('fetch', vi.fn((input: string | URL | Request) => {
+    const url = String(input)
+    const body = url.includes('/api/regions/options') ? [{
+      id: 1, code: '41', name: '경기도', regions: [{ id: 10, code: '41135', name: '성남시 분당구' }],
+    }] : {
+      regionId: 10,
+      regionName: '성남시 분당구',
+      currentGrade: 5,
+      year: 2026,
       currentAveragePricePerPyeong: 50_000_000,
-      targetAveragePricePerPyeong: 70_000_000,
-      currentGapPerPyeong: 20_000_000,
-      historicalGapPercentile: 25,
-      historicalYears: 5,
-    }],
+      targets: [{
+        currentGrade: 5, targetGrade: 4, year: 2026,
+        currentAveragePricePerPyeong: 50_000_000,
+        targetAveragePricePerPyeong: 70_000_000,
+        currentGapPerPyeong: 20_000_000,
+        historicalGapPercentile: 25,
+        historicalYears: 5,
+      }],
+    }
+    return Promise.resolve({ ok: true, json: async () => body })
   }))
 
   render(<UpgradePanel year={2026} />)
-  await userEvent.selectOptions(screen.getByLabelText('현재 급지'), '5')
+  await userEvent.selectOptions(await screen.findByLabelText('현재 거주 지역 시·도'), '41')
+  await userEvent.selectOptions(screen.getByLabelText('현재 거주 지역 시·군·구'), '10')
 
-  expect(await screen.findAllByText('4급지')).toHaveLength(2)
+  expect(await screen.findByText('성남시 분당구 · 5급지')).toBeInTheDocument()
   expect(screen.getByText('7,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('과거 격차의 하위 25% 수준')).toBeInTheDocument()
