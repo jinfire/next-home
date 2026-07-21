@@ -26,8 +26,8 @@ function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
-function homePrice(perPyeong: number, pyeong: number) {
-  const eok = perPyeong * pyeong / 100_000_000
+function additionalPrice(targetPerPyeong: number, currentPerPyeong: number, pyeong: number) {
+  const eok = Math.max(0, targetPerPyeong - currentPerPyeong) * pyeong / 100_000_000
   return `${eok.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원`
 }
 
@@ -92,8 +92,8 @@ export default function UpgradePanel({ year }: { year: number }) {
                   <div><strong>{item.regionName}</strong><em>{item.grade}급지</em></div>
                   <dl>
                     <div><dt>평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
-                    <div><dt>25평 기준</dt><dd>{homePrice(item.averagePricePerPyeong, 25)}</dd></div>
-                    <div><dt>34평 기준</dt><dd>{homePrice(item.averagePricePerPyeong, 34)}</dd></div>
+                    <div><dt>25평 기준 추가 금액</dt><dd>+{additionalPrice(item.averagePricePerPyeong, comparison.currentAveragePricePerPyeong, 25)}</dd></div>
+                    <div><dt>34평 기준 추가 금액</dt><dd>+{additionalPrice(item.averagePricePerPyeong, comparison.currentAveragePricePerPyeong, 34)}</dd></div>
                   </dl>
                 </article>
               ))}

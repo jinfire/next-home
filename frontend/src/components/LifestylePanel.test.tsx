@@ -26,6 +26,6 @@ it('searches current apartment and recommends better apartments in the same regi
   expect(screen.getByText(/서울특별시 마포구 마포대로 1/)).toBeInTheDocument()
   expect(screen.getByText('8,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
-  expect(screen.getByText('6월 실거래')).toBeInTheDocument()
+  expect(screen.getByText('6월 실거래 합계')).toBeInTheDocument()
   expect(fetch).toHaveBeenCalledWith('/api/apartments?query=%ED%98%84%EC%9E%AC&regionId=10')
 })

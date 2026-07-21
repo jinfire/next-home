@@ -19,9 +19,9 @@ class LifestyleApartmentCalculatorTest {
         List<LifestyleApartmentRecommendation> result = calculator.recommend(current, candidates);
 
         assertThat(result).extracting(LifestyleApartmentRecommendation::apartmentName)
-                .containsExactly("Upgrade B", "Upgrade A");
+                .containsExactly("Upgrade A", "Upgrade B");
         assertThat(result).extracting(LifestyleApartmentRecommendation::gapPerPyeong)
-                .containsExactly(new BigDecimal("10.00"), new BigDecimal("30.00"));
+                .containsExactly(new BigDecimal("30.00"), new BigDecimal("10.00"));
     }
 
     @Test
@@ -29,7 +29,7 @@ class LifestyleApartmentCalculatorTest {
         ApartmentPriceAverage current = apt(1, 10, "Current", 10);
         List<ApartmentPriceAverage> candidates = java.util.stream.IntStream.range(0, 15)
                 .mapToObj(i -> apt(i + 2, 10, "Candidate " + i, 100 - i)).toList();
-        assertThat(calculator.recommend(current, candidates)).hasSize(5);
+        assertThat(calculator.recommend(current, candidates)).hasSize(10);
     }
 
     private ApartmentPriceAverage apt(long id, long regionId, String name, long average) {

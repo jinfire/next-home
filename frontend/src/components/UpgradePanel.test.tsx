@@ -33,6 +33,8 @@ it('resolves the grade from a selected district and loads upper-grade comparison
 
   expect(await screen.findByText('성남시 분당구 · 5급지')).toBeInTheDocument()
   expect(screen.getByText('과천시')).toBeInTheDocument()
-  expect(screen.getByText('18.8억원')).toBeInTheDocument()
-  expect(screen.getByText('25.5억원')).toBeInTheDocument()
+  expect(screen.getByText('25평 기준 추가 금액')).toBeInTheDocument()
+  expect(screen.getByText('+6.3억원')).toBeInTheDocument()
+  expect(screen.getByText('34평 기준 추가 금액')).toBeInTheDocument()
+  expect(screen.getByText('+8.5억원')).toBeInTheDocument()
 })
