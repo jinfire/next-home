@@ -22,7 +22,7 @@
 
 ## Next Home 급지 지도
 
-메인 화면은 네이버 Dynamic Map과 연도별 지역 급지 목록을 보여준다. 루트 `.env`의 `NAVER_MAP_CLIENT_ID`를 사용하며 지도 Client Secret은 프런트엔드에 포함하지 않는다. 개발 서버의 `/api` 요청은 `http://localhost:8080`으로 전달된다.
+메인 화면은 네이버 Dynamic Map과 연도별 지역 급지 목록을 보여준다. 루트 `.env`의 `NAVER_MAP_CLIENT_ID`를 사용하며 지도 Client Secret은 프런트엔드에 포함하지 않는다. 개발 서버의 `/api` 요청은 같은 `.env`의 `BACKEND_PORT`로 전달된다.
 
 Dynamic Map SDK는 지도 영역이 화면 가까이에 들어올 때 지연 로딩하며, 페이지 안에서 script와 SDK 로드 요청을 한 번만 공유한다.
 
@@ -40,11 +40,10 @@ npm run test:e2e
 
 테스트는 API 응답을 가로채므로 외부 API 호출량을 사용하지 않는다.
 
-로컬 PostgreSQL의 실제 수집 데이터와 NAVER Map까지 확인하는 선택적 스모크 테스트는 백엔드를 `8080` 포트에서 실행한 상태로 다음처럼 실행한다. 이 명령은 Dynamic Map을 실제 1회 로드한다.
+로컬 PostgreSQL의 실제 수집 데이터와 NAVER Map까지 확인하는 선택적 스모크 테스트는 백엔드를 루트 `.env`의 `BACKEND_PORT`에서 실행한 상태로 다음처럼 실행한다. 이 명령은 Dynamic Map을 실제 1회 로드한다.
 
 ```powershell
 $env:LIVE_E2E='1'
-$env:BACKEND_PROXY_TARGET='http://localhost:8080'
 npm run test:e2e -- live-stack.spec.ts
 ```
 

@@ -1,5 +1,9 @@
 # Decision Log
 
+## 2026-07-21 — 로컬 백엔드 포트는 단일 환경변수로 관리한다
+
+이미 사용 중인 8080·18080 포트와 충돌하지 않도록 로컬 예시 포트를 `28080`으로 정한다. Spring Boot와 Vite 프록시는 모두 루트 `.env`의 `BACKEND_PORT`를 읽으며, 동일한 포트를 두 주소 설정에 중복 기록하던 `BACKEND_PROXY_TARGET`은 제거한다.
+
 ## 2026-07-21 — 저장소 루트는 단일 next-home 폴더로 유지한다
 
 로컬 기준 경로는 `C:\Users\두두\Documents\sidehustle\coding\next-home`이다. 압축 해제 과정에서 생긴 중첩 `next-home/next-home` 구조와 커밋이 없는 바깥쪽 Git 메타데이터를 제거하고, 실제 `main` 이력과 GitHub 원격 연결을 가진 저장소를 상위 폴더로 이동했다.

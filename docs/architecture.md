@@ -2,7 +2,7 @@
 
 ## Live-stack smoke flow
 
-선택적 `LIVE_E2E=1` 테스트는 Vite의 `/api` 프록시를 `BACKEND_PROXY_TARGET`으로 실행 중인 Spring Boot에 연결한다. 실제 로컬 PostGIS의 급지 응답과 NAVER Map SDK 초기화를 Chromium에서 확인하며, 기본 CI와 단위 테스트에서는 실행하지 않는다.
+선택적 `LIVE_E2E=1` 테스트는 Vite의 `/api` 프록시를 루트 `.env`의 `BACKEND_PORT`로 실행 중인 Spring Boot에 연결한다. 실제 로컬 PostGIS의 급지 응답과 NAVER Map SDK 초기화를 Chromium에서 확인하며, 기본 CI와 단위 테스트에서는 실행하지 않는다.
 
 ## VWorld boundary import flow
 
@@ -56,7 +56,7 @@ React의 `UpgradePanel`은 현재 급지와 지도에서 선택한 연도만 상
 
 ## Frontend grade map flow
 
-Vite는 루트 `.env`의 `NAVER_MAP_CLIENT_ID`만 프런트 빌드에 주입하고 Client Secret은 노출하지 않는다. React가 네이버 Dynamic Map SDK를 한 번 로드하고 `/api/grades?year={year}`를 호출해 지역 급지 목록을 구성한다. 개발 환경의 `/api` 요청은 Vite 프록시를 통해 Spring Boot `8080` 포트로 전달한다.
+Vite는 루트 `.env`의 `NAVER_MAP_CLIENT_ID`만 프런트 빌드에 주입하고 Client Secret은 노출하지 않는다. React가 네이버 Dynamic Map SDK를 한 번 로드하고 `/api/grades?year={year}`를 호출해 지역 급지 목록을 구성한다. 개발 환경의 `/api` 요청은 Vite 프록시를 통해 같은 `.env`의 `BACKEND_PORT`로 전달한다.
 
 ## Alert condition registration flow
 

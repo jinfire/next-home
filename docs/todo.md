@@ -1,5 +1,13 @@
 # TODO
 
+## 백엔드 포트 환경변수 통합 (2026-07-21)
+
+- [x] 로컬 백엔드 포트를 `28080`으로 변경
+- [x] Spring Boot가 루트 `.env`의 `BACKEND_PORT` 참조
+- [x] Vite 프록시가 동일한 `BACKEND_PORT`에서 주소 생성
+- [x] 중복 `BACKEND_PROXY_TARGET` 설정 제거
+- [x] 포트 해석 단위 테스트 추가
+
 ## 저장소 경로 평탄화 (2026-07-21)
 
 - [x] 중첩 `next-home/next-home` 구조 제거

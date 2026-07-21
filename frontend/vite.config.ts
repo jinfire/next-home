@@ -1,11 +1,12 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { loadEnv } from 'vite'
+import { resolveBackendTarget } from './backendTarget.js'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '..', '')
-  const backendTarget = process.env.BACKEND_PROXY_TARGET ?? env.BACKEND_PROXY_TARGET ?? 'http://localhost:8080'
+  const backendTarget = resolveBackendTarget(env, process.env)
   return {
     plugins: [react()],
     define: {
