@@ -66,6 +66,14 @@
 .selection-summary > div { display: grid; gap: 5px; padding: 15px 0; border-bottom: 1px solid var(--line); }
 .selection-summary span { color: #758078; font-size: .72rem; }
 .selection-summary strong { font-size: .98rem; }
+.grade-methodology { display:grid; grid-template-columns:minmax(0,1fr) minmax(460px,.9fr); gap:28px; padding:28px 32px; border-top:1px solid var(--line); background:#fbfcfa; }
+.grade-methodology > div:first-child > span { color:var(--green); font-size:.72rem; font-weight:800; }
+.grade-methodology h3 { margin:7px 0 12px; font-size:1.25rem; }.grade-methodology p { margin:7px 0; color:var(--muted); line-height:1.6; }
+.grade-methodology code { color:var(--ink); font-family:inherit; font-weight:750; }
+.grade-thresholds { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
+.grade-thresholds div { display:grid; gap:3px; padding:9px; border:1px solid var(--line); border-radius:9px; background:#fff; }
+.grade-thresholds strong { font-size:.74rem; }.grade-thresholds span { color:var(--muted); font-size:.66rem; }
+.grade-methodology > small { grid-column:1/-1; color:#7a847d; line-height:1.55; }
 
 .section-panel,.lifestyle-panel { margin-top: 28px; padding: 36px 40px 40px; }
 .section-heading { display: flex; justify-content: space-between; gap: 28px; }
@@ -117,6 +125,7 @@
 @media (max-width: 900px) {
   .map-heading,.lifestyle-head { grid-template-columns: 1fr; }
   .map-with-info { grid-template-columns: 1fr; }
+  .grade-methodology { grid-template-columns:1fr; }.grade-methodology > small { grid-column:auto; }
   .map-region-info { border-top: 1px solid var(--line); border-left: 0; }
   .selection-summary { grid-template-columns: repeat(4,1fr); gap: 14px; }
   .nearby-regions > div { grid-template-columns: repeat(2,1fr); }
@@ -135,6 +144,7 @@
   .map-canvas { min-height: 460px; }
   .selection-summary { grid-template-columns: 1fr 1fr; }
   .selection-summary > div { padding: 14px 16px; }
+  .grade-methodology { padding:22px 20px; }.grade-thresholds { grid-template-columns:repeat(2,1fr); }
   .apartment-search { grid-template-columns: 1fr; }
   .apartment-recommendations article { grid-template-columns: 30px 1fr; }.apartment-recommendations dl { grid-column: 2; grid-template-columns: 1fr; }
 }

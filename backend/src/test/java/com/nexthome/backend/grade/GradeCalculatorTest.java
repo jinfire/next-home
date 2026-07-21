@@ -18,16 +18,16 @@ class GradeCalculatorTest {
     }
 
     @Test
-    void assignsGradeOneToHighestAndTenToLowestOfTenRegions() {
-        List<RegionPriceAverage> averages = IntStream.range(0, 10)
+    void assignsGradesFromPriceIndexAgainstCapitalAreaMedian() {
+        long[] values = {300, 225, 180, 150, 110, 90, 85, 70, 55, 40};
+        List<RegionPriceAverage> averages = IntStream.range(0, values.length)
                 .mapToObj(index -> new RegionPriceAverage((long) index + 1, "지역" + index,
-                        BigDecimal.valueOf(100 - index * 10L), 10))
-                .toList();
+                        BigDecimal.valueOf(values[index]), 10)).toList();
 
         List<CalculatedRegionGrade> grades = calculator.assignGrades(2026, averages);
 
         assertThat(grades).extracting(CalculatedRegionGrade::grade)
-                .containsExactly(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+                .containsExactly(1, 2, 3, 4, 6, 7, 7, 8, 9, 10);
     }
 
     @Test
