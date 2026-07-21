@@ -26,6 +26,7 @@ test.beforeEach(async ({ page }) => {
         targetAveragePricePerPyeong: 110_000_000,
         currentGapPerPyeong: 20_000_000, historicalGapPercentile: 35, historicalYears: 2,
       }],
+      nearbyRegions: [{ regionId: 2, regionName: '서초구', grade: 4, averagePricePerPyeong: 115_000_000 }],
     } })
     return route.fulfill({ status: 404, json: {} })
   })

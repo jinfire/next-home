@@ -22,7 +22,7 @@ function formatPrice(value: number) {
 }
 
 function App() {
-  const [availableYears, setAvailableYears] = useState<number[]>([currentYear])
+  const [availableYears, setAvailableYears] = useState<number[]>(Array.from({ length: currentYear - 2014 }, (_, index) => 2015 + index))
   const [year, setYear] = useState(currentYear)
   const [grades, setGrades] = useState<GradeSummary[]>([])
   const [selected, setSelected] = useState<GradeSummary | null>(null)
@@ -33,9 +33,10 @@ function App() {
       .then((response) => response.ok ? response.json() as Promise<number[]> : Promise.reject())
       .then((years) => {
         if (years.length === 0) return
-        const sorted = [...years].sort((a, b) => a - b)
-        setAvailableYears(sorted)
-        setYear(sorted.at(-1) ?? currentYear)
+        const first = Math.min(2015, ...years)
+        const last = Math.max(currentYear, ...years)
+        setAvailableYears(Array.from({ length: last - first + 1 }, (_, index) => first + index))
+        setYear(Math.max(...years))
       })
       .catch(() => undefined)
   }, [])
@@ -68,6 +69,12 @@ function App() {
     const matching = grades.find((item) => item.regionId === region.id)
     setSelected(matching ?? null)
     setError(matching ? '' : `${region.provinceName} ${region.name}의 ${year}년 실거래 급지 데이터가 없습니다.`)
+  }
+
+  const selectRegionFromMap = (regionId: number) => {
+    const matching = grades.find((item) => item.regionId === regionId)
+    setSelected(matching ?? null)
+    setError(matching ? '' : `${year}년 실거래 급지 데이터가 없는 지역입니다.`)
   }
 
   return (
@@ -114,7 +121,6 @@ function App() {
             step="1"
             value={yearIndex}
             onChange={(event) => setYear(availableYears[Number(event.target.value)] ?? year)}
-            disabled={availableYears.length < 2}
           />
           <div className="year-ticks" aria-hidden="true">
             {availableYears.map((item) => <span key={item}>{item}</span>)}
@@ -128,17 +134,22 @@ function App() {
           <span><i className="legend-color no-data" />데이터 없음</span>
         </div>
 
-        <NaverMap year={year} />
-
-        {error && <p role="alert" className="map-error">{error}</p>}
-        {selected && (
-          <div className="selection-summary" aria-live="polite">
+        <div className="map-with-info">
+          <NaverMap year={year} onSelectRegion={selectRegionFromMap} />
+          <aside className="map-region-info" aria-live="polite">
+            <span className="info-eyebrow">지도에서 지역을 클릭하세요</span>
+            {selected ? <>
+              <h3>{selected.regionName}</h3>
+              <div className="selection-summary">
             <div><span>선택 지역</span><strong>{selected.regionName}</strong></div>
             <div><span>급지</span><strong>{selected.grade}급지</strong></div>
             <div><span>평균 평단가</span><strong>{formatPrice(selected.averagePricePerPyeong)}</strong></div>
             <div><span>실거래</span><strong>{selected.tradeCount.toLocaleString('ko-KR')}건</strong></div>
-          </div>
-        )}
+              </div>
+            </> : <p>{year}년 급지 정보가 있는 지역을 선택해 주세요.</p>}
+          </aside>
+        </div>
+        {error && <p role="alert" className="map-error">{error}</p>}
       </section>
 
       <UpgradePanel year={year} />

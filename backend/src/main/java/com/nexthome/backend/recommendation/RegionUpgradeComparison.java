@@ -9,5 +9,6 @@ public record RegionUpgradeComparison(
         int currentGrade,
         int year,
         BigDecimal currentAveragePricePerPyeong,
-        List<UpgradeRecommendation> targets) {
+        List<UpgradeRecommendation> targets,
+        List<NearbyUpgradeRegion> nearbyRegions) {
 }

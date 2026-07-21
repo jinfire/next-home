@@ -31,14 +31,16 @@ class RecommendationControllerTest {
 
     @Test void resolvesCurrentGradeFromSelectedRegion() throws Exception {
         var target = new UpgradeRecommendation(5,4,2026,new BigDecimal("50000000"),new BigDecimal("70000000"),new BigDecimal("20000000"),new BigDecimal("25"),5);
-        var comparison = new RegionUpgradeComparison(10, "마포구", 5, 2026, new BigDecimal("50000000"), List.of(target));
+        var nearby = new NearbyUpgradeRegion(11, "용산구", 4, new BigDecimal("70000000"));
+        var comparison = new RegionUpgradeComparison(10, "마포구", 5, 2026, new BigDecimal("50000000"), List.of(target), List.of(nearby));
         when(service.recommendRegion(10, 2026)).thenReturn(comparison);
 
         mvc.perform(get("/api/recommendations/upgrades").param("regionId","10").param("year","2026"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.regionName").value("마포구"))
                 .andExpect(jsonPath("$.currentGrade").value(5))
-                .andExpect(jsonPath("$.targets[0].targetGrade").value(4));
+                .andExpect(jsonPath("$.targets[0].targetGrade").value(4))
+                .andExpect(jsonPath("$.nearbyRegions[0].regionName").value("용산구"));
     }
 
     @Test void returnsBetterApartmentsInSameLifestyleZone() throws Exception {

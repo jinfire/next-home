@@ -19,6 +19,7 @@ type Comparison = {
   year: number
   currentAveragePricePerPyeong: number
   targets: Upgrade[]
+  nearbyRegions: { regionId: number; regionName: string; grade: number; averagePricePerPyeong: number }[]
 }
 
 function price(value: number) {
@@ -91,6 +92,19 @@ export default function UpgradePanel({ year }: { year: number }) {
             <small>{item.historicalYears}개 연도 기준 · 대출 및 총 필요 자금은 계산하지 않습니다.</small>
           </article>
         ))}
+        {comparison && (comparison.nearbyRegions?.length ?? 0) > 0 && (
+          <div className="nearby-regions">
+            <h3>가까운 상급지 후보</h3>
+            <div>
+              {comparison.nearbyRegions.slice(0, 4).map((item) => (
+                <article key={item.regionId}>
+                  <strong>{item.regionName}</strong>
+                  <span>{item.grade}급지 · {price(item.averagePricePerPyeong)}</span>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

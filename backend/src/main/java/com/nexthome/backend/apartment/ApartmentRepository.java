@@ -11,7 +11,11 @@ interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     @Query(value = """
             SELECT * FROM apartment
-            WHERE name ILIKE CONCAT('%', :query, '%') OR address ILIKE CONCAT('%', :query, '%')
+            WHERE NOT EXISTS (
+                SELECT 1 FROM unnest(string_to_array(:query, ' ')) AS token
+                WHERE token <> ''
+                  AND CONCAT_WS(' ', name, address) NOT ILIKE CONCAT('%', token, '%')
+            )
             ORDER BY name LIMIT 20
             """, nativeQuery = true)
     List<Apartment> searchByNameOrAddress(@Param("query") String query);
@@ -19,7 +23,11 @@ interface ApartmentRepository extends JpaRepository<Apartment, Long> {
     @Query(value = """
             SELECT * FROM apartment
             WHERE region_id=:regionId
-              AND (name ILIKE CONCAT('%', :query, '%') OR address ILIKE CONCAT('%', :query, '%'))
+              AND NOT EXISTS (
+                  SELECT 1 FROM unnest(string_to_array(:query, ' ')) AS token
+                  WHERE token <> ''
+                    AND CONCAT_WS(' ', name, address) NOT ILIKE CONCAT('%', token, '%')
+              )
             ORDER BY name LIMIT 20
             """, nativeQuery = true)
     List<Apartment> searchByRegionAndNameOrAddress(@Param("regionId") Long regionId, @Param("query") String query);

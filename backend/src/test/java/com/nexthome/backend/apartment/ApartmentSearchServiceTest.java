@@ -20,4 +20,14 @@ class ApartmentSearchServiceTest {
         assertThat(result).isEmpty();
         verify(repository).searchByNameOrAddress("마포대로 201");
     }
+
+    @Test
+    void removesApartmentNoiseWordForOrderIndependentPartialSearch() {
+        ApartmentRepository repository = mock(ApartmentRepository.class);
+        when(repository.searchByNameOrAddress("동탄 포레나")).thenReturn(List.of());
+
+        new ApartmentSearchService(repository).search("동탄 포레나 아파트", null);
+
+        verify(repository).searchByNameOrAddress("동탄 포레나");
+    }
 }

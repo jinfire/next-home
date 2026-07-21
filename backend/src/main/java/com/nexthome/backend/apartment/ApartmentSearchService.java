@@ -10,7 +10,8 @@ public class ApartmentSearchService {
     ApartmentSearchService(ApartmentRepository repository) { this.repository = repository; }
     @Transactional(readOnly = true)
     public List<ApartmentSummary> search(String query, Long regionId) {
-        String normalized = query == null ? "" : query.trim();
+        String normalized = query == null ? "" : query.trim().replaceAll("\\s+", " ")
+                .replaceAll("(^|\\s)아파트($|\\s)", " ").trim();
         if (normalized.isBlank()) throw new IllegalArgumentException("검색어가 필요합니다.");
         List<Apartment> result = regionId == null
                 ? repository.searchByNameOrAddress(normalized)

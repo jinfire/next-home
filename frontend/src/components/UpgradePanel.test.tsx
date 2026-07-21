@@ -22,6 +22,7 @@ it('resolves the grade from a selected district and loads upper-grade comparison
         historicalGapPercentile: 25,
         historicalYears: 5,
       }],
+      nearbyRegions: [{ regionId: 11, regionName: '과천시', grade: 4, averagePricePerPyeong: 75_000_000 }],
     }
     return Promise.resolve({ ok: true, json: async () => body })
   }))
@@ -34,4 +35,5 @@ it('resolves the grade from a selected district and loads upper-grade comparison
   expect(screen.getByText('7,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
   expect(screen.getByText('과거 격차의 하위 25% 수준')).toBeInTheDocument()
+  expect(screen.getByText('과천시')).toBeInTheDocument()
 })

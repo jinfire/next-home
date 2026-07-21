@@ -43,9 +43,10 @@ describe('NAVER Dynamic Map usage protection', () => {
     const addGeoJson = vi.fn()
     const setStyle = vi.fn()
     const removeFeature = vi.fn()
+    const addListener = vi.fn()
     let mapOptions: Record<string, unknown> | undefined
     addGeoJson.mockReturnValue([])
-    const map = { data: { addGeoJson, setStyle, removeFeature } }
+    const map = { data: { addGeoJson, setStyle, removeFeature, addListener } }
     class MockMap {
       data = map.data
       constructor(_element: HTMLElement, options: Record<string, unknown>) { mapOptions = options }
@@ -78,6 +79,7 @@ describe('NAVER Dynamic Map usage protection', () => {
     expect(container.querySelector('.naver-map')).toHaveAttribute('data-map-ready', 'true')
     expect(addGeoJson).toHaveBeenCalledWith({ type: 'FeatureCollection', features: [] })
     expect(setStyle).toHaveBeenCalled()
+    expect(addListener).toHaveBeenCalledWith('click', expect.any(Function))
     expect(mapOptions).toMatchObject({ zoom: 9, minZoom: 7 })
   })
 })

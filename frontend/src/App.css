@@ -44,6 +44,12 @@
 .grade-color-1 { background:#5b21b6 }.grade-color-2 { background:#2563eb }.grade-color-3 { background:#0891b2 }.grade-color-4 { background:#059669 }.grade-color-5 { background:#65a30d }.grade-color-6 { background:#ca8a04 }.grade-color-7 { background:#ea580c }.grade-color-8 { background:#dc2626 }.grade-color-9 { background:#be185d }.grade-color-10 { background:#64748b }.no-data { background:#cbd5e1 }
 
 .map-canvas { position: relative; min-height: 680px; border-top: 1px solid var(--line); background: #e8eee9; }
+.map-with-info { display: grid; grid-template-columns: minmax(0, 1fr) 320px; border-top: 1px solid var(--line); }
+.map-with-info .map-canvas { min-width: 0; border-top: 0; }
+.map-region-info { padding: 28px 24px; border-left: 1px solid var(--line); background: #fff; }
+.info-eyebrow { color: var(--green); font-size: .74rem; font-weight: 750; }
+.map-region-info h3 { margin: 12px 0 20px; font-size: 1.55rem; letter-spacing: -.035em; }
+.map-region-info > p { color: var(--muted); line-height: 1.6; }
 .naver-map {
   position: relative;
   width: 100%;
@@ -54,9 +60,8 @@
 }
 .map-message { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%,-50%); margin: 0; padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,.94); color: #526158; font-size: .85rem; }
 .map-error { margin: 0; padding: 14px 32px; border-top: 1px solid #f2c7c2; color: #b42318; background: #fff5f3; }
-.selection-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.selection-summary > div { display: grid; gap: 5px; padding: 18px 24px; border-right: 1px solid var(--line); }
-.selection-summary > div:last-child { border-right: 0; }
+.selection-summary { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.selection-summary > div { display: grid; gap: 5px; padding: 15px 0; border-bottom: 1px solid var(--line); }
 .selection-summary span { color: #758078; font-size: .72rem; }
 .selection-summary strong { font-size: .98rem; }
 
@@ -73,6 +78,12 @@
 .upgrade-card-head span { color: #557064; font-size: .78rem; font-weight: 750; }.upgrade-card-head strong { color: var(--green); font-size: 1.3rem; }
 .upgrade-card dl { margin: 18px 0 12px; }.upgrade-card dl div { display: flex; justify-content: space-between; gap: 18px; padding: 10px 0; border-top: 1px solid var(--line); }
 .upgrade-card dt { color: #69756d; font-size: .78rem; }.upgrade-card dd { margin: 0; font-weight: 750; text-align: right; }.upgrade-card small { color: #7b857e; }
+.nearby-regions { grid-column: 1/-1; margin-top: 4px; }
+.nearby-regions h3 { margin: 0 0 12px; font-size: 1rem; }
+.nearby-regions > div { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+.nearby-regions article { display: grid; gap: 7px; min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 12px; }
+.nearby-regions article strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nearby-regions article span { color: var(--muted); font-size: .74rem; }
 
 .lifestyle-head { display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,.65fr); gap: 40px; align-items: end; }
 .apartment-search { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 28px; }
@@ -88,8 +99,10 @@
 
 @media (max-width: 900px) {
   .map-heading,.lifestyle-head { grid-template-columns: 1fr; }
-  .selection-summary { grid-template-columns: repeat(2,1fr); }
-  .selection-summary > div:nth-child(2) { border-right: 0; }
+  .map-with-info { grid-template-columns: 1fr; }
+  .map-region-info { border-top: 1px solid var(--line); border-left: 0; }
+  .selection-summary { grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .nearby-regions > div { grid-template-columns: repeat(2,1fr); }
   .upgrade-results { grid-template-columns: 1fr; }
   .map-canvas { min-height: 560px; }
 }

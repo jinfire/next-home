@@ -19,21 +19,24 @@ type NaverMapInstance = {
     addGeoJson(value: GeoJson): NaverFeature[]
     removeFeature(feature: NaverFeature): void
     setStyle(style: (feature: NaverFeature) => Record<string, unknown>): void
+    addListener(event: 'click', listener: (event: { feature: NaverFeature }) => void): void
   }
 }
 
 const configuredClientId = import.meta.env.VITE_NAVER_MAP_CLIENT_ID as string | undefined
 
-type NaverMapProps = { clientId?: string; year?: number }
+type NaverMapProps = { clientId?: string; year?: number; onSelectRegion?: (regionId: number) => void }
 
 const gradeColors = ['#7c3aed', '#2563eb', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#ea580c', '#dc2626', '#be185d', '#64748b']
 
-export default function NaverMap({ clientId = configuredClientId, year = new Date().getFullYear() }: NaverMapProps) {
+export default function NaverMap({ clientId = configuredClientId, year = new Date().getFullYear(), onSelectRegion }: NaverMapProps) {
   const wrapper = useRef<HTMLDivElement>(null)
   const container = useRef<HTMLDivElement>(null)
   const initialized = useRef(false)
   const map = useRef<NaverMapInstance | null>(null)
   const boundaryFeatures = useRef<NaverFeature[]>([])
+  const onSelectRegionRef = useRef(onSelectRegion)
+  onSelectRegionRef.current = onSelectRegion
   const [mapReady, setMapReady] = useState(false)
   const [visible, setVisible] = useState(false)
   const [message, setMessage] = useState('지도를 불러오는 중입니다.')
@@ -68,6 +71,10 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
         center: new window.naver.maps.LatLng(37.45, 127.15),
         zoom: 9,
         minZoom: 7,
+      })
+      map.current.data.addListener('click', (event) => {
+        const regionId = Number(event.feature.getProperty('regionId'))
+        if (Number.isFinite(regionId)) onSelectRegionRef.current?.(regionId)
       })
       initialized.current = true
       setMapReady(true)

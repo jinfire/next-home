@@ -37,8 +37,23 @@ public class RecommendationService {
                     """, (rs, row) -> new CurrentRegionGrade(
                     rs.getString("name"), rs.getInt("grade"), rs.getBigDecimal("average_price_per_pyeong")),
                     regionId, year);
+            List<NearbyUpgradeRegion> nearby = jdbc.query("""
+                    SELECT candidate.id, candidate.name, candidate_grade.grade,
+                           candidate_grade.average_price_per_pyeong
+                    FROM region selected
+                    JOIN region candidate ON candidate.id <> selected.id AND candidate.boundary IS NOT NULL
+                    JOIN region_grade candidate_grade ON candidate_grade.region_id=candidate.id AND candidate_grade.year=?
+                    WHERE selected.id=? AND candidate_grade.grade BETWEEN GREATEST(1, ? - 2) AND ? - 1
+                    ORDER BY ST_Distance(ST_Centroid(selected.boundary)::geography,
+                                         ST_Centroid(candidate.boundary)::geography),
+                             candidate_grade.grade
+                    LIMIT 4
+                    """, (rs, row) -> new NearbyUpgradeRegion(
+                    rs.getLong("id"), rs.getString("name"), rs.getInt("grade"),
+                    rs.getBigDecimal("average_price_per_pyeong")),
+                    year, regionId, current.grade(), current.grade());
             return new RegionUpgradeComparison(regionId, current.name(), current.grade(), year, current.average(),
-                    calculator.calculate(current.grade(), year, gradeHistory()));
+                    calculator.calculate(current.grade(), year, gradeHistory()), nearby);
         } catch (EmptyResultDataAccessException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "선택한 지역의 해당 연도 급지 데이터가 없습니다.");
         }
