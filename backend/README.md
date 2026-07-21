@@ -16,9 +16,9 @@ PostGIS 경계가 존재하고 요청 연도의 급지가 계산된 지역만 `a
 .\gradlew.bat importVworldBoundaries
 ```
 
-명령은 VWorld WFS를 한 번 호출하고, 기존 `region.code`와 일치하는 시군구 경계를 PostGIS에 신규 저장하거나 갱신한 뒤 자동 종료한다. 평상시 `bootRun`은 VWorld를 호출하지 않으며 별도의 활성화 환경변수도 필요 없다.
+명령은 VWorld WFS를 한 번 호출하고, 서울·경기·인천의 시도 계층과 전체 시군구 경계를 PostGIS에 신규 저장하거나 갱신한 뒤 자동 종료한다. 평상시 `bootRun`은 VWorld를 호출하지 않으며 별도의 활성화 환경변수도 필요 없다.
 
-실제 검증에서는 현재 DB의 종로구 경계 1건이 적재됐고 유효한 SRID 4326 MultiPolygon임을 확인했다. `.env`의 키는 Git에서 제외한다.
+실제 검증에서는 서울 25개·경기 47개·인천 11개, 총 83개 경계를 적재했다. 경계는 유효한 SRID 4326 MultiPolygon이며 `.env`의 키는 Git에서 제외한다.
 
 ## Geocoding 좌표 보강
 
