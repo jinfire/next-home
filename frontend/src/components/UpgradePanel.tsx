@@ -43,10 +43,24 @@ function homeAmount(value: number) {
   return `+${(value / 100_000_000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원`
 }
 
-export default function UpgradePanel({ year }: { year: number }) {
+export default function UpgradePanel() {
+  const [availableYears, setAvailableYears] = useState<number[]>([new Date().getFullYear()])
+  const [year, setYear] = useState(new Date().getFullYear())
   const [region, setRegion] = useState<RegionSelection | null>(null)
   const [comparison, setComparison] = useState<Comparison | null>(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/api/grades/years')
+      .then((response) => response.ok ? response.json() as Promise<number[]> : Promise.reject())
+      .then((years) => {
+        if (years.length === 0) return
+        const sorted = [...years].sort((a, b) => a - b)
+        setAvailableYears(sorted)
+        setYear(sorted.at(-1) ?? new Date().getFullYear())
+      })
+      .catch(() => undefined)
+  }, [])
 
   useEffect(() => {
     if (!region) {
@@ -81,6 +95,27 @@ export default function UpgradePanel({ year }: { year: number }) {
       </div>
 
       <RegionSelector id="upgrade-region" label="현재 거주 지역" onSelect={setRegion} />
+
+      <div className="upgrade-year-control">
+        <div>
+          <label htmlFor="upgrade-year">갈아타기 비교 연도</label>
+          <output htmlFor="upgrade-year">{year}년</output>
+        </div>
+        <input
+          id="upgrade-year"
+          aria-label="갈아타기 비교 연도"
+          type="range"
+          min="0"
+          max={Math.max(0, availableYears.length - 1)}
+          step="1"
+          value={Math.max(0, availableYears.indexOf(year))}
+          onChange={(event) => setYear(availableYears[Number(event.target.value)] ?? year)}
+          disabled={availableYears.length < 2}
+        />
+        <div className="year-ticks" aria-hidden="true">
+          {availableYears.map((item) => <span key={item}>{item}</span>)}
+        </div>
+      </div>
 
       <div className="upgrade-results" aria-live="polite">
         {!region && <p className="panel-placeholder">시·도와 시·군·구를 차례로 선택해 주세요.</p>}

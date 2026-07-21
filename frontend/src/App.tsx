@@ -23,6 +23,7 @@ function formatPrice(value: number) {
 function App() {
   const [availableYears, setAvailableYears] = useState<number[]>(Array.from({ length: currentYear - 2014 }, (_, index) => 2015 + index))
   const [year, setYear] = useState(currentYear)
+  const [latestDataYear, setLatestDataYear] = useState(currentYear)
   const [grades, setGrades] = useState<GradeSummary[]>([])
   const [selected, setSelected] = useState<GradeSummary | null>(null)
   const [error, setError] = useState('')
@@ -36,7 +37,9 @@ function App() {
         const first = Math.min(2015, ...years)
         const last = Math.max(currentYear, ...years)
         setAvailableYears(Array.from({ length: last - first + 1 }, (_, index) => first + index))
-        setYear(Math.max(...years))
+        const latest = Math.max(...years)
+        setYear(latest)
+        setLatestDataYear(latest)
       })
       .catch(() => undefined)
   }, [])
@@ -151,8 +154,8 @@ function App() {
         {error && <p role="alert" className="map-error">{error}</p>}
       </section>
 
-      <UpgradePanel year={year} />
-      <LifestylePanel year={year} />
+      <UpgradePanel />
+      <LifestylePanel year={latestDataYear} />
     </main>
   )
 }

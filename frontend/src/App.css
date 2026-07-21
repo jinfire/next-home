@@ -71,6 +71,12 @@
 .section-heading { display: flex; justify-content: space-between; gap: 28px; }
 .section-heading > div { max-width: 860px; }
 .upgrade-panel > .region-selector { max-width: 760px; margin-top: 26px; }
+.upgrade-year-control { margin-top:20px; padding:18px 20px 14px; border:1px solid var(--line); border-radius:14px; background:var(--soft); }
+.upgrade-year-control > div:first-child { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.upgrade-year-control label { color:#536158; font-size:.8rem; font-weight:700; }
+.upgrade-year-control output { color:var(--green); font-weight:800; }
+.upgrade-year-control input[type='range'] { width:100%; margin:14px 0 7px; accent-color:var(--green); cursor:pointer; }
+.upgrade-year-control input:disabled { cursor:not-allowed; opacity:.55; }
 .upgrade-results { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-top: 22px; }
 .panel-placeholder { grid-column: 1/-1; display: grid; min-height: 110px; place-items: center; margin: 0; padding: 24px; border: 1px dashed #cbd2cc; border-radius: 14px; color: #6e7971; text-align: center; }
 .current-region-card { grid-column: 1/-1; display: flex; align-items: center; gap: 14px; padding: 17px 20px; border-radius: 14px; background: #eaf3ec; }

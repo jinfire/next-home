@@ -6,7 +6,8 @@ import UpgradePanel from './UpgradePanel'
 it('resolves the grade from a selected district and loads upper-grade comparisons', async () => {
   vi.stubGlobal('fetch', vi.fn((input: string | URL | Request) => {
     const url = String(input)
-    const body = url.includes('/api/regions/options') ? [{
+    const body = url.includes('/api/grades/years') ? [2025, 2026]
+      : url.includes('/api/regions/options') ? [{
       id: 1, code: '41', name: '경기도', regions: [{ id: 10, code: '41135', name: '성남시 분당구' }],
     }] : {
       regionId: 10,
@@ -32,7 +33,8 @@ it('resolves the grade from a selected district and loads upper-grade comparison
     return Promise.resolve({ ok: true, json: async () => body })
   }))
 
-  render(<UpgradePanel year={2026} />)
+  render(<UpgradePanel />)
+  expect(await screen.findByLabelText('갈아타기 비교 연도')).toHaveAttribute('type', 'range')
   await userEvent.selectOptions(await screen.findByLabelText('현재 거주 지역 시·도'), '41')
   await userEvent.selectOptions(screen.getByLabelText('현재 거주 지역 시·군·구'), '10')
 
