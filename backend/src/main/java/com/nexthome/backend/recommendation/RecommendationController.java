@@ -18,7 +18,14 @@ public class RecommendationController {
     }
 
     @GetMapping("/upgrades")
-    public List<UpgradeRecommendation> upgrades(@RequestParam int currentGrade, @RequestParam int year) {
+    public Object upgrades(
+            @RequestParam(required = false) Integer currentGrade,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam int year) {
+        if (regionId != null) return service.recommendRegion(regionId, year);
+        if (currentGrade == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "regionId가 필요합니다.");
+        }
         if (currentGrade < 1 || currentGrade > 10) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "currentGrade must be between 1 and 10");
         }

@@ -17,6 +17,11 @@ public class RegionController {
         this.service = service;
     }
 
+    @GetMapping("/options")
+    public List<RegionOptionGroup> options() {
+        return service.options();
+    }
+
     @GetMapping
     public List<RegionSummary> search(@RequestParam String query) {
         if (query == null || query.isBlank()) {

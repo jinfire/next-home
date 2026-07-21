@@ -9,6 +9,7 @@ public class HttpClientConfiguration {
 
     @Bean
     WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
+        return WebClient.builder().codecs(configurer ->
+                configurer.defaultCodecs().maxInMemorySize(4 * 1024 * 1024));
     }
 }

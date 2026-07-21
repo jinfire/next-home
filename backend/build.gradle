@@ -53,3 +53,10 @@ tasks.register('importVworldBoundaries', JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = 'com.nexthome.backend.region.VworldBoundaryImportApplication'
 }
+
+tasks.register('recalculateGrades', JavaExec) {
+	group = 'next home'
+	description = '실거래가 존재하는 모든 연도의 수도권 급지를 다시 계산하고 종료합니다.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.nexthome.backend.grade.GradeRecalculationApplication'
+}

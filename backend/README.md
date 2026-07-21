@@ -6,7 +6,23 @@
 GET /api/region-boundaries?year=2026
 ```
 
-PostGIS 경계가 존재하고 요청 연도의 급지가 계산된 지역만 `application/geo+json` FeatureCollection으로 반환한다.
+PostGIS 경계가 존재하는 수도권 지역을 `application/geo+json` FeatureCollection으로 반환한다. 급지가 없는 지역은 `grade: null`로 내려 지도에서 데이터 없음으로 구분할 수 있다.
+
+## 급지 재계산
+
+실거래가 존재하는 모든 연도의 수도권 급지를 다시 계산하고 종료한다.
+
+```powershell
+.\gradlew.bat recalculateGrades
+```
+
+## 연동 지역 목록
+
+```http
+GET /api/regions/options
+```
+
+서울특별시·경기도·인천광역시와 각 하위 시군구를 중첩 목록으로 반환한다.
 
 ### VWorld 경계 1회 적재
 

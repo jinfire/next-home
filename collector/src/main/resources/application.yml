@@ -26,3 +26,8 @@ next-home:
     region-name: ${COLLECTOR_REGION_NAME:}
     month: ${COLLECTOR_MONTH:}
     rows: ${COLLECTOR_ROWS:100}
+  capital-collector:
+    enabled: false
+    start-month: ${CAPITAL_COLLECTION_START_MONTH:2026-01}
+    end-month: ${CAPITAL_COLLECTION_END_MONTH:2026-06}
+    rows: ${CAPITAL_COLLECTION_ROWS:500}

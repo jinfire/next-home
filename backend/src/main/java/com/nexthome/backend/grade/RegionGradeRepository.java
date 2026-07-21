@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 interface RegionGradeRepository extends JpaRepository<RegionGrade, Long> {
     List<RegionGrade> findByYearOrderByGradeAscAveragePricePerPyeongDesc(short year);
+    @Query("SELECT DISTINCT grade.year FROM RegionGrade grade ORDER BY grade.year")
+    List<Short> findAvailableYears();
     @Modifying void deleteByYear(short year);
     @Query(value = """
         SELECT r.id AS regionId, r.name AS regionName,

@@ -1,5 +1,11 @@
 # Architecture
 
+## Capital-area collection and selection flow
+
+`collectCapitalAreaTrades`가 `region.level=2`인 수도권 83개 지역과 설정 기간의 모든 월을 순회한다. 월별 응답은 최대 4MB까지 버퍼링하고 페이지별 트랜잭션으로 apartment·trade를 멱등 저장한다. `recalculateGrades`는 거래 연도를 찾아 수도권 전체를 하나의 모집단으로 급지를 다시 만든다.
+
+프런트엔드는 `/api/regions/options`의 시도·시군구 계층을 연동 드롭다운으로 표시한다. 사용자가 시군구를 선택하면 `regionId`를 지도 선택과 `/api/recommendations/upgrades`에 전달하며 서버가 현재 급지를 조회한다. 문자열 검색으로 사용자가 급지를 직접 추정하는 흐름은 사용하지 않는다.
+
 ## Live-stack smoke flow
 
 선택적 `LIVE_E2E=1` 테스트는 Vite의 `/api` 프록시를 루트 `.env`의 `BACKEND_PORT`로 실행 중인 Spring Boot에 연결한다. 실제 로컬 PostGIS의 급지 응답과 NAVER Map SDK 초기화를 Chromium에서 확인하며, 기본 CI와 단위 테스트에서는 실행하지 않는다.

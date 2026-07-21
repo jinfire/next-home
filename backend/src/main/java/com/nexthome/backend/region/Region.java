@@ -11,6 +11,9 @@ public class Region {
     private String code;
     @Column(nullable = false, length = 100)
     private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Region parent;
     @Column(nullable = false)
     private short level;
 
@@ -19,5 +22,6 @@ public class Region {
     public Long id() { return id; }
     public String code() { return code; }
     public String name() { return name; }
+    public Region parent() { return parent; }
     public int level() { return level; }
 }

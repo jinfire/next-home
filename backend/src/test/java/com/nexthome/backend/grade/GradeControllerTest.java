@@ -24,4 +24,11 @@ class GradeControllerTest {
                 .andExpect(jsonPath("$[0].grade").value(1))
                 .andExpect(jsonPath("$[0].averagePricePerPyeong").value(90000000));
     }
+    @Test void returnsOnlyYearsWithCalculatedGrades() throws Exception {
+        when(service.availableYears()).thenReturn(List.of(2024, 2025, 2026));
+        mvc.perform(get("/api/grades/years"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value(2024))
+                .andExpect(jsonPath("$[2]").value(2026));
+    }
 }

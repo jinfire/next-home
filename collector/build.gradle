@@ -37,3 +37,10 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('collectCapitalAreaTrades', JavaExec) {
+	group = 'next home'
+	description = '루트 .env 기간 설정으로 수도권 전체 실거래를 수집하고 종료합니다.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.nexthome.collector.CapitalAreaTradeCollectionApplication'
+}

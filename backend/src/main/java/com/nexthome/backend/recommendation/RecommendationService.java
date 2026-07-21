@@ -1,6 +1,7 @@
 package com.nexthome.backend.recommendation;
 
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,31 @@ public class RecommendationService {
     }
     @Transactional(readOnly = true)
     public List<UpgradeRecommendation> recommend(int currentGrade, int year) {
-        List<AnnualGradeAverage> history = jdbc.query("""
+        return calculator.calculate(currentGrade, year, gradeHistory());
+    }
+
+    @Transactional(readOnly = true)
+    public RegionUpgradeComparison recommendRegion(long regionId, int year) {
+        try {
+            CurrentRegionGrade current = jdbc.queryForObject("""
+                    SELECT r.name, rg.grade, rg.average_price_per_pyeong
+                    FROM region_grade rg JOIN region r ON r.id=rg.region_id
+                    WHERE rg.region_id=? AND rg.year=?
+                    """, (rs, row) -> new CurrentRegionGrade(
+                    rs.getString("name"), rs.getInt("grade"), rs.getBigDecimal("average_price_per_pyeong")),
+                    regionId, year);
+            return new RegionUpgradeComparison(regionId, current.name(), current.grade(), year, current.average(),
+                    calculator.calculate(current.grade(), year, gradeHistory()));
+        } catch (EmptyResultDataAccessException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "선택한 지역의 해당 연도 급지 데이터가 없습니다.");
+        }
+    }
+
+    private List<AnnualGradeAverage> gradeHistory() {
+        return jdbc.query("""
                 SELECT year, grade, AVG(average_price_per_pyeong) AS grade_average
                 FROM region_grade GROUP BY year, grade ORDER BY year, grade
                 """, (rs, row) -> new AnnualGradeAverage(rs.getInt("year"), rs.getInt("grade"), rs.getBigDecimal("grade_average")));
-        return calculator.calculate(currentGrade, year, history);
     }
 
     @Transactional(readOnly = true)
@@ -56,5 +77,8 @@ public class RecommendationService {
                         HttpStatus.NOT_FOUND,
                         "No valid trades found for this apartment and year"));
         return apartmentCalculator.recommend(current, averages);
+    }
+
+    private record CurrentRegionGrade(String name, int grade, java.math.BigDecimal average) {
     }
 }

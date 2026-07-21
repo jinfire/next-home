@@ -30,4 +30,7 @@ public class Region {
     public static Region create(String code, String name, int level) {
         return new Region(code, name, level);
     }
+
+    public String code() { return code; }
+    public String name() { return name; }
 }

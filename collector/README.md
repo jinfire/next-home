@@ -1,5 +1,23 @@
 # Collector
 
+## 수도권 전체 기간 수집
+
+루트 `.env`에서 수집 범위를 설정한다.
+
+```env
+CAPITAL_COLLECTION_START_MONTH=2026-01
+CAPITAL_COLLECTION_END_MONTH=2026-06
+CAPITAL_COLLECTION_ROWS=500
+```
+
+PostGIS와 수도권 경계 적재가 끝난 뒤 실행한다.
+
+```powershell
+.\gradlew.bat collectCapitalAreaTrades
+```
+
+서울·경기·인천의 전체 시군구와 설정 기간을 순차 처리하고 자동 종료한다. 재실행 시 source key가 같은 거래는 중복으로 기록하지 않는다.
+
 국토교통부 아파트 매매 실거래가 API를 수집해 PostgreSQL에 저장하는 Spring Boot 애플리케이션이다.
 
 ## 실행

@@ -13,8 +13,8 @@ public class ApartmentSearchService {
         String normalized = query == null ? "" : query.trim();
         if (normalized.isBlank()) throw new IllegalArgumentException("검색어가 필요합니다.");
         List<Apartment> result = regionId == null
-                ? repository.findTop20ByNameContainingIgnoreCaseOrderByNameAsc(normalized)
-                : repository.findTop20ByRegionIdAndNameContainingIgnoreCaseOrderByNameAsc(regionId, normalized);
+                ? repository.searchByNameOrAddress(normalized)
+                : repository.searchByRegionAndNameOrAddress(regionId, normalized);
         return result.stream().map(ApartmentSummary::from).toList();
     }
 }

@@ -30,7 +30,7 @@ public class RegionBoundaryService {
                     ) ORDER BY rg.grade, r.name), '[]'::jsonb)
                 )::text
                 FROM region r
-                JOIN region_grade rg ON rg.region_id = r.id AND rg.year = ?
+                LEFT JOIN region_grade rg ON rg.region_id = r.id AND rg.year = ?
                 WHERE r.boundary IS NOT NULL
                 """, String.class, year);
     }
