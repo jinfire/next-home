@@ -43,7 +43,8 @@ test('selects a district and compares one-grade-up prices', async ({ page }) => 
 
   await page.getByLabel('현재 거주 지역 시·도').selectOption('11')
   await page.getByLabel('현재 거주 지역 시·군·구').selectOption('1')
-  const recommendation = page.locator('.upgrade-card').filter({ hasText: '4급지' })
-  await expect(recommendation.getByText('1급지 위')).toBeVisible()
-  await expect(recommendation).toContainText('+2,000만원/평')
+  const recommendation = page.locator('.nearby-regions').filter({ hasText: '서초구' })
+  await expect(recommendation.getByText('서초구')).toBeVisible()
+  await expect(recommendation).toContainText('25평 기준')
+  await expect(recommendation).toContainText('34평 기준')
 })

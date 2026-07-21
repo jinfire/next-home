@@ -32,8 +32,7 @@ it('resolves the grade from a selected district and loads upper-grade comparison
   await userEvent.selectOptions(screen.getByLabelText('현재 거주 지역 시·군·구'), '10')
 
   expect(await screen.findByText('성남시 분당구 · 5급지')).toBeInTheDocument()
-  expect(screen.getByText('7,000만원/평')).toBeInTheDocument()
-  expect(screen.getByText('+2,000만원/평')).toBeInTheDocument()
-  expect(screen.getByText('과거 격차의 하위 25% 수준')).toBeInTheDocument()
   expect(screen.getByText('과천시')).toBeInTheDocument()
+  expect(screen.getByText('18.8억원')).toBeInTheDocument()
+  expect(screen.getByText('25.5억원')).toBeInTheDocument()
 })

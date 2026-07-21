@@ -40,7 +40,7 @@ export default function LifestylePanel({ year }: { year: number }) {
     }
     const data = await response.json() as Apartment[]
     setApartments(data)
-    setMessage(data.length ? '현재 거주 중인 아파트를 선택하세요.' : '검색 결과가 없습니다.')
+    setMessage(data.length ? '정확한 현재 아파트를 선택하세요.' : '수집된 실거래 단지에서 일치하는 아파트를 찾지 못했습니다.')
   }
 
   async function selectApartment(apartment: Apartment) {
@@ -62,9 +62,9 @@ export default function LifestylePanel({ year }: { year: number }) {
     <section className="lifestyle-panel" id="lifestyle">
       <div className="lifestyle-head">
         <div>
-          <h2>같은 지역에서 더 높은 평단가의 아파트 찾기</h2>
+          <h2>현재 아파트보다 한 단계 높은 단지 찾기</h2>
         </div>
-        <p>아파트 이름 일부를 검색해 단지를 선택하면 같은 시·군·구의 더 높은 평단가 단지를 보여드립니다.</p>
+        <p>아파트 이름 일부를 검색해 정확한 단지를 선택하면 같은 시·군·구에서 바로 다음 가격대 단지를 보여드립니다.</p>
       </div>
 
       <form className="apartment-search" onSubmit={search}>

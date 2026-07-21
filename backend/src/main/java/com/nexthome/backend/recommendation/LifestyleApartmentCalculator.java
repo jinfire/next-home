@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LifestyleApartmentCalculator {
-    private static final int MAX_RECOMMENDATIONS = 10;
+    private static final int MAX_RECOMMENDATIONS = 5;
 
     public List<LifestyleApartmentRecommendation> recommend(
             ApartmentPriceAverage current,
@@ -19,7 +19,6 @@ public class LifestyleApartmentCalculator {
                 .filter(candidate -> candidate.averagePricePerPyeong()
                         .compareTo(current.averagePricePerPyeong()) > 0)
                 .sorted(Comparator.comparing(ApartmentPriceAverage::averagePricePerPyeong)
-                        .reversed()
                         .thenComparingLong(ApartmentPriceAverage::apartmentId))
                 .limit(MAX_RECOMMENDATIONS)
                 .map(candidate -> toRecommendation(current, candidate))

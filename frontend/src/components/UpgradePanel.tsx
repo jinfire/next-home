@@ -26,6 +26,11 @@ function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
+function homePrice(perPyeong: number, pyeong: number) {
+  const eok = perPyeong * pyeong / 100_000_000
+  return `${eok.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원`
+}
+
 export default function UpgradePanel({ year }: { year: number }) {
   const [region, setRegion] = useState<RegionSelection | null>(null)
   const [comparison, setComparison] = useState<Comparison | null>(null)
@@ -75,31 +80,21 @@ export default function UpgradePanel({ year }: { year: number }) {
             <small>{price(comparison.currentAveragePricePerPyeong)}</small>
           </div>
         )}
-        {comparison && comparison.targets.length === 0 && (
+        {comparison && comparison.nearbyRegions.length === 0 && (
           <p className="panel-placeholder">현재 지역보다 높은 급지 데이터가 없습니다.</p>
         )}
-        {comparison?.targets.map((item) => (
-          <article className="upgrade-card" key={item.targetGrade}>
-            <div className="upgrade-card-head">
-              <span>{item.currentGrade - item.targetGrade}급지 위</span>
-              <strong>{item.targetGrade}급지</strong>
-            </div>
-            <dl>
-              <div><dt>상급지 평균 평단가</dt><dd>{price(item.targetAveragePricePerPyeong)}</dd></div>
-              <div><dt>현재 지역과의 평당 격차</dt><dd>+{price(item.currentGapPerPyeong)}</dd></div>
-              <div><dt>과거 대비 현재 격차</dt><dd>과거 격차의 하위 {Math.round(item.historicalGapPercentile)}% 수준</dd></div>
-            </dl>
-            <small>{item.historicalYears}개 연도 기준 · 대출 및 총 필요 자금은 계산하지 않습니다.</small>
-          </article>
-        ))}
         {comparison && (comparison.nearbyRegions?.length ?? 0) > 0 && (
           <div className="nearby-regions">
-            <h3>가까운 상급지 후보</h3>
+            <h3>{comparison.regionName}에서 가까운 상급지</h3>
             <div>
               {comparison.nearbyRegions.slice(0, 4).map((item) => (
                 <article key={item.regionId}>
-                  <strong>{item.regionName}</strong>
-                  <span>{item.grade}급지 · {price(item.averagePricePerPyeong)}</span>
+                  <div><strong>{item.regionName}</strong><em>{item.grade}급지</em></div>
+                  <dl>
+                    <div><dt>평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
+                    <div><dt>25평 기준</dt><dd>{homePrice(item.averagePricePerPyeong, 25)}</dd></div>
+                    <div><dt>34평 기준</dt><dd>{homePrice(item.averagePricePerPyeong, 34)}</dd></div>
+                  </dl>
                 </article>
               ))}
             </div>
