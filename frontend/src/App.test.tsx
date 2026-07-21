@@ -33,4 +33,19 @@ describe('Capital area grade map', () => {
     expect(await screen.findAllByText('강남구')).not.toHaveLength(0)
     expect(screen.queryByText('원하는 격차가 오면 알려드릴게요')).not.toBeInTheDocument()
   })
+
+  it('shows rank and percentile immediately after the average price', async () => {
+    render(<App />)
+
+    const averagePrice = await screen.findByText('평균 평단가')
+    const rank = screen.getByText('수도권 순위')
+    const percentile = screen.getByText('상위 백분위')
+    const priceIndex = screen.getByText('수도권 가격지수')
+    const medianMultiple = screen.getByText('중간값 대비')
+
+    expect(averagePrice.compareDocumentPosition(rank) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(rank.compareDocumentPosition(percentile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(percentile.compareDocumentPosition(priceIndex) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(priceIndex.compareDocumentPosition(medianMultiple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
 })

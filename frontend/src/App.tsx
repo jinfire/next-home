@@ -162,10 +162,10 @@ function App() {
             <div><span>급지</span><strong>{selected.grade}급지</strong></div>
             <div><span>평균 평단가</span><strong>{formatPrice(selected.averagePricePerPyeong)}</strong></div>
             {marketStats && <>
-              <div><span>수도권 가격지수</span><strong>{Math.round(marketStats.priceIndex)}</strong></div>
-              <div><span>중간값 대비</span><strong>{(marketStats.priceIndex / 100).toFixed(1)}배</strong></div>
               <div><span>수도권 순위</span><strong>{marketStats.rank}위</strong></div>
               <div><span>상위 백분위</span><strong>상위 {marketStats.percentile}%</strong></div>
+              <div><span>수도권 가격지수</span><strong>{Math.round(marketStats.priceIndex)}</strong></div>
+              <div><span>중간값 대비</span><strong>{(marketStats.priceIndex / 100).toFixed(1)}배</strong></div>
             </>}
               </div>
             </> : <p>{year}년 급지 정보가 있는 지역을 선택해 주세요.</p>}
