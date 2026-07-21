@@ -69,21 +69,30 @@ public class RecommendationService {
     @Transactional(readOnly = true)
     public List<LifestyleApartmentRecommendation> recommendApartments(long apartmentId, int year) {
         List<ApartmentPriceAverage> averages = jdbc.query("""
+                WITH latest_month AS (
+                    SELECT DATE_TRUNC('month', MAX(contract_date)) AS month_start
+                    FROM trade
+                    WHERE EXTRACT(YEAR FROM contract_date) = ? AND cancellation_date IS NULL
+                )
                 SELECT a.id AS apartment_id, a.region_id, a.name, a.road_address AS address,
                        AVG(t.price_krw * 3.305785 / t.exclusive_area_sqm) AS average_price_per_pyeong,
-                       COUNT(*) AS trade_count
+                       COUNT(*) AS trade_count,
+                       TO_CHAR(latest_month.month_start, 'YYYY-MM') AS trade_month
                 FROM apartment a
                 JOIN trade t ON t.apartment_id = a.id
-                WHERE EXTRACT(YEAR FROM t.contract_date) = ?
+                CROSS JOIN latest_month
+                WHERE t.contract_date >= latest_month.month_start
+                  AND t.contract_date < latest_month.month_start + INTERVAL '1 month'
                   AND t.cancellation_date IS NULL
-                GROUP BY a.id, a.region_id, a.name, a.road_address
+                GROUP BY a.id, a.region_id, a.name, a.road_address, latest_month.month_start
                 """, (rs, row) -> new ApartmentPriceAverage(
                         rs.getLong("apartment_id"),
                         rs.getLong("region_id"),
                         rs.getString("name"),
                         rs.getString("address"),
                         rs.getBigDecimal("average_price_per_pyeong"),
-                        rs.getInt("trade_count")), year);
+                        rs.getInt("trade_count"),
+                        rs.getString("trade_month")), year);
 
         ApartmentPriceAverage current = averages.stream()
                 .filter(average -> average.apartmentId() == apartmentId)

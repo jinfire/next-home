@@ -8,5 +8,6 @@ public record ApartmentPriceAverage(
         String apartmentName,
         String address,
         BigDecimal averagePricePerPyeong,
-        int tradeCount) {
+        int tradeCount,
+        String tradeMonth) {
 }

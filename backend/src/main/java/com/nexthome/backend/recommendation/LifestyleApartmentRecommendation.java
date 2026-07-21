@@ -8,5 +8,6 @@ public record LifestyleApartmentRecommendation(
         String address,
         BigDecimal averagePricePerPyeong,
         BigDecimal gapPerPyeong,
-        int tradeCount) {
+        int tradeCount,
+        String tradeMonth) {
 }

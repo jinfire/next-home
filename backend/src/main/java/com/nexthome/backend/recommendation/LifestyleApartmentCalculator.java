@@ -35,6 +35,6 @@ public class LifestyleApartmentCalculator {
                 .setScale(2, RoundingMode.HALF_UP);
         return new LifestyleApartmentRecommendation(
                 candidate.apartmentId(), candidate.apartmentName(), candidate.address(),
-                average, gap, candidate.tradeCount());
+                average, gap, candidate.tradeCount(), candidate.tradeMonth());
     }
 }

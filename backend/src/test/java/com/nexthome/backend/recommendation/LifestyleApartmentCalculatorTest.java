@@ -33,6 +33,6 @@ class LifestyleApartmentCalculatorTest {
     }
 
     private ApartmentPriceAverage apt(long id, long regionId, String name, long average) {
-        return new ApartmentPriceAverage(id, regionId, name, name + " address", BigDecimal.valueOf(average), 3);
+        return new ApartmentPriceAverage(id, regionId, name, name + " address", BigDecimal.valueOf(average), 3, "2026-06");
     }
 }

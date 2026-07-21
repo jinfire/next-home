@@ -18,21 +18,19 @@ type Recommendation = {
   averagePricePerPyeong: number
   gapPerPyeong: number
   tradeCount: number
+  tradeMonth: string
 }
 
 function price(value: number) {
   return `${Math.round(value / 10_000).toLocaleString('ko-KR')}만원/평`
 }
 
-function tradeMonthLabel(tradeMonths: string[], year: number) {
-  if (tradeMonths.length === 0) return `${year}년 실거래`
-  const months = tradeMonths.map((month) => Number(month.slice(5))).sort((a, b) => a - b)
-  const contiguous = months.every((month, index) => index === 0 || month === months[index - 1] + 1)
-  if (months.length > 1 && contiguous) return `${months[0]}~${months.at(-1)}월 실거래 합계`
-  return `${months.map((month) => `${month}월`).join('·')} 실거래 합계`
+function tradeMonthLabel(tradeMonth: string) {
+  const [year, month] = tradeMonth.split('-').map(Number)
+  return `${year}년 ${month}월 실거래`
 }
 
-export default function LifestylePanel({ year, tradeMonths = [] }: { year: number; tradeMonths?: string[] }) {
+export default function LifestylePanel({ year }: { year: number }) {
   const [query, setQuery] = useState('')
   const [region, setRegion] = useState<RegionSelection | null>(null)
   const [apartments, setApartments] = useState<Apartment[]>([])
@@ -121,7 +119,7 @@ export default function LifestylePanel({ year, tradeMonths = [] }: { year: numbe
             <dl>
               <div><dt>평균 평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
               <div><dt>현재보다</dt><dd>+{price(item.gapPerPyeong)}</dd></div>
-              <div><dt>{tradeMonthLabel(tradeMonths, year)}</dt><dd>{item.tradeCount}건</dd></div>
+              <div><dt>{tradeMonthLabel(item.tradeMonth)}</dt><dd>{item.tradeCount}건</dd></div>
             </dl>
           </article>
         ))}

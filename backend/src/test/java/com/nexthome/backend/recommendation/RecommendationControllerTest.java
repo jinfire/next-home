@@ -46,13 +46,14 @@ class RecommendationControllerTest {
     @Test void returnsBetterApartmentsInSameLifestyleZone() throws Exception {
         var recommendation = new LifestyleApartmentRecommendation(
                 2, "Upgrade A", "Seoul", new BigDecimal("8000.00"),
-                new BigDecimal("2000.00"), 4);
+                new BigDecimal("2000.00"), 4, "2026-06");
         when(service.recommendApartments(1, 2026)).thenReturn(List.of(recommendation));
 
         mvc.perform(get("/api/recommendations/apartments")
                         .param("apartmentId", "1").param("year", "2026"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].apartmentId").value(2))
-                .andExpect(jsonPath("$[0].gapPerPyeong").value(2000.00));
+                .andExpect(jsonPath("$[0].gapPerPyeong").value(2000.00))
+                .andExpect(jsonPath("$[0].tradeMonth").value("2026-06"));
     }
 }
