@@ -80,7 +80,7 @@ export default function UpgradePanel({ year }: { year: number }) {
             <small>{price(comparison.currentAveragePricePerPyeong)}</small>
           </div>
         )}
-        {comparison && comparison.nearbyRegions.length === 0 && (
+        {comparison && (comparison.nearbyRegions?.length ?? 0) === 0 && (
           <p className="panel-placeholder">현재 지역보다 높은 급지 데이터가 없습니다.</p>
         )}
         {comparison && (comparison.nearbyRegions?.length ?? 0) > 0 && (

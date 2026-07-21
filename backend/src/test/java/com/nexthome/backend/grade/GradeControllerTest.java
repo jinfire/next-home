@@ -31,4 +31,11 @@ class GradeControllerTest {
                 .andExpect(jsonPath("$[0]").value(2024))
                 .andExpect(jsonPath("$[2]").value(2026));
     }
+    @Test void returnsActuallyCollectedTradeMonths() throws Exception {
+        when(service.tradeMonths(2026)).thenReturn(List.of("2026-01", "2026-06"));
+        mvc.perform(get("/api/grades/coverage").param("year", "2026"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value("2026-01"))
+                .andExpect(jsonPath("$[1]").value("2026-06"));
+    }
 }

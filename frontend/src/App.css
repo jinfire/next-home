@@ -35,6 +35,7 @@
 .year-control-title { display: flex; justify-content: space-between; align-items: center; }
 .year-control-title label { color: #536158; font-size: .8rem; font-weight: 700; }
 .year-control output { color: var(--green); font-size: 1.05rem; font-weight: 800; }
+.coverage-label { margin: 5px 0 0; color: var(--muted); font-size: .75rem; }
 .year-control input[type='range'] { width: 100%; margin: 14px 0 7px; accent-color: var(--green); cursor: pointer; }
 .year-ticks { display: flex; justify-content: space-between; color: #79837c; font-size: .7rem; }
 
@@ -97,7 +98,7 @@
 .apartment-search button { align-self: end; min-height: 46px; padding: 0 24px; border: 0; border-radius: 11px; background: var(--green); color: #fff; font-weight: 750; cursor: pointer; }
 .search-results { display: grid; gap: 5px; margin-top: 10px; padding: 7px; border: 1px solid var(--line); border-radius: 13px; }
 .search-results button { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; cursor: pointer; }.search-results button:hover { background: var(--soft); }.search-results span { color: #778079; font-size: .78rem; }
-.current-apartment { margin: 20px 0 0; color: #58645c; }.lifestyle-message { padding: 24px; color: #7a837d; text-align: center; }
+.current-apartment { display:grid; gap:5px; margin:20px 0 0; color:#58645c; }.current-apartment p { margin:0; }.current-apartment small { color:var(--muted); }.lifestyle-message { padding: 24px; color: #7a837d; text-align: center; }
 .apartment-recommendations { display: grid; gap: 8px; margin-top: 16px; }
 .apartment-recommendations article { display: grid; grid-template-columns: 40px 1fr minmax(330px,.8fr); gap: 18px; align-items: center; padding: 18px 6px; border-top: 1px solid var(--line); }
 .rank { color: #91a298; font-size: .78rem; }.apartment-recommendations h3 { margin: 0; font-size: 1.08rem; }.apartment-recommendations p { margin: 5px 0 0; color: #788078; font-size: .78rem; }

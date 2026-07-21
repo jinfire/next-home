@@ -26,6 +26,7 @@ function App() {
   const [grades, setGrades] = useState<GradeSummary[]>([])
   const [selected, setSelected] = useState<GradeSummary | null>(null)
   const [error, setError] = useState('')
+  const [tradeMonths, setTradeMonths] = useState<string[]>([])
 
   useEffect(() => {
     fetch('/api/grades/years')
@@ -57,6 +58,17 @@ function App() {
       })
     return () => controller.abort()
   }, [year])
+
+  useEffect(() => {
+    fetch(`/api/grades/coverage?year=${year}`)
+      .then((response) => response.ok ? response.json() as Promise<string[]> : [])
+      .then(setTradeMonths)
+      .catch(() => setTradeMonths([]))
+  }, [year])
+
+  const coverageLabel = tradeMonths.length === 0
+    ? '수집된 실거래 없음'
+    : `${tradeMonths.map((month) => Number(month.slice(5))).join('·')}월 실거래 기준`
 
   const yearIndex = Math.max(0, availableYears.indexOf(year))
   const groupedCounts = useMemo(() => Array.from({ length: 10 }, (_, index) => ({
@@ -99,6 +111,7 @@ function App() {
             <label htmlFor="grade-year">기준 연도</label>
             <output htmlFor="grade-year">{year}년</output>
           </div>
+          <p className="coverage-label">{year}년 {coverageLabel}</p>
           <input
             id="grade-year"
             aria-label="기준 연도"

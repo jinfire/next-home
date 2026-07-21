@@ -13,11 +13,13 @@ public class Apartment {
     private Region region;
     @Column(nullable = false) private String name;
     @Column(nullable = false) private String address;
+    @Column(name = "road_address") private String roadAddress;
     @Column(name = "build_year") private Short buildYear;
     protected Apartment() {}
     public Long id() { return id; }
     public Region region() { return region; }
     public String name() { return name; }
     public String address() { return address; }
+    public String roadAddress() { return roadAddress; }
     public Integer buildYear() { return buildYear == null ? null : buildYear.intValue(); }
 }

@@ -5,6 +5,7 @@ type Apartment = {
   id: number
   name: string
   address: string
+  roadAddress: string | null
   regionId: number
   regionName: string
   buildYear: number | null
@@ -80,20 +81,23 @@ export default function LifestylePanel({ year }: { year: number }) {
           {apartments.map((apartment) => (
             <button key={apartment.id} onClick={() => selectApartment(apartment)}>
               <strong>{apartment.name}</strong>
-              <span>{apartment.regionName} · {apartment.address}</span>
+              <span>{apartment.regionName}{apartment.roadAddress ? ` · ${apartment.roadAddress}` : ''}</span>
             </button>
           ))}
         </div>
       )}
 
-      {current && <p className="current-apartment">현재 단지 <strong>{current.name}</strong> · {current.regionName}</p>}
+      {current && <div className="current-apartment">
+        <p>현재 단지 <strong>{current.name}</strong> · {current.regionName}</p>
+        {current.roadAddress && <small>{current.roadAddress}</small>}
+      </div>}
       {message && <p className="lifestyle-message" aria-live="polite">{message}</p>}
 
       <div className="apartment-recommendations">
         {recommendations.map((item, index) => (
           <article key={item.apartmentId}>
             <span className="rank">{String(index + 1).padStart(2, '0')}</span>
-            <div><h3>{item.apartmentName}</h3><p>{item.address}</p></div>
+            <div><h3>{item.apartmentName}</h3>{item.address && <p>{item.address}</p>}</div>
             <dl>
               <div><dt>평균 평단가</dt><dd>{price(item.averagePricePerPyeong)}</dd></div>
               <div><dt>현재보다</dt><dd>+{price(item.gapPerPyeong)}</dd></div>

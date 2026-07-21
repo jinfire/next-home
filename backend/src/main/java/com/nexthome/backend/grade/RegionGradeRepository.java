@@ -10,6 +10,13 @@ interface RegionGradeRepository extends JpaRepository<RegionGrade, Long> {
     List<RegionGrade> findByYearOrderByGradeAscAveragePricePerPyeongDesc(short year);
     @Query("SELECT DISTINCT grade.year FROM RegionGrade grade ORDER BY grade.year")
     List<Short> findAvailableYears();
+    @Query(value = """
+        SELECT DISTINCT TO_CHAR(contract_date, 'YYYY-MM')
+        FROM trade
+        WHERE EXTRACT(YEAR FROM contract_date)=:year AND cancellation_date IS NULL
+        ORDER BY 1
+        """, nativeQuery = true)
+    List<String> findTradeMonths(@Param("year") int year);
     @Modifying void deleteByYear(short year);
     @Query(value = """
         SELECT r.id AS regionId, r.name AS regionName,

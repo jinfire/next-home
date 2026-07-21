@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface ApartmentLocationStore {
     List<ApartmentAddress> findWithoutLocation(int limit);
-    void updateLocation(long apartmentId, BigDecimal longitude, BigDecimal latitude);
+    void updateLocation(long apartmentId, String roadAddress, BigDecimal longitude, BigDecimal latitude);
 }

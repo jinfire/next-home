@@ -16,18 +16,23 @@ class JdbcApartmentLocationStore implements ApartmentLocationStore {
     @Override
     public List<ApartmentAddress> findWithoutLocation(int limit) {
         return jdbc.query("""
-                SELECT id, address FROM apartment
-                WHERE location IS NULL ORDER BY id LIMIT ?
+                SELECT a.id, CONCAT_WS(' ', parent.name, region.name, a.address) AS address
+                FROM apartment a
+                JOIN region ON region.id=a.region_id
+                LEFT JOIN region parent ON parent.id=region.parent_id
+                WHERE a.location IS NULL OR a.road_address IS NULL
+                ORDER BY a.id LIMIT ?
                 """, (rs, row) -> new ApartmentAddress(rs.getLong("id"), rs.getString("address")), limit);
     }
 
     @Override
-    public void updateLocation(long apartmentId, BigDecimal longitude, BigDecimal latitude) {
+    public void updateLocation(long apartmentId, String roadAddress, BigDecimal longitude, BigDecimal latitude) {
         jdbc.update("""
                 UPDATE apartment
-                SET location = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography,
+                SET road_address = NULLIF(?, ''),
+                    location = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography,
                     updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
-                """, longitude, latitude, apartmentId);
+                """, roadAddress, longitude, latitude, apartmentId);
     }
 }

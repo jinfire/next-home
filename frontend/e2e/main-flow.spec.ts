@@ -14,6 +14,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/**', async (route) => {
     const url = new URL(route.request().url())
     if (url.pathname === '/api/grades/years') return route.fulfill({ json: [2025, 2026] })
+    if (url.pathname === '/api/grades/coverage') return route.fulfill({ json: ['2026-06'] })
     if (url.pathname === '/api/grades') return route.fulfill({ json: [grade] })
     if (url.pathname === '/api/region-boundaries') return route.fulfill({ json: { type: 'FeatureCollection', features: [] } })
     if (url.pathname === '/api/regions/options') return route.fulfill({ json: regionOptions })

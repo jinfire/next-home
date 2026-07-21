@@ -25,7 +25,7 @@ class ApartmentControllerTest {
     @Test
     void searchesApartmentsWithOptionalRegionFilter() throws Exception {
         when(service.search("래미안", 1L)).thenReturn(List.of(
-                new ApartmentSummary(10L, "래미안 원베일리", "반포동 1", 1L, "서초구", 2023)));
+                new ApartmentSummary(10L, "래미안 원베일리", "반포동 1", "서울특별시 서초구 반포대로 1", 1L, "서초구", 2023)));
 
         mvc.perform(get("/api/apartments").param("query", "래미안").param("regionId", "1"))
                 .andExpect(status().isOk())

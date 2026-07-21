@@ -26,7 +26,7 @@ public class ApartmentGeocodingJob {
     public void backfill() {
         for (ApartmentAddress apartment : store.findWithoutLocation(batchSize)) {
             geocoding.geocode(apartment.address()).ifPresent(result ->
-                    store.updateLocation(apartment.apartmentId(), result.longitude(), result.latitude()));
+                    store.updateLocation(apartment.apartmentId(), result.roadAddress(), result.longitude(), result.latitude()));
         }
     }
 }

@@ -13,6 +13,8 @@ public class GradeService {
     public List<GradeSummary> findByYear(int year) { return grades.findByYearOrderByGradeAscAveragePricePerPyeongDesc((short)year).stream().map(GradeSummary::from).toList(); }
     @Transactional(readOnly = true)
     public List<Integer> availableYears() { return grades.findAvailableYears().stream().map(Short::intValue).toList(); }
+    @Transactional(readOnly = true)
+    public List<String> tradeMonths(int year) { return grades.findTradeMonths(year); }
     @Transactional
     public List<GradeSummary> recalculate(int year) {
         List<RegionPriceAverage> averages = grades.calculateAverages(year).stream().map(v -> new RegionPriceAverage(v.getRegionId(), v.getRegionName(), v.getAveragePricePerPyeong(), v.getTradeCount())).toList();

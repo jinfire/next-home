@@ -7,6 +7,7 @@ describe('Capital area grade map', () => {
     vi.stubGlobal('fetch', vi.fn((input: string | URL | Request) => {
       const url = String(input)
       const body = url.includes('/api/grades/years') ? [2025, 2026]
+        : url.includes('/api/grades/coverage') ? ['2026-06']
         : url.includes('/api/regions/options') ? [{
             id: 1, code: '11', name: '서울특별시', regions: [{ id: 10, code: '11680', name: '강남구' }],
           }]

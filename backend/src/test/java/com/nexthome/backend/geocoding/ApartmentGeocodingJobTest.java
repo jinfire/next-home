@@ -22,6 +22,6 @@ class ApartmentGeocodingJobTest {
 
         new ApartmentGeocodingJob(store, geocoding, 50).backfill();
 
-        verify(store).updateLocation(7, result.longitude(), result.latitude());
+        verify(store).updateLocation(7, result.roadAddress(), result.longitude(), result.latitude());
     }
 }

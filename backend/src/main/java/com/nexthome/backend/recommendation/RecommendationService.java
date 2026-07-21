@@ -69,14 +69,14 @@ public class RecommendationService {
     @Transactional(readOnly = true)
     public List<LifestyleApartmentRecommendation> recommendApartments(long apartmentId, int year) {
         List<ApartmentPriceAverage> averages = jdbc.query("""
-                SELECT a.id AS apartment_id, a.region_id, a.name, a.address,
+                SELECT a.id AS apartment_id, a.region_id, a.name, a.road_address AS address,
                        AVG(t.price_krw * 3.305785 / t.exclusive_area_sqm) AS average_price_per_pyeong,
                        COUNT(*) AS trade_count
                 FROM apartment a
                 JOIN trade t ON t.apartment_id = a.id
                 WHERE EXTRACT(YEAR FROM t.contract_date) = ?
                   AND t.cancellation_date IS NULL
-                GROUP BY a.id, a.region_id, a.name, a.address
+                GROUP BY a.id, a.region_id, a.name, a.road_address
                 """, (rs, row) -> new ApartmentPriceAverage(
                         rs.getLong("apartment_id"),
                         rs.getLong("region_id"),
