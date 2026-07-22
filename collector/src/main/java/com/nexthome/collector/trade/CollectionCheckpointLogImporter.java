@@ -3,6 +3,7 @@ package com.nexthome.collector.trade;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.time.YearMonth;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CollectionCheckpointLogImporter {
     private static final Pattern SUCCESS = Pattern.compile(
-            "region=.*\\((\\d{5})\\), month=(\\d{4}-\\d{2}), saved=\\d+, duplicates=\\d+");
+            "\\((\\d{5})\\), month=(\\d{4}-\\d{2}), saved=\\d+, duplicates=\\d+");
     private final CollectionCoverageStore coverage;
 
     public CollectionCheckpointLogImporter(CollectionCoverageStore coverage) {
@@ -22,7 +23,7 @@ public class CollectionCheckpointLogImporter {
 
     public int importSuccessfulMonths(Path logPath) throws IOException {
         Set<Checkpoint> checkpoints = new LinkedHashSet<>();
-        try (var lines = Files.lines(logPath)) {
+        try (var lines = Files.lines(logPath, StandardCharsets.ISO_8859_1)) {
             lines.forEach(line -> {
                 Matcher matcher = SUCCESS.matcher(line);
                 if (matcher.find()) {
