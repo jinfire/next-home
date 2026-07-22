@@ -82,4 +82,37 @@ describe('NAVER Dynamic Map usage protection', () => {
     expect(addListener).toHaveBeenCalledWith('click', expect.any(Function))
     expect(mapOptions).toMatchObject({ zoom: 9, minZoom: 7 })
   })
+
+  it('keeps rendering when NAVER returns null after adding GeoJSON', async () => {
+    const addGeoJson = vi.fn().mockReturnValue(null)
+    const map = { data: { addGeoJson, setStyle: vi.fn(), removeFeature: vi.fn(), addListener: vi.fn() } }
+    class MockMap { data = map.data }
+    class MockLatLng {}
+    window.naver = { maps: { Map: MockMap, LatLng: MockLatLng } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ type: 'FeatureCollection', features: [] }),
+    }))
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(callback: IntersectionObserverCallback) {
+        queueMicrotask(() => callback([{ isIntersecting: true } as IntersectionObserverEntry], this as unknown as IntersectionObserver))
+      }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+      takeRecords() { return [] }
+      root = null
+      rootMargin = '0px'
+      thresholds = [0]
+    })
+
+    const { rerender } = render(<NaverMap clientId="client-id" year={2026} />)
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/region-boundaries?year=2026', expect.anything()))
+
+    rerender(<NaverMap clientId="client-id" year={2025} />)
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/region-boundaries?year=2025', expect.anything()))
+    await waitFor(() => expect(addGeoJson).toHaveBeenCalledTimes(2))
+    expect(map.data.removeFeature).not.toHaveBeenCalled()
+  })
 })

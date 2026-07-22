@@ -16,7 +16,7 @@ type GeoJson = { type: 'FeatureCollection'; features: unknown[] }
 type NaverFeature = { getProperty(name: string): unknown }
 type NaverMapInstance = {
   data: {
-    addGeoJson(value: GeoJson): NaverFeature[]
+    addGeoJson(value: GeoJson): NaverFeature[] | null
     removeFeature(feature: NaverFeature): void
     setStyle(style: (feature: NaverFeature) => Record<string, unknown>): void
     addListener(event: 'click', listener: (event: { feature: NaverFeature }) => void): void
@@ -94,7 +94,7 @@ export default function NaverMap({ clientId = configuredClientId, year = new Dat
       .then((geoJson) => {
         if (!map.current) return
         boundaryFeatures.current.forEach((feature) => map.current?.data.removeFeature(feature))
-        boundaryFeatures.current = map.current.data.addGeoJson(geoJson)
+        boundaryFeatures.current = map.current.data.addGeoJson(geoJson) ?? []
         map.current.data.setStyle((feature) => {
           const grade = Number(feature.getProperty('grade'))
           return {
