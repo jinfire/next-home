@@ -20,6 +20,8 @@ next-home:
   molit:
     endpoint: ${MOLIT_API_ENDPOINT:https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev}
     service-key: ${MOLIT_API_KEY:}
+    max-retries: ${MOLIT_API_MAX_RETRIES:4}
+    retry-backoff: ${MOLIT_API_RETRY_BACKOFF:2s}
   collector:
     enabled: ${COLLECTOR_ENABLED:false}
     region-code: ${COLLECTOR_REGION_CODE:}
@@ -30,4 +32,7 @@ next-home:
     enabled: false
     start-month: ${CAPITAL_COLLECTION_START_MONTH:2026-01}
     end-month: ${CAPITAL_COLLECTION_END_MONTH:2026-06}
-    rows: ${CAPITAL_COLLECTION_ROWS:500}
+    rows: ${CAPITAL_COLLECTION_ROWS:1000}
+  checkpoint-import:
+    enabled: false
+    log-path: ${CHECKPOINT_LOG_PATH:}

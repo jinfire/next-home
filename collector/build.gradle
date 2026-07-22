@@ -44,3 +44,10 @@ tasks.register('collectCapitalAreaTrades', JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = 'com.nexthome.collector.CapitalAreaTradeCollectionApplication'
 }
+
+tasks.register('importCollectionCheckpoints', JavaExec) {
+	group = 'next home'
+	description = '기존 장기 수집 로그의 성공 지역·월을 완료 체크포인트로 복구합니다.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.nexthome.collector.CollectionCheckpointImportApplication'
+}

@@ -27,6 +27,11 @@ public class CapitalAreaTradeCollectionJob {
         int attempts = 0, pages = 0, saved = 0, duplicates = 0;
         for (Region region : districts) {
             for (YearMonth month = start; !month.isAfter(end); month = month.plusMonths(1)) {
+                if (coverage.isComplete(region.code(), month)) {
+                    log.info("완료된 수도권 실거래 수집 건너뜀: region={}({}), month={}",
+                            region.name(), region.code(), month);
+                    continue;
+                }
                 CollectionSummary summary = collector.collect(region.code(), region.name(), month, rows);
                 coverage.markComplete(region.code(), month);
                 attempts++;

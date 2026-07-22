@@ -7,6 +7,8 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.YearMonth;
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.sun.net.httpserver.HttpServer;
@@ -53,5 +55,29 @@ class MolitTradeClientTest {
         assertThat(page.totalCount()).isZero();
         assertThat(requestedUri.get().getQuery())
                 .contains("LAWD_CD=11110", "DEAL_YMD=202601", "pageNo=2", "numOfRows=50", "serviceKey=test-key");
+    }
+
+    @Test
+    void retriesRateLimitedRequestsAndEventuallyReturnsThePage() throws Exception {
+        server.stop(0);
+        AtomicInteger requests = new AtomicInteger();
+        server = HttpServer.create(new InetSocketAddress(0), 0);
+        server.createContext("/getRTMSDataSvcAptTradeDev", exchange -> {
+            int attempt = requests.incrementAndGet();
+            byte[] body = (attempt < 3 ? "rate limited" : """
+                    <response><header><resultCode>000</resultCode><resultMsg>OK</resultMsg></header>
+                    <body><totalCount>0</totalCount><items></items></body></response>
+                    """).getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(attempt < 3 ? 429 : 200, body.length);
+            try (OutputStream output = exchange.getResponseBody()) { output.write(body); }
+        });
+        server.start();
+
+        MolitTradeClient client = new MolitTradeClient(WebClient.builder(),
+                "http://localhost:" + server.getAddress().getPort(), "test-key",
+                new MolitTradeXmlParser(), 3, Duration.ofMillis(1));
+
+        assertThat(client.fetch("11110", YearMonth.of(2026, 1), 1, 500).totalCount()).isZero();
+        assertThat(requests).hasValue(3);
     }
 }

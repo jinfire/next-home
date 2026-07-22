@@ -16,6 +16,8 @@
 2. `docker compose up -d`로 PostgreSQL + PostGIS를 실행한다.
 3. `backend/gradlew.bat bootRun`으로 API를 실행한다.
 4. `collector/gradlew.bat bootRun`으로 필요할 때 수집기를 실행한다.
+
+장기 수집은 `collector/gradlew.bat collectCapitalAreaTrades`로 실행한다. 완료된 지역·월은 자동으로 건너뛴다. 구버전 수집 로그를 이어받기 체크포인트로 복구할 때는 `.env`의 `CHECKPOINT_LOG_PATH`를 지정하고 `collector/gradlew.bat importCollectionCheckpoints`를 먼저 실행한다.
 5. `frontend`에서 `npm install`, `npm run dev`를 실행한다.
 
 ## 테스트

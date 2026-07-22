@@ -2,7 +2,7 @@
 
 ## Capital-area collection and selection flow
 
-`collectCapitalAreaTrades`가 `region.level=2`인 수도권 83개 지역과 설정 기간의 모든 월을 순회한다. 월별 응답은 최대 4MB까지 버퍼링하고 페이지별 트랜잭션으로 apartment·trade를 멱등 저장한다. `recalculateGrades`는 거래 연도를 찾아 수도권 전체를 하나의 모집단으로 급지를 다시 만든다.
+`collectCapitalAreaTrades`가 `region.level=2`인 수도권 83개 지역과 설정 기간의 모든 월을 순회한다. 수집 전에 `trade_collection_coverage`를 조회해 완료된 지역·월을 건너뛰고, 모든 페이지가 성공한 뒤에만 체크포인트를 기록한다. `429`·`5xx`·네트워크 타임아웃은 지수 백오프로 재시도한다. 월별 응답은 최대 4MB까지 버퍼링하고 페이지별 트랜잭션으로 apartment·trade를 멱등 저장한다. `importCollectionCheckpoints`는 구버전 성공 로그를 체크포인트로 복구한다. `recalculateGrades`는 거래 연도를 찾아 수도권 전체를 하나의 모집단으로 급지를 다시 만든다.
 
 프런트엔드는 `/api/regions/options`의 시도·시군구 계층을 연동 드롭다운으로 표시한다. 사용자가 시군구를 선택하면 `regionId`를 지도 선택과 `/api/recommendations/upgrades`에 전달하며 서버가 현재 급지를 조회한다. 문자열 검색으로 사용자가 급지를 직접 추정하는 흐름은 사용하지 않는다.
 

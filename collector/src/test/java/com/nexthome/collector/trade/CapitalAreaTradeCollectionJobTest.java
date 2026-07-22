@@ -2,6 +2,7 @@ package com.nexthome.collector.trade;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,5 +38,25 @@ class CapitalAreaTradeCollectionJobTest {
         assertThat(summary.regions()).isEqualTo(2);
         assertThat(summary.months()).isEqualTo(4);
         assertThat(summary.savedTrades()).isEqualTo(8);
+    }
+
+    @Test
+    void skipsCompletedRegionMonthsAndResumesFromTheFirstIncompleteCheckpoint() {
+        RegionRepository regions = mock(RegionRepository.class);
+        TradeCollectionJob collector = mock(TradeCollectionJob.class);
+        CollectionCoverageStore coverage = mock(CollectionCoverageStore.class);
+        Region seoul = Region.create("11110", "종로구", 2);
+        when(regions.findByLevelOrderByCodeAsc((short) 2)).thenReturn(List.of(seoul));
+        when(coverage.isComplete("11110", YearMonth.of(2026, 1))).thenReturn(true);
+        when(collector.collect("11110", "종로구", YearMonth.of(2026, 2), 500))
+                .thenReturn(new CollectionSummary(1, 0, 0, 3, 0));
+
+        CapitalAreaCollectionSummary summary = new CapitalAreaTradeCollectionJob(regions, collector, coverage)
+                .collect(YearMonth.of(2026, 1), YearMonth.of(2026, 2), 500);
+
+        verify(collector, never()).collect("11110", "종로구", YearMonth.of(2026, 1), 500);
+        verify(collector).collect("11110", "종로구", YearMonth.of(2026, 2), 500);
+        verify(coverage).markComplete("11110", YearMonth.of(2026, 2));
+        assertThat(summary.months()).isEqualTo(1);
     }
 }
